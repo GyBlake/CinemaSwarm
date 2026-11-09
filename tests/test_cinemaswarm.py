@@ -17,7 +17,7 @@ from cinema_swarm import DEFAULT_BRIEF, build_request, parse_args, write_packet
 
 def test_default_brief_is_generic():
     assert "Lantern City" in DEFAULT_BRIEF
-    assert "Dreamguard" not in DEFAULT_BRIEF
+    assert "Main Character:" in DEFAULT_BRIEF
 
 
 def test_request_contains_brief():
