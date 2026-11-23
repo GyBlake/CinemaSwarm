@@ -37,10 +37,32 @@ print(world.narrative_observer())
 print(world.to_json())
 ```
 
-**Boundary:** world-state writes are explicit and authored. The existing
-`cinema_swarm.py` remains the production-packet entry point and is not
-automatically connected to this kernel. A future controlled adapter can use
-observer output as a *brief*, gated by human canon approval.
+## Connect to the Showrunner (explicit, review-gated)
+
+The optional adapter reads a **local** world snapshot and projects up to five
+chronological events with participating character metadata and provenance into
+a read-only prompt. The Showrunner receives this context through the existing
+executive orchestrator. No world mutation occurs during generation.
+
+```bash
+# Export a World instance to a JSON file under a private local path first.
+python cinema_swarm.py --world-snapshot ./private/world.json --dry-run
+
+# Review the preview carefully; only then authorize sending the same data to a provider:
+python cinema_swarm.py --world-snapshot ./private/world.json \\
+  --approve-world-brief --brief ./private/story.txt --output ./private/episode.md
+```
+
+The approval flag is required for **live** world-context generation, not for
+local dry runs. Any world snapshot is untrusted input, and the adapter validates
+character references, chronological event ordering, origins, and provenance
+field shape before constructing the request. Do not commit snapshots or expose
+sensitive world state to third-party services without authorization.
+
+**Boundary:** world-state writes are explicit and authored. The adapter is
+read-only and outputs a text production packet, not a canonical world-state
+mutation. Produced scene dramatizations require human review before promotion
+to canon.
 
 **Security:** no proprietary character canon, credentials, prompts or private
 repository metadata are embedded in this package. Output snapshots can contain

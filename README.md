@@ -8,6 +8,7 @@
 
 - Modular agent tools for nine creative-production disciplines
 - Configurable UTF-8 story briefs
+- Optional, read-only narrative world snapshot adapter with explicit approval for live context sharing
 - Safe offline request preview, without API keys or installed SDK packages
 - Output path selection, no-clobber default, optional `--overwrite`
 - Neutral sample project: **Lantern City**
@@ -45,6 +46,20 @@ python cinema_swarm.py --brief series.txt --output outputs/pilot.md
 ```
 
 Live generation uses the OpenAI Agents SDK and may incur API charges. The default series brief is optional. To replace an existing output, add `--overwrite`.
+
+## Experimental world → screenplay integration
+
+```bash
+# Preview the Showrunner's world-informed prompt without installing the SDK
+python cinema_swarm.py --world-snapshot ./private/world.json --dry-run
+# After reviewing the preview, explicitly approve live external processing
+python cinema_swarm.py --world-snapshot ./private/world.json --approve-world-brief
+```
+
+Generate a `world.json` file with `World.to_json()` (see
+[world engine docs](docs/world-engine.md)). No snapshots are included in the
+repository. Live use sends the selected story context to an AI provider and may
+incur charges. The current pipeline still produces text packets, not video.
 
 ## Architecture
 

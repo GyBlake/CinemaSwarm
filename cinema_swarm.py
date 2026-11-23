@@ -43,6 +43,8 @@ def create_orchestrator():
     You are the master story architect.
     Create serialized short-form cinematic arcs.
     Protect plot structure, character motivation, emotional stakes, and episode order.
+    When world observer data is supplied, treat its established events as immutable canon.
+    Preserve event references and distinguish suggested dramatization from world facts.
     Every clip must advance the story.
     """,
     )
@@ -189,6 +191,8 @@ def parse_args(argv=None):
     parser.add_argument("--brief", type=Path, help="UTF-8 series brief file")
     parser.add_argument("--output", type=Path, default=Path("pilot_sequence.md"))
     parser.add_argument("--dry-run", action="store_true", help="Preview the request without provider calls")
+    parser.add_argument("--world-snapshot", type=Path, help="Local CinemaSwarm world-state JSON")
+    parser.add_argument("--approve-world-brief", action="store_true", help="Authorize world context in a live provider request")
     parser.add_argument("--overwrite", action="store_true", help="Allow replacing an existing output")
     return parser.parse_args(argv)
 
@@ -196,7 +200,19 @@ def parse_args(argv=None):
 async def main(argv=None) -> int:
     args = parse_args(argv)
     brief = args.brief.read_text(encoding="utf-8") if args.brief else DEFAULT_BRIEF
-    request = build_request(brief)
+    if args.world_snapshot:
+        from cinemaswarm_world.adapter import build_world_request, load_world_snapshot
+        try:
+            snapshot = load_world_snapshot(args.world_snapshot)
+            request = build_world_request(brief, snapshot)
+        except (OSError, ValueError) as exc:
+            print(f"Invalid world snapshot: {exc}", file=sys.stderr)
+            return 2
+        if not args.dry_run and not args.approve_world_brief:
+            print("World context requires --approve-world-brief for live generation.", file=sys.stderr)
+            return 2
+    else:
+        request = build_request(brief)
     if args.dry_run:
         print(request)
         return 0
