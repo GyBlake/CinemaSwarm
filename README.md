@@ -12,6 +12,7 @@
 - Annotated plot morphology comparison and offline originality gate (requires an author-supplied reference library)
 - Offline, evidence-linked screenplay-to-literary-ontology drafting with mandatory human beat review
 - Read-only Semantic Dramaturgy audit for character knowledge, causal pressure, stakes, transformations, and motifs
+- Replay-verified body-bound clothing, props, equipment slots and presentation asset references
 - Safe offline request preview, without API keys or installed SDK packages
 - Output path selection, no-clobber default, optional `--overwrite`
 - Neutral sample project: **Lantern City**
@@ -111,6 +112,23 @@ To include author-reviewed dramaturgy diagnostics in a production request,
 provide both `--dramaturgy-candidate` and `--dramaturgy-context`. Live external
 processing additionally requires `--approve-dramaturgy-brief`.
 See [dramaturgy guide](docs/semantic-dramaturgy.md).
+
+## Embodiment and asset bindings
+
+When a production includes transmigration or physical continuity changes,
+provide a separate body and object ledger alongside world and identity state:
+
+```bash
+python cinema_swarm.py --world-snapshot ./private/world.json \
+  --identity-snapshot ./private/identity.json \
+  --asset-bindings ./private/assets.json --dry-run
+```
+
+Body-worn objects remain with the body through body swaps. Identity memories,
+name and voice signature remain with the persona. Live external data use
+requires `--approve-world-brief`, `--approve-identity-brief`, and
+`--approve-asset-brief`.
+[Embodiment documentation](docs/embodiment-bindings.md).
 
 ## Architecture
 

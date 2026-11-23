@@ -59,6 +59,8 @@ def create_orchestrator():
     Return precise fixes.
     Distinguish structural plot repetition from surface changes in dialogue and visuals.
     Preserve approved causal events, character agency, and world provenance.
+    Respect separately approved body-bound clothing, current body anatomy,
+    body-worn props and ownership; never infer physical custody from personal ownership.
     When identity projections are supplied, verify stable IDs, body occupancy,
     equipment state, relationships, and all appearance/voice changes against
     the snapshot. Flag contradictory visual or identity continuity.
@@ -206,6 +208,8 @@ def parse_args(argv=None):
     parser.add_argument("--approve-world-brief", action="store_true", help="Authorize world context in a live provider request")
     parser.add_argument("--identity-snapshot", type=Path, help="Replay-verified identity continuity JSON, requires world snapshot")
     parser.add_argument("--approve-identity-brief", action="store_true", help="Authorize identity-state context in a live provider request")
+    parser.add_argument("--asset-bindings", type=Path, help="Body and item asset binding snapshot; requires identity snapshot")
+    parser.add_argument("--approve-asset-brief", action="store_true", help="Authorize asset binding references in live provider request")
     parser.add_argument("--morphology-candidate", type=Path, help="Annotated candidate story structure JSON")
     parser.add_argument("--morphology-library", type=Path, help="Local JSON library of annotated story structures")
     parser.add_argument("--originality-threshold", type=float, default=0.85, help="Block on similarity at or above this score (default 0.85)")
@@ -261,6 +265,9 @@ async def main(argv=None) -> int:
         print(f"Saved dramaturgy audit to {args.dramaturgy_output}")
         return 0
     brief = args.brief.read_text(encoding="utf-8") if args.brief else DEFAULT_BRIEF
+    if args.asset_bindings and not args.identity_snapshot:
+        print("Asset bindings requires --identity-snapshot and --world-snapshot.", file=sys.stderr)
+        return 2
     if args.identity_snapshot and not args.world_snapshot:
         print("Identity context requires --world-snapshot.", file=sys.stderr)
         return 2
@@ -292,6 +299,25 @@ async def main(argv=None) -> int:
             print("Identity context requires --approve-identity-brief for live generation.", file=sys.stderr)
             return 2
         request += identity_prompt
+    if args.asset_bindings:
+        from cinemaswarm_world.embodiment import (
+            load_binding_snapshot, project_embodiment, binding_context,
+        )
+        try:
+            binding_registry = load_binding_snapshot(args.asset_bindings)
+            binding_projection = project_embodiment(identity_registry, binding_registry)
+            relevant = set(identity_projection["characters"])
+            binding_projection["characters"] = {
+                key: value for key, value in binding_projection["characters"].items()
+                if key in relevant
+            }
+        except (OSError, ValueError) as exc:
+            print(f"Invalid asset bindings: {exc}", file=sys.stderr)
+            return 2
+        if not args.dry_run and not args.approve_asset_brief:
+            print("Asset bindings requires --approve-asset-brief for live generation.", file=sys.stderr)
+            return 2
+        request += binding_context(binding_projection)
     if bool(args.morphology_candidate) != bool(args.morphology_library):
         print("Morphology gate requires both --morphology-candidate and --morphology-library.", file=sys.stderr)
         return 2
