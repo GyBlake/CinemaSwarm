@@ -126,3 +126,30 @@ def test_real_ffprobe_schema_parser(monkeypatch, tmp_path):
         ]})
     monkeypatch.setattr("subprocess.run", lambda *a, **k: Result())
     assert probe_media(tmp_path / "master.mp4")["fps"] > 29
+
+def test_measured_audio_loudness_can_pass_studio_gate(tmp_path):
+    doc = sample(tmp_path)
+    measured = {"integrated_lufs": -16.0, "true_peak_dbfs": -2.0, "method": "ffmpeg ebur128"}
+    with patch("cinemaswarm_world.benchmarks.probe_media", return_value=PROBED), \
+         patch("cinemaswarm_world.benchmarks.probe_loudness", return_value=measured):
+        assert audit_season(doc, tmp_path)["status"] == "qualified"
+
+
+def test_excessive_true_peak_blocks_even_when_artistic_scores_are_perfect(tmp_path):
+    doc = sample(tmp_path)
+    measured = {"integrated_lufs": -16.0, "true_peak_dbfs": 0.0, "method": "ffmpeg ebur128"}
+    with patch("cinemaswarm_world.benchmarks.probe_media", return_value=PROBED), \\
+         patch("cinemaswarm_world.benchmarks.probe_loudness", return_value=measured):
+        report = audit_season(doc, tmp_path)
+    assert "true_peak_above_studio_limit" in report["episodes"][0]["failures"]
+
+
+def test_provenance_season_and_episode_must_both_match(tmp_path):
+    doc = sample(tmp_path)
+    record = tmp_path / "provenance.json"
+    content = json.loads(record.read_text())
+    content["season_id"] = "different"
+    record.write_text(json.dumps(content))
+    with patch("cinemaswarm_world.benchmarks.probe_media", return_value=PROBED):
+        report = audit_season(doc, tmp_path)
+    assert "provenance_identity_mismatch" in report["episodes"][0]["failures"]

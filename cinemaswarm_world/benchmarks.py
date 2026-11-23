@@ -9,6 +9,7 @@ import hashlib
 import json
 import math
 import subprocess
+import re
 from pathlib import Path
 
 SCHEMA_VERSION = 1
@@ -28,6 +29,8 @@ PROFILES = {
         "allowed_video_codecs": ("h264", "hevc", "av1"),
         "allowed_audio_codecs": ("aac", "opus", "flac", "pcm_s24le", "pcm_s16le"),
         "min_human_score": 95,
+        "loudness_target": -16.0, "loudness_tolerance": 2.0,
+        "peak_limit": -1.0,
         "captions_required": True,
         "provenance_required": True,
     },
@@ -40,6 +43,8 @@ PROFILES = {
         "allowed_video_codecs": ("prores", "hevc", "h264", "av1"),
         "allowed_audio_codecs": ("aac", "flac", "pcm_s24le", "pcm_s16le"),
         "min_human_score": 95,
+        "loudness_target": -23.0, "loudness_tolerance": 1.0,
+        "peak_limit": -1.0,
         "captions_required": True,
         "provenance_required": True,
     },
@@ -125,6 +130,36 @@ def probe_media(path: Path) -> dict:
         raise ValueError("incomplete decoded media metadata") from exc
 
 
+def probe_loudness(path: Path) -> dict:
+    """Measure real audio via ffmpeg ebur128; report LUFS and true peak.
+
+    An internal policy target is used. This is NOT EBU broadcaster or
+    streaming-distributor certification.
+    """
+    try:
+        process = subprocess.run(
+            ["ffmpeg", "-hide_banner", "-nostats", "-v", "info", "-i", str(path),
+             "-filter_complex", "ebur128=peak=true", "-f", "null", "-"],
+            capture_output=True, text=True, timeout=180, check=False,
+        )
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        raise ValueError("ffmpeg EBU loudness probe unavailable") from exc
+    if process.returncode != 0:
+        raise ValueError("ffmpeg EBU loudness analysis failed")
+    summary = process.stderr.rsplit("Summary:", 1)
+    if len(summary) != 2:
+        raise ValueError("EBU loudness summary unavailable")
+    tail = summary[1]
+    integrated = re.search(r"Integrated loudness:.*?\\bI:\\s*(-?[0-9]+(?:\\.[0-9]+)?)\\s*LUFS", tail, re.S)
+    true_peak = re.search(r"True peak:.*?\\bPeak:\\s*(-?[0-9]+(?:\\.[0-9]+)?)\\s*dBFS", tail, re.S)
+    if not integrated or not true_peak:
+        raise ValueError("EBU loudness / true peak not measured")
+    loudness, peak = float(integrated.group(1)), float(true_peak.group(1))
+    if not math.isfinite(loudness) or not math.isfinite(peak):
+        raise ValueError("invalid loudness measurement")
+    return {"integrated_lufs": loudness, "true_peak_dbfs": peak,
+            "method": "local ffmpeg ebur128 integrated and true-peak"}
+
 def load_season_manifest(path: Path) -> dict:
     if path.stat().st_size > MAX_MANIFEST_BYTES:
         raise ValueError("season manifest exceeds 2 MB")
@@ -188,7 +223,7 @@ def _read_json_file(path: Path):
         raise ValueError("invalid JSON evidence") from exc
 
 
-def _episode(ep: dict, root: Path, profile: dict) -> dict:
+def _episode(ep: dict, root: Path, profile: dict, season_id: str) -> dict:
     failures, unknowns, evidence = [], [], {}
     def fail(code):
         failures.append(code)
@@ -238,7 +273,7 @@ def _episode(ep: dict, root: Path, profile: dict) -> dict:
         unknown("continuity_report_unavailable")
     try:
         provenance = _read_json_file(_file(root, ep["provenance_record"]))
-        if provenance.get("season_id") != ep.get("season_id", "") and provenance.get("episode_number") != ep["number"]:
+        if provenance.get("season_id") != season_id or provenance.get("episode_number") != ep["number"]:
             fail("provenance_identity_mismatch")
         if provenance.get("approved") is not True or not provenance.get("assets_licensed") is True:
             fail("provenance_approval_missing")
@@ -261,15 +296,16 @@ def _episode(ep: dict, root: Path, profile: dict) -> dict:
             fail("artistic_score_below_studio_target")
         if any(reviews[k]["score"] < 85 for k in MANDATORY_REVIEWS):
             fail("critical_artistic_dimension_below_floor")
-    if not ep.get("loudness_measurement"):
+    try:
+        measurement = probe_loudness(_file(root, ep["master"]))
+        evidence["measured_loudness"] = measurement
+        if abs(measurement["integrated_lufs"] - profile["loudness_target"]) > profile["loudness_tolerance"]:
+            fail("integrated_loudness_outside_studio_target")
+        if measurement["true_peak_dbfs"] > profile["peak_limit"]:
+            fail("true_peak_above_studio_limit")
+    except (OSError, ValueError) as exc:
+        evidence["loudness_probe_error"] = str(exc)
         unknown("loudness_unmeasured")
-    else:
-        measurement = ep["loudness_measurement"]
-        if not isinstance(measurement, dict) or measurement.get("method") not in ("bs1770", "ebu_r128") or type(measurement.get("integrated_lufs")) not in (float, int):
-            fail("invalid_loudness_measurement")
-        else:
-            evidence["reported_loudness_lufs"] = measurement["integrated_lufs"]
-            unknown("loudness_attestation_requires_independent_verification")
     if not ep.get("caption_review"):
         unknown("caption_accessibility_unreviewed")
     elif ep["caption_review"].get("approved") is not True:
@@ -286,7 +322,7 @@ def _episode(ep: dict, root: Path, profile: dict) -> dict:
 def audit_season(doc: dict, root: Path) -> dict:
     validate_season_manifest(doc)
     profile = PROFILES[doc["profile"]]
-    results = [_episode(ep, root, profile) for ep in sorted(doc["episodes"], key=lambda x: x["number"])]
+    results = [_episode(ep, root, profile, doc["season_id"]) for ep in sorted(doc["episodes"], key=lambda x: x["number"])]
     present = {item["number"] for item in results}
     missing = [n for n in range(1, doc["planned_episodes"] + 1) if n not in present]
     statuses = [x["status"] for x in results]

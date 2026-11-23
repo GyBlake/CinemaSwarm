@@ -34,9 +34,13 @@ identity 25%, voice identity 20%, cinematography 10%. Internal studio target
 is >=95/100 with no dimension below 85. All reviews require explicit
 reviewer IDs and evidence provenance. Missing evaluations remain unknown.
 
-Loudness measurements must eventually be validated against the appropriate
-destination profile; supplying a number alone does **not** prove EBU/ITU
-compliance. Caption presence alone does **not** prove WCAG conformance.
+Loudness is measured locally with ffmpeg's ebur128 filter, reporting
+integrated LUFS and true peak. The vertical profile sets an **internal**
+-16 LUFS ±2 and -1 dBFS true peak limit, while the cinematic-horizontal
+studio profile uses -23 LUFS ±1 and -1 dBFS. These are selectable studio
+policies, not generic destination requirements; actual destination loudness
+profiles require contractual qualification. A number supplied in JSON alone
+does **not** prove EBU/ITU compliance. Caption presence alone does **not** prove WCAG conformance.
 C2PA claims likewise require independent validation; a JSON claim is not a
 signed credential. To protect integrity, these remain incomplete or review
 required until trusted validation is integrated.
