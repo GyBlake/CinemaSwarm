@@ -224,12 +224,34 @@ def parse_args(argv=None):
     parser.add_argument("--approve-dramaturgy-brief", action="store_true", help="Authorize dramaturgy context in a live provider request")
     parser.add_argument("--validate-av-manifest", type=Path, help="Validate shot-level AV metadata against canonical snapshots offline")
     parser.add_argument("--av-report", type=Path, help="Continuity audit JSON destination")
+    parser.add_argument("--analyze-media-evidence", type=Path, help="Offline per-shot pixel/audio evidence plan JSON")
+    parser.add_argument("--media-root", type=Path, help="Allowed root directory for local evidence files")
+    parser.add_argument("--media-report", type=Path, help="Media evidence JSON report destination")
     parser.add_argument("--overwrite", action="store_true", help="Allow replacing an existing output")
     return parser.parse_args(argv)
 
 
 async def main(argv=None) -> int:
     args = parse_args(argv)
+    if args.analyze_media_evidence:
+        if not args.media_root or not args.media_report:
+            print("Media analysis requires --media-root and --media-report.", file=sys.stderr)
+            return 2
+        import json
+        from cinemaswarm_world.media_evidence import load_evidence_plan, analyze_evidence
+        try:
+            plan = load_evidence_plan(args.analyze_media_evidence)
+            report = analyze_evidence(plan, args.media_root)
+            write_packet(args.media_report, json.dumps(report, indent=2, ensure_ascii=False) + "\n",
+                         overwrite=args.overwrite)
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            print(f"Media evidence analysis failed: {exc}", file=sys.stderr)
+            return 2
+        if report["error_count"] or report["unknown_count"]:
+            print("Media evidence requires review; see report.", file=sys.stderr)
+            return 3
+        print(f"Media evidence report saved to {args.media_report}")
+        return 0
     if args.validate_av_manifest:
         if not all((args.world_snapshot, args.identity_snapshot, args.asset_bindings, args.av_report)):
             print("AV validation requires --world-snapshot, --identity-snapshot, --asset-bindings and --av-report.", file=sys.stderr)

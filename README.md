@@ -147,6 +147,20 @@ This detects metadata mismatches in body occupancy, reference assets, voice
 signature IDs, clothing and worn equipment. It **does not inspect rendered
 pixels or audio timbre**. See [AV continuity guide](docs/av-continuity.md).
 
+## Experimental media evidence inspection
+
+Inspect actual local image pixels and uncompressed PCM WAV audio signals against
+approved references, with **a separate canonical snapshot per shot**:
+
+```bash
+python cinema_swarm.py --analyze-media-evidence ./private/plan.json \
+  --media-root ./private --media-report ./private/evidence-report.json
+```
+
+This produces generic signal differences, hash-integrity reports and canonical
+metadata checks. It does **not** recognize character faces or verify speaker
+identity. [Media evidence guide](docs/media-evidence.md).
+
 ## Architecture
 
 ```text
