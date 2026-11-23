@@ -230,12 +230,32 @@ def parse_args(argv=None):
     parser.add_argument("--audit-season", type=Path, help="Versioned season benchmark manifest")
     parser.add_argument("--benchmark-root", type=Path, help="Approved local root for media and review evidence")
     parser.add_argument("--benchmark-report", type=Path, help="Season qualification report JSON")
+    parser.add_argument("--render-episode", type=Path, help="Local episode assembly plan JSON")
+    parser.add_argument("--render-assets-root", type=Path, help="Approved asset folder for local rendering")
+    parser.add_argument("--episode-master", type=Path, help="Output MP4 episode path")
+    parser.add_argument("--episode-receipt", type=Path, help="Output render receipt JSON")
     parser.add_argument("--overwrite", action="store_true", help="Allow replacing an existing output")
     return parser.parse_args(argv)
 
 
 async def main(argv=None) -> int:
     args = parse_args(argv)
+    if args.render_episode:
+        if not all((args.render_assets_root, args.episode_master, args.episode_receipt)):
+            print("Episode rendering requires --render-assets-root, --episode-master and --episode-receipt.", file=sys.stderr)
+            return 2
+        from cinemaswarm_world.episode_renderer import load_plan, render_episode
+        try:
+            render_plan = load_plan(args.render_episode)
+            render_receipt = render_episode(render_plan, args.render_assets_root,
+                                            args.episode_master, args.episode_receipt,
+                                            overwrite=args.overwrite)
+        except (OSError, ValueError) as exc:
+            print(f"Episode assembly failed: {exc}", file=sys.stderr)
+            return 2
+        print(f"Episode assembled at {args.episode_master}; technical receipt {args.episode_receipt}.")
+        print("Artistic quality and season release qualification remain unverified.")
+        return 0
     if args.audit_season:
         if not args.benchmark_root or not args.benchmark_report:
             print("Season audit requires --benchmark-root and --benchmark-report.", file=sys.stderr)

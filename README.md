@@ -2,7 +2,10 @@
 
 **CinemaSwarm** is an experimental Python multi-agent production-planning application for serialized short-form cinema. An executive orchestrator delegates work to nine specialist agents covering narrative structure, continuity, symbolism, actor direction, cinematography, audience retention, social-platform packaging, production prompting, and quality control.
 
-**What it produces:** a text-based, five-clip production packet with a connected storyline and scene-level production prompts. It **does not render video** or verify final visual identity consistency.
+**What it produces:** text-based connected production packets and an optional
+**local MP4 assembly** from supplied still images and audio. It does not
+generate animated acting, lip sync, or production-quality AI cinematography,
+nor certify finished visual identity consistency.
 
 ## Features
 
@@ -175,6 +178,22 @@ python cinema_swarm.py --audit-season ./private/season.json \
 Profiles are **internal studio gates**, not worldwide platform certification.
 The project still does not render full seasons.
 [Benchmark program](docs/cinema-benchmarks.md).
+
+## Executable local episode assembly
+
+Assemble a short MP4 episode from authorized scene stills and a provided
+soundtrack (or generated silence in technical preview mode):
+
+```bash
+python cinema_swarm.py --render-episode ./private/episode-plan.json \
+  --render-assets-root ./private \
+  --episode-master ./private/build/episode.mp4 \
+  --episode-receipt ./private/build/episode-receipt.json
+```
+
+This FFmpeg stage provides a **real rendering smoke test**, a checked duration
+and master SHA-256. It cannot manufacture character animation or satisfy the
+studio quality score by itself. [Renderer contract](docs/episode-renderer.md).
 
 ## Architecture
 
