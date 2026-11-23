@@ -32,7 +32,7 @@ def test_extracts_evidence_and_flags_unapproved_beats():
     assert review["candidate"]["beats"][2]["cause"] == 1
     assert review["candidate"]["beats"][0]["actor_role"] == "protagonist"
     assert review["candidate"]["beats"][1]["actor_role"] == "other"  # Two names: ambiguity, not invented role
-    assert review["evidence"][0]["line"] == 5
+    assert review["evidence"][0]["line"] == 6
     assert all(not item["approved"] for item in review["evidence"])
 
 

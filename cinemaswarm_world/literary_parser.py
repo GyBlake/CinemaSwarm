@@ -80,11 +80,13 @@ def extract_draft(screenplay: str, story_id: str) -> dict:
         # Character labels are not narrative events.
         if line.isupper() and len(line.split()) <= 4:
             continue
-        matched = _match(line, RULES)
+        # Prefer the main clause after an explicit causal preface, not the recalled event.
+        primary = line.split(',', 1)[1].strip() if CAUSE_CUE.search(line) and ',' in line else line
+        matched = _match(primary, RULES) or _match(line, RULES)
         if not matched:
             continue
         function, cue = matched
-        outcome_match = _match(line, OUTCOMES)
+        outcome_match = _match(primary, OUTCOMES) or _match(line, OUTCOMES)
         outcome = outcome_match[0] if outcome_match else "uncertain"
         speakers = [role for name, role in roles.items() if re.search(r"\b" + re.escape(name) + r"\b", line, re.I)]
         role = speakers[0] if len(set(speakers)) == 1 else "other"
