@@ -227,12 +227,34 @@ def parse_args(argv=None):
     parser.add_argument("--analyze-media-evidence", type=Path, help="Offline per-shot pixel/audio evidence plan JSON")
     parser.add_argument("--media-root", type=Path, help="Allowed root directory for local evidence files")
     parser.add_argument("--media-report", type=Path, help="Media evidence JSON report destination")
+    parser.add_argument("--audit-season", type=Path, help="Versioned season benchmark manifest")
+    parser.add_argument("--benchmark-root", type=Path, help="Approved local root for media and review evidence")
+    parser.add_argument("--benchmark-report", type=Path, help="Season qualification report JSON")
     parser.add_argument("--overwrite", action="store_true", help="Allow replacing an existing output")
     return parser.parse_args(argv)
 
 
 async def main(argv=None) -> int:
     args = parse_args(argv)
+    if args.audit_season:
+        if not args.benchmark_root or not args.benchmark_report:
+            print("Season audit requires --benchmark-root and --benchmark-report.", file=sys.stderr)
+            return 2
+        from cinemaswarm_world.benchmarks import load_season_manifest, audit_season
+        import json
+        try:
+            manifest = load_season_manifest(args.audit_season)
+            result = audit_season(manifest, args.benchmark_root)
+            write_packet(args.benchmark_report, json.dumps(result, indent=2, ensure_ascii=False) + "\n",
+                         overwrite=args.overwrite)
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            print(f"Season benchmark audit failed: {exc}", file=sys.stderr)
+            return 2
+        if result["status"] != "qualified":
+            print(f"Season benchmark {result['status']}; inspect report.", file=sys.stderr)
+            return 3
+        print(f"Season qualified under local studio profile: {result['profile']}")
+        return 0
     if args.analyze_media_evidence:
         if not args.media_root or not args.media_report:
             print("Media analysis requires --media-root and --media-report.", file=sys.stderr)

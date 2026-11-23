@@ -161,6 +161,21 @@ This produces generic signal differences, hash-integrity reports and canonical
 metadata checks. It does **not** recognize character faces or verify speaker
 identity. [Media evidence guide](docs/media-evidence.md).
 
+## Evidence-first season benchmark audit
+
+The optional `--audit-season` mode examines a versioned multi-episode manifest,
+inspects real media streams with local `ffprobe`, verifies files and documented
+human reviews, and refuses to certify incomplete seasons or missing measurements.
+
+```bash
+python cinema_swarm.py --audit-season ./private/season.json \
+  --benchmark-root ./private --benchmark-report ./private/season-audit.json
+```
+
+Profiles are **internal studio gates**, not worldwide platform certification.
+The project still does not render full seasons.
+[Benchmark program](docs/cinema-benchmarks.md).
+
 ## Architecture
 
 ```text
