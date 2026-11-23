@@ -10,6 +10,7 @@
 - Configurable UTF-8 story briefs
 - Optional, read-only narrative world snapshot adapter with explicit approval for live context sharing
 - Annotated plot morphology comparison and offline originality gate (requires an author-supplied reference library)
+- Offline, evidence-linked screenplay-to-literary-ontology drafting with mandatory human beat review
 - Safe offline request preview, without API keys or installed SDK packages
 - Output path selection, no-clobber default, optional `--overwrite`
 - Neutral sample project: **Lantern City**
@@ -77,6 +78,22 @@ The gate blocks high structural similarity (exit code 3, default score threshold
 0.85). It ignores mere changes in names, dialogue or visual style. It is an
 author-supplied heuristic and **not** copyright clearance or universal
 originality detection. See [morphology docs](docs/narrative-morphology.md).
+
+## Screenplay → reviewed literary ontology
+
+```bash
+python cinema_swarm.py --extract-ontology ./private/script.txt \
+  --ontology-story-id pilot --ontology-output ./private/review.json
+# Edit review.json, verify dramatic functions and cause links,
+# then set each evidence entry's approved flag to true.
+python cinema_swarm.py --finalize-ontology-review ./private/review.json \
+  --ontology-output ./private/candidate.json
+```
+
+This first-pass **low-confidence lexical parser** emits line-linked draft
+proposals, not an authoritative interpretation of an arbitrary screenplay.
+Finalized, explicitly reviewed candidates can be checked with the existing
+morphology similarity gate. [Parser guide](docs/literary-ontology-parser.md).
 
 ## Architecture
 

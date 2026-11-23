@@ -200,12 +200,34 @@ def parse_args(argv=None):
     parser.add_argument("--morphology-candidate", type=Path, help="Annotated candidate story structure JSON")
     parser.add_argument("--morphology-library", type=Path, help="Local JSON library of annotated story structures")
     parser.add_argument("--originality-threshold", type=float, default=0.85, help="Block on similarity at or above this score (default 0.85)")
+    parser.add_argument("--extract-ontology", type=Path, help="Extract review-only dramatic beats from local UTF-8 screenplay")
+    parser.add_argument("--finalize-ontology-review", type=Path, help="Finalize manually approved literary ontology review")
+    parser.add_argument("--ontology-story-id", default="screenplay-draft", help="Identifier for extracted screenplay")
+    parser.add_argument("--ontology-output", type=Path, help="Local JSON review or candidate destination")
     parser.add_argument("--overwrite", action="store_true", help="Allow replacing an existing output")
     return parser.parse_args(argv)
 
 
 async def main(argv=None) -> int:
     args = parse_args(argv)
+    if args.extract_ontology or args.finalize_ontology_review:
+        if bool(args.extract_ontology) == bool(args.finalize_ontology_review) or not args.ontology_output:
+            print("Choose exactly one ontology operation and supply --ontology-output.", file=sys.stderr)
+            return 2
+        from cinemaswarm_world.literary_parser import extract_file, finalize_file
+        import json
+        try:
+            if args.extract_ontology:
+                payload = extract_file(args.extract_ontology, args.ontology_story_id)
+            else:
+                payload = finalize_file(args.finalize_ontology_review)
+            write_packet(args.ontology_output, json.dumps(payload, indent=2, ensure_ascii=False) + "\n",
+                         overwrite=args.overwrite)
+        except (OSError, ValueError) as exc:
+            print(f"Ontology processing failed: {exc}", file=sys.stderr)
+            return 2
+        print(f"Saved ontology JSON to {args.ontology_output}")
+        return 0
     brief = args.brief.read_text(encoding="utf-8") if args.brief else DEFAULT_BRIEF
     if args.world_snapshot:
         from cinemaswarm_world.adapter import build_world_request, load_world_snapshot
