@@ -79,3 +79,11 @@ and optional world-state approval maintain their existing behaviors.
 - Dramatic irony and mystery reflect supplied epistemic states, not mind-reading.
 - A broad finding is editorial advice; no hard creative rejection is automatic.
 - Keep client narrative assets and private Dreamcorp canon out of the public repo.
+
+## Knowledge-continuity audit
+
+When the same character is present in two explicit knowledge snapshots,
+previously listed facts that disappear are flagged as **possible knowledge
+discontinuities**. This is a review question, not a declaration that the
+character cannot forget or that the narrative contains a plot hole. Incomplete
+snapshot coverage is still unknown.

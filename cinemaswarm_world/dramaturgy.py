@@ -163,10 +163,21 @@ def audit_dramaturgy(story: dict, context: dict) -> dict:
     }
     facts = {f["id"]: f for f in context["facts"]}
     asymmetries = []
+    knowledge_regressions = []
+    previous_knowledge = {}
     for entry in sorted(context["knowledge"], key=lambda x: x["beat_index"]):
         audience = set(entry["audience"])
         for character, known in sorted(entry["characters"].items()):
             known_set = set(known)
+            if character in previous_knowledge:
+                previous_beat, previously_known = previous_knowledge[character]
+                for fact in sorted(previously_known - known_set):
+                    knowledge_regressions.append({
+                        "character_id": character, "fact_id": fact,
+                        "previous_beat": previous_beat, "beat_index": entry["beat_index"],
+                        "provenance": facts[fact]["provenance"],
+                    })
+            previous_knowledge[character] = (entry["beat_index"], known_set)
             for fact in sorted(audience - known_set):
                 asymmetries.append({"beat_index": entry["beat_index"],
                                     "character_id": character, "fact_id": fact,
@@ -178,6 +189,11 @@ def audit_dramaturgy(story: dict, context: dict) -> dict:
     findings = []
     def add(severity: str, code: str, detail: str) -> None:
         findings.append({"severity": severity, "code": code, "detail": detail})
+    for regression in knowledge_regressions:
+        add("review", "knowledge_discontinuity",
+            f"{regression['character_id']} no longer lists fact {regression['fact_id']} "
+            f"between beats {regression['previous_beat']} and {regression['beat_index']}; "
+            "confirm intentional forgetting, deception, or missing annotation")
     if len(roots) > 1:
         add("review", "unlinked_roots", f"{len(roots)} beats have no causal predecessor; establish independent arcs or add links")
     if not analysis["protagonist_decisions"]:
@@ -201,6 +217,7 @@ def audit_dramaturgy(story: dict, context: dict) -> dict:
         "status": "reviewed_annotations" if context["reviewed"] else "needs_review",
         "causality": analysis,
         "knowledge_asymmetries": asymmetries,
+        "knowledge_discontinuities": knowledge_regressions,
         "stakes": [{"id": s["id"], "owner": s["owner"],
                     "introduced_at": s["introduced_at"], "resolved_at": s.get("resolved_at"),
                     "provenance": s["provenance"]} for s in context["stakes"]],

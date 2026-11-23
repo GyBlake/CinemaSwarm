@@ -121,3 +121,47 @@ def test_cli_requires_both_inputs(tmp_path):
                             cwd=tmp_path, capture_output=True, text=True)
     assert result.returncode == 2
     assert "both" in result.stderr
+
+
+def test_audit_flags_possible_memory_discontinuity_not_fabricated_forgetting():
+    context = copy.deepcopy(CONTEXT)
+    context["knowledge"][1]["characters"]["archivist"] = []
+    report = audit_dramaturgy(STORY, context)
+    assert report["knowledge_discontinuities"] == [{
+        "character_id": "archivist", "fact_id": "secret-map",
+        "previous_beat": 1, "beat_index": 2,
+        "provenance": "approved-beat-1",
+    }]
+    assert "knowledge_discontinuity" in {f["code"] for f in report["findings"]}
+
+
+def test_unreviewed_context_cannot_pass_cli_even_with_approval_flag(tmp_path):
+    candidate, context = tmp_path / "story.json", tmp_path / "context.json"
+    candidate.write_text(json.dumps(STORY))
+    annotations = copy.deepcopy(CONTEXT)
+    annotations["reviewed"] = False
+    context.write_text(json.dumps(annotations))
+    script = Path(__file__).resolve().parents[1] / "cinema_swarm.py"
+    call = subprocess.run(
+        [sys.executable, str(script), "--dramaturgy-candidate", str(candidate),
+         "--dramaturgy-context", str(context), "--approve-dramaturgy-brief"],
+        cwd=tmp_path, capture_output=True, text=True, check=False,
+    )
+    assert call.returncode == 2
+    assert "unreviewed" in call.stderr
+    assert not (tmp_path / "pilot_sequence.md").exists()
+
+
+def test_dramaturgy_audit_refuses_overwrite(tmp_path):
+    candidate, context, output = (tmp_path / n for n in ("story.json", "context.json", "audit.json"))
+    candidate.write_text(json.dumps(STORY))
+    context.write_text(json.dumps(CONTEXT))
+    output.write_text("original")
+    script = Path(__file__).resolve().parents[1] / "cinema_swarm.py"
+    call = subprocess.run(
+        [sys.executable, str(script), "--audit-dramaturgy", str(candidate),
+         "--dramaturgy-context", str(context), "--dramaturgy-output", str(output)],
+        cwd=tmp_path, capture_output=True, text=True, check=False,
+    )
+    assert call.returncode == 2
+    assert output.read_text() == "original"
