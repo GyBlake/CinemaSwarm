@@ -11,6 +11,7 @@
 - Optional, read-only narrative world snapshot adapter with explicit approval for live context sharing
 - Annotated plot morphology comparison and offline originality gate (requires an author-supplied reference library)
 - Offline, evidence-linked screenplay-to-literary-ontology drafting with mandatory human beat review
+- Read-only Semantic Dramaturgy audit for character knowledge, causal pressure, stakes, transformations, and motifs
 - Safe offline request preview, without API keys or installed SDK packages
 - Output path selection, no-clobber default, optional `--overwrite`
 - Neutral sample project: **Lantern City**
@@ -94,6 +95,22 @@ This first-pass **low-confidence lexical parser** emits line-linked draft
 proposals, not an authoritative interpretation of an arbitrary screenplay.
 Finalized, explicitly reviewed candidates can be checked with the existing
 morphology similarity gate. [Parser guide](docs/literary-ontology-parser.md).
+
+## Semantic dramaturgy (offline review and optional production context)
+
+After reviewing the screenplay ontology candidate, supply explicit dramatic
+annotations for known character facts, stakes, archetypal changes and motifs:
+
+```bash
+python cinema_swarm.py --audit-dramaturgy ./private/candidate.json \
+  --dramaturgy-context ./private/dramaturgy.json \
+  --dramaturgy-output ./private/audit.json
+```
+
+To include author-reviewed dramaturgy diagnostics in a production request,
+provide both `--dramaturgy-candidate` and `--dramaturgy-context`. Live external
+processing additionally requires `--approve-dramaturgy-brief`.
+See [dramaturgy guide](docs/semantic-dramaturgy.md).
 
 ## Architecture
 

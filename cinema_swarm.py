@@ -45,6 +45,8 @@ def create_orchestrator():
     Protect plot structure, character motivation, emotional stakes, and episode order.
     When world observer data is supplied, treat its established events as immutable canon.
     Preserve event references and distinguish suggested dramatization from world facts.
+    When author-reviewed dramaturgy is supplied, preserve knowledge asymmetries,
+    explicit stakes, evidence-linked archetypal transitions, and unresolved questions.
     Every clip must advance the story.
     """,
     )
@@ -67,6 +69,8 @@ def create_orchestrator():
     For each clip define: core emotion, conflict, symbol, motif, callback, hidden meaning, future setup.
     Analyze dramatic functions, actor roles, outcomes and causal links when supplied.
     Suggest substantive changes rather than merely renaming or re-skinning a familiar plot.
+    Evaluate author-supplied dramatic irony, stakes, motif circulation and transformation;
+    treat missing annotations as unknown, never as established absence.
     """,
     )
     
@@ -204,6 +208,11 @@ def parse_args(argv=None):
     parser.add_argument("--finalize-ontology-review", type=Path, help="Finalize manually approved literary ontology review")
     parser.add_argument("--ontology-story-id", default="screenplay-draft", help="Identifier for extracted screenplay")
     parser.add_argument("--ontology-output", type=Path, help="Local JSON review or candidate destination")
+    parser.add_argument("--audit-dramaturgy", type=Path, help="Audit an approved morphology candidate offline")
+    parser.add_argument("--dramaturgy-candidate", type=Path, help="Morphology candidate for production dramaturgy context")
+    parser.add_argument("--dramaturgy-context", type=Path, help="Author-annotated dramaturgy JSON")
+    parser.add_argument("--dramaturgy-output", type=Path, help="Offline dramaturgy audit JSON destination")
+    parser.add_argument("--approve-dramaturgy-brief", action="store_true", help="Authorize dramaturgy context in a live provider request")
     parser.add_argument("--overwrite", action="store_true", help="Allow replacing an existing output")
     return parser.parse_args(argv)
 
@@ -227,6 +236,24 @@ async def main(argv=None) -> int:
             print(f"Ontology processing failed: {exc}", file=sys.stderr)
             return 2
         print(f"Saved ontology JSON to {args.ontology_output}")
+        return 0
+    if args.audit_dramaturgy:
+        if not args.dramaturgy_context or not args.dramaturgy_output or args.dramaturgy_candidate:
+            print("Offline audit requires --dramaturgy-context and --dramaturgy-output, without --dramaturgy-candidate.", file=sys.stderr)
+            return 2
+        from cinemaswarm_world.morphology import load_candidate
+        from cinemaswarm_world.dramaturgy import audit_dramaturgy, load_context
+        import json
+        try:
+            audited_story = load_candidate(args.audit_dramaturgy)
+            audited_context = load_context(args.dramaturgy_context, audited_story)
+            audited_report = audit_dramaturgy(audited_story, audited_context)
+            write_packet(args.dramaturgy_output, json.dumps(audited_report, indent=2, ensure_ascii=False) + "\n",
+                         overwrite=args.overwrite)
+        except (OSError, ValueError) as exc:
+            print(f"Dramaturgy audit failed: {exc}", file=sys.stderr)
+            return 2
+        print(f"Saved dramaturgy audit to {args.dramaturgy_output}")
         return 0
     brief = args.brief.read_text(encoding="utf-8") if args.brief else DEFAULT_BRIEF
     if args.world_snapshot:
@@ -263,6 +290,24 @@ async def main(argv=None) -> int:
                   file=sys.stderr)
             return 3
         request += morphology_context(candidate, report)
+    if bool(args.dramaturgy_candidate) != bool(args.dramaturgy_context):
+        print("Dramaturgy production requires both --dramaturgy-candidate and --dramaturgy-context.", file=sys.stderr)
+        return 2
+    if args.dramaturgy_candidate:
+        from cinemaswarm_world.morphology import load_candidate
+        from cinemaswarm_world.dramaturgy import load_context, audit_dramaturgy, dramaturgy_context
+        try:
+            dramatic_story = load_candidate(args.dramaturgy_candidate)
+            dramatic_annotations = load_context(args.dramaturgy_context, dramatic_story)
+            dramatic_report = audit_dramaturgy(dramatic_story, dramatic_annotations)
+            context_text = dramaturgy_context(dramatic_report)
+        except (OSError, ValueError) as exc:
+            print(f"Invalid dramaturgy context: {exc}", file=sys.stderr)
+            return 2
+        if not args.dry_run and not args.approve_dramaturgy_brief:
+            print("Dramaturgy context requires --approve-dramaturgy-brief for live generation.", file=sys.stderr)
+            return 2
+        request += context_text
     if args.dry_run:
         print(request)
         return 0
