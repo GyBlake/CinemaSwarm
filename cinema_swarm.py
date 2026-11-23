@@ -222,12 +222,39 @@ def parse_args(argv=None):
     parser.add_argument("--dramaturgy-context", type=Path, help="Author-annotated dramaturgy JSON")
     parser.add_argument("--dramaturgy-output", type=Path, help="Offline dramaturgy audit JSON destination")
     parser.add_argument("--approve-dramaturgy-brief", action="store_true", help="Authorize dramaturgy context in a live provider request")
+    parser.add_argument("--validate-av-manifest", type=Path, help="Validate shot-level AV metadata against canonical snapshots offline")
+    parser.add_argument("--av-report", type=Path, help="Continuity audit JSON destination")
     parser.add_argument("--overwrite", action="store_true", help="Allow replacing an existing output")
     return parser.parse_args(argv)
 
 
 async def main(argv=None) -> int:
     args = parse_args(argv)
+    if args.validate_av_manifest:
+        if not all((args.world_snapshot, args.identity_snapshot, args.asset_bindings, args.av_report)):
+            print("AV validation requires --world-snapshot, --identity-snapshot, --asset-bindings and --av-report.", file=sys.stderr)
+            return 2
+        from cinemaswarm_world.adapter import load_world_snapshot
+        from cinemaswarm_world.identity_adapter import load_identity_snapshot
+        from cinemaswarm_world.embodiment import load_binding_snapshot
+        from cinemaswarm_world.av_continuity import read_manifest, validate_av_continuity
+        import json
+        try:
+            manifest = read_manifest(args.validate_av_manifest)
+            world = load_world_snapshot(args.world_snapshot)
+            identities = load_identity_snapshot(args.identity_snapshot)
+            bindings = load_binding_snapshot(args.asset_bindings)
+            report = validate_av_continuity(manifest, world, identities, bindings)
+            write_packet(args.av_report, json.dumps(report, ensure_ascii=False, indent=2) + "\n",
+                         overwrite=args.overwrite)
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            print(f"AV continuity validation failed: {exc}", file=sys.stderr)
+            return 2
+        if report["error_count"]:
+            print("AV continuity metadata_mismatch; see report.", file=sys.stderr)
+            return 3
+        print(f"Saved AV continuity metadata report to {args.av_report}")
+        return 0
     if args.extract_ontology or args.finalize_ontology_review:
         if bool(args.extract_ontology) == bool(args.finalize_ontology_review) or not args.ontology_output:
             print("Choose exactly one ontology operation and supply --ontology-output.", file=sys.stderr)

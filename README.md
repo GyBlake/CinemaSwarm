@@ -130,6 +130,23 @@ requires `--approve-world-brief`, `--approve-identity-brief`, and
 `--approve-asset-brief`.
 [Embodiment documentation](docs/embodiment-bindings.md).
 
+## Offline audiovisual continuity manifest validation
+
+Compare *declared* shot metadata to the replay-verified world/identity/body
+state without a provider call:
+
+```bash
+python cinema_swarm.py --validate-av-manifest ./private/shots.json \
+  --world-snapshot ./private/world.json \
+  --identity-snapshot ./private/identity.json \
+  --asset-bindings ./private/assets.json \
+  --av-report ./private/continuity-report.json
+```
+
+This detects metadata mismatches in body occupancy, reference assets, voice
+signature IDs, clothing and worn equipment. It **does not inspect rendered
+pixels or audio timbre**. See [AV continuity guide](docs/av-continuity.md).
+
 ## Architecture
 
 ```text
