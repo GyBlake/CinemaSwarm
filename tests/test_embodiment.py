@@ -72,13 +72,8 @@ def test_conflicting_equipment_rolls_back():
     original = assets.snapshot()
     with pytest.raises(ValueError, match="slot"):
         assets.pulse(T1, [
-            BindingEvent("good", T1, "body_change", "body-b", {"clothing": "green"}, "approved"),
-            BindingEvent("bad", T1, "object_change", "talisman",
-                         {"location": "worn", "holder": "body-b", "slot": "neck"}, "approved"),
-            BindingEvent("second", T1, "object_change", "talisman",
-                         {"location": "worn", "holder": "body-a", "slot": "neck"}, "approved"),
-        ]) if False else assets.pulse(T1, [
-            BindingEvent("one", T1, "body_change", "body-a", {"clothing": "green"}, "approved"),
+            BindingEvent("one", T1, "body_change", "body-a",
+                         {"clothing": "green"}, "approved"),
             BindingEvent("two", T1, "object_change", "talisman",
                          {"location": "carried", "holder": "body-b", "slot": None}, "approved"),
             BindingEvent("three", T1, "object_change", "talisman",
