@@ -59,6 +59,9 @@ def create_orchestrator():
     Return precise fixes.
     Distinguish structural plot repetition from surface changes in dialogue and visuals.
     Preserve approved causal events, character agency, and world provenance.
+    When identity projections are supplied, verify stable IDs, body occupancy,
+    equipment state, relationships, and all appearance/voice changes against
+    the snapshot. Flag contradictory visual or identity continuity.
     """,
     )
     
@@ -201,6 +204,8 @@ def parse_args(argv=None):
     parser.add_argument("--dry-run", action="store_true", help="Preview the request without provider calls")
     parser.add_argument("--world-snapshot", type=Path, help="Local CinemaSwarm world-state JSON")
     parser.add_argument("--approve-world-brief", action="store_true", help="Authorize world context in a live provider request")
+    parser.add_argument("--identity-snapshot", type=Path, help="Replay-verified identity continuity JSON, requires world snapshot")
+    parser.add_argument("--approve-identity-brief", action="store_true", help="Authorize identity-state context in a live provider request")
     parser.add_argument("--morphology-candidate", type=Path, help="Annotated candidate story structure JSON")
     parser.add_argument("--morphology-library", type=Path, help="Local JSON library of annotated story structures")
     parser.add_argument("--originality-threshold", type=float, default=0.85, help="Block on similarity at or above this score (default 0.85)")
@@ -256,6 +261,9 @@ async def main(argv=None) -> int:
         print(f"Saved dramaturgy audit to {args.dramaturgy_output}")
         return 0
     brief = args.brief.read_text(encoding="utf-8") if args.brief else DEFAULT_BRIEF
+    if args.identity_snapshot and not args.world_snapshot:
+        print("Identity context requires --world-snapshot.", file=sys.stderr)
+        return 2
     if args.world_snapshot:
         from cinemaswarm_world.adapter import build_world_request, load_world_snapshot
         try:
@@ -269,6 +277,21 @@ async def main(argv=None) -> int:
             return 2
     else:
         request = build_request(brief)
+    if args.identity_snapshot:
+        from cinemaswarm_world.identity_adapter import (
+            load_identity_snapshot, project_identities, identity_context,
+        )
+        try:
+            identity_registry = load_identity_snapshot(args.identity_snapshot)
+            identity_projection = project_identities(snapshot, identity_registry)
+            identity_prompt = identity_context(identity_projection)
+        except (OSError, ValueError) as exc:
+            print(f"Invalid identity snapshot: {exc}", file=sys.stderr)
+            return 2
+        if not args.dry_run and not args.approve_identity_brief:
+            print("Identity context requires --approve-identity-brief for live generation.", file=sys.stderr)
+            return 2
+        request += identity_prompt
     if bool(args.morphology_candidate) != bool(args.morphology_library):
         print("Morphology gate requires both --morphology-candidate and --morphology-library.", file=sys.stderr)
         return 2

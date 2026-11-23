@@ -67,3 +67,24 @@ body-appearance model for faithful visual continuity. Inventory currently
 follows the persona rather than body location unless an explicit item event
 updates it. This is a simplified v1 policy; body-tethered clothing and
 accessories require a later location/ownership model.
+
+## Optional World Observer → Showrunner integration
+
+An identity registry is intentionally separate from the old World ledger.
+For cross-scene production continuity, use a **read-only projection** after
+replay validation and matching snapshot timestamps:
+
+```bash
+python cinema_swarm.py --world-snapshot ./private/world.json \
+  --identity-snapshot ./private/identity.json --dry-run
+```
+
+Only participants in the five most recent world events are projected, and
+their IDs and canonical names must match the world-state records. Live
+provider processing requires BOTH `--approve-world-brief` and
+`--approve-identity-brief`. Nothing is sent by the local preview.
+The projection preserves current body, clothing, physique, voice delivery,
+relationships, skills and inventory without rewriting the canonical ledger.
+
+**Compatibility:** Old World snapshots without any identity projection remain
+supported. This is a read-only bridge, not a single cross-ledger transaction.
