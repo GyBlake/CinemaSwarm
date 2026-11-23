@@ -138,7 +138,7 @@ def test_measured_audio_loudness_can_pass_studio_gate(tmp_path):
 def test_excessive_true_peak_blocks_even_when_artistic_scores_are_perfect(tmp_path):
     doc = sample(tmp_path)
     measured = {"integrated_lufs": -16.0, "true_peak_dbfs": 0.0, "method": "ffmpeg ebur128"}
-    with patch("cinemaswarm_world.benchmarks.probe_media", return_value=PROBED), \\
+    with patch("cinemaswarm_world.benchmarks.probe_media", return_value=PROBED), \
          patch("cinemaswarm_world.benchmarks.probe_loudness", return_value=measured):
         report = audit_season(doc, tmp_path)
     assert "true_peak_above_studio_limit" in report["episodes"][0]["failures"]

@@ -150,8 +150,8 @@ def probe_loudness(path: Path) -> dict:
     if len(summary) != 2:
         raise ValueError("EBU loudness summary unavailable")
     tail = summary[1]
-    integrated = re.search(r"Integrated loudness:.*?\\bI:\\s*(-?[0-9]+(?:\\.[0-9]+)?)\\s*LUFS", tail, re.S)
-    true_peak = re.search(r"True peak:.*?\\bPeak:\\s*(-?[0-9]+(?:\\.[0-9]+)?)\\s*dBFS", tail, re.S)
+    integrated = re.search(r"Integrated loudness:.*?\bI:\s*(-?[0-9]+(?:\.[0-9]+)?)\s*LUFS", tail, re.S)
+    true_peak = re.search(r"True peak:.*?\bPeak:\s*(-?[0-9]+(?:\.[0-9]+)?)\s*dBFS", tail, re.S)
     if not integrated or not true_peak:
         raise ValueError("EBU loudness / true peak not measured")
     loudness, peak = float(integrated.group(1)), float(true_peak.group(1))
