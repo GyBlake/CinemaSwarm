@@ -11,5 +11,14 @@ jobs:
         with:
           python-version: '3.11'
       - run: python -m pip install -r requirements-dev.txt
+      - name: Install FFmpeg and FFprobe for real episode rendering tests
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          command -v ffmpeg
+          command -v ffprobe
       - run: python -m compileall -q cinema_swarm.py
-      - run: python -m pytest -q
+      - name: Test everything including real MP4 assembly
+        run: python -m pytest -q -rs
+      - name: Verify executable episode renderer with actual media
+        run: python -m pytest -q tests/test_episode_renderer.py -rs
