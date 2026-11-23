@@ -207,6 +207,7 @@ def analyze_evidence(plan: dict, root: Path) -> dict:
         metadata = validate_av_continuity(manifest, world, identity, binding)
         shot_errors = metadata["error_count"]
         errors += shot_errors
+        unknown += sum(f["severity"] == "unknown" for f in metadata["findings"])
         observations = {entry["identity_id"]: entry for entry in manifest["shots"][0]["cast"]}
         media_checks = []
         for entry in shot["media"]:
@@ -216,7 +217,13 @@ def analyze_evidence(plan: dict, root: Path) -> dict:
             kind = entry["kind"]
             reference = _local(root, entry["reference"])
             rendered = _local(root, entry["rendered"])
-            digest = _hash(rendered, entry.get("rendered_sha256"))
+            manifest_digest = observations[pid].get(
+                "rendered_image_sha256" if kind == "image" else "rendered_audio_sha256"
+            )
+            provided_digest = entry.get("rendered_sha256")
+            if manifest_digest and provided_digest and manifest_digest != provided_digest:
+                raise ValueError("plan and manifest media hashes disagree")
+            digest = _hash(rendered, provided_digest or manifest_digest)
             if digest["integrity"] == "mismatch":
                 errors += 1
                 findings.append({"shot_id": shot["shot_id"], "identity_id": pid,
@@ -248,6 +255,13 @@ def analyze_evidence(plan: dict, root: Path) -> dict:
                                  "detail": "generic signal difference; manual continuity review required"})
             media_checks.append({"identity_id": pid, "kind": kind, "hash": digest,
                                  "comparison": comparison})
+        available = {(item["identity_id"], item["kind"]) for item in shot["media"]}
+        for person in manifest["shots"][0]["cast"]:
+            if person["voice_active"] and (person["identity_id"], "audio") not in available:
+                unknown += 1
+                findings.append({"shot_id": shot["shot_id"],
+                                 "identity_id": person["identity_id"],
+                                 "field": "missing_audio_evidence", "severity": "unknown"})
         shot_reports.append({"shot_id": shot["shot_id"], "at": shot["at"],
                              "metadata": metadata, "media": media_checks})
     return {
