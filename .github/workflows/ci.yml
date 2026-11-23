@@ -22,3 +22,14 @@ jobs:
         run: python -m pytest -q -rs
       - name: Verify executable episode renderer with actual media
         run: python -m pytest -q tests/test_episode_renderer.py -rs
+      - name: Generate synthetic episode and technical receipt for review
+        run: python scripts/create_episode_smoke.py
+      - name: Upload inspectable sample MP4 and receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: cinemaswarm-episode-smoke
+          path: |
+            build/smoke/smoke-episode.mp4
+            build/smoke/receipt.json
+            build/smoke/plan.json
+          retention-days: 7

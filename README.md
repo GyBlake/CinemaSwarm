@@ -195,6 +195,16 @@ This FFmpeg stage provides a **real rendering smoke test**, a checked duration
 and master SHA-256. It cannot manufacture character animation or satisfy the
 studio quality score by itself. [Renderer contract](docs/episode-renderer.md).
 
+## Testing-ready synthetic episode
+
+CI installs FFmpeg, runs actual MP4 assembly tests (not skipped), generates a
+short **synthetic** 360 × 640 preview using `scripts/create_episode_smoke.py`,
+and publishes the MP4, plan, and SHA-256 receipt as an Actions artifact.
+
+The preview is deliberately **not** a film or character-rendering
+demonstration and receives no artistic score. It is a reproducible technical
+test proving that assets can be assembled, measured and audited.
+
 ## Architecture
 
 ```text
