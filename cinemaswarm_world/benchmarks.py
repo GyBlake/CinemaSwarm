@@ -306,13 +306,15 @@ def _episode(ep: dict, root: Path, profile: dict, season_id: str) -> dict:
     except (OSError, ValueError) as exc:
         evidence["loudness_probe_error"] = str(exc)
         unknown("loudness_unmeasured")
-    if not ep.get("caption_review"):
+    caption_review = ep.get("caption_review")
+    if not isinstance(caption_review, dict):
         unknown("caption_accessibility_unreviewed")
-    elif ep["caption_review"].get("approved") is not True:
+    elif caption_review.get("approved") is not True:
         fail("captions_not_approved")
-    if not ep.get("rights_review"):
+    rights_review = ep.get("rights_review")
+    if not isinstance(rights_review, dict):
         unknown("rights_review_missing")
-    elif ep["rights_review"].get("approved") is not True:
+    elif rights_review.get("approved") is not True:
         fail("rights_review_not_approved")
     return {"number": ep["number"], "status": "blocked" if failures else ("incomplete" if unknowns else "qualified"),
             "failures": sorted(set(failures)), "unknowns": sorted(set(unknowns)),

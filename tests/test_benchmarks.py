@@ -153,3 +153,33 @@ def test_provenance_season_and_episode_must_both_match(tmp_path):
     with patch("cinemaswarm_world.benchmarks.probe_media", return_value=PROBED):
         report = audit_season(doc, tmp_path)
     assert "provenance_identity_mismatch" in report["episodes"][0]["failures"]
+
+
+def test_cli_audit_season_blocks_incomplete_evidence(tmp_path):
+    import subprocess
+    import sys
+    manifest = tmp_path / "season.json"
+    output = tmp_path / "audit.json"
+    manifest.write_text(json.dumps(sample(tmp_path)))
+    cli = Path(__file__).resolve().parents[1] / "cinema_swarm.py"
+    result = subprocess.run(
+        [sys.executable, str(cli), "--audit-season", str(manifest),
+         "--benchmark-root", str(tmp_path), "--benchmark-report", str(output)],
+        capture_output=True, text=True, cwd=tmp_path, check=False,
+    )
+    # The fixture contains fake MP4 bytes, so real ffprobe cannot verify media.
+    assert result.returncode == 3
+    report = json.loads(output.read_text())
+    assert report["status"] == "incomplete"
+    assert "media_probe_or_file_unavailable" in report["episodes"][0]["unknowns"]
+
+
+def test_malformed_rights_and_caption_review_are_unknown_not_crashes(tmp_path):
+    doc = sample(tmp_path)
+    doc["episodes"][0]["rights_review"] = "not reviewed"
+    doc["episodes"][0]["caption_review"] = "not reviewed"
+    with patch("cinemaswarm_world.benchmarks.probe_media", return_value=PROBED):
+        result = audit_season(doc, tmp_path)
+    assert result["status"] == "incomplete"
+    assert "rights_review_missing" in result["episodes"][0]["unknowns"]
+    assert "caption_accessibility_unreviewed" in result["episodes"][0]["unknowns"]
