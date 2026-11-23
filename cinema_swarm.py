@@ -55,6 +55,8 @@ def create_orchestrator():
     You are the continuity protector.
     Find plot holes, contradictions, timeline breaks, character inconsistency, broken lore, and visual drift.
     Return precise fixes.
+    Distinguish structural plot repetition from surface changes in dialogue and visuals.
+    Preserve approved causal events, character agency, and world provenance.
     """,
     )
     
@@ -63,6 +65,8 @@ def create_orchestrator():
         instructions="""
     You map the symbolic and emotional meaning-space of every clip.
     For each clip define: core emotion, conflict, symbol, motif, callback, hidden meaning, future setup.
+    Analyze dramatic functions, actor roles, outcomes and causal links when supplied.
+    Suggest substantive changes rather than merely renaming or re-skinning a familiar plot.
     """,
     )
     
@@ -193,6 +197,9 @@ def parse_args(argv=None):
     parser.add_argument("--dry-run", action="store_true", help="Preview the request without provider calls")
     parser.add_argument("--world-snapshot", type=Path, help="Local CinemaSwarm world-state JSON")
     parser.add_argument("--approve-world-brief", action="store_true", help="Authorize world context in a live provider request")
+    parser.add_argument("--morphology-candidate", type=Path, help="Annotated candidate story structure JSON")
+    parser.add_argument("--morphology-library", type=Path, help="Local JSON library of annotated story structures")
+    parser.add_argument("--originality-threshold", type=float, default=0.85, help="Block on similarity at or above this score (default 0.85)")
     parser.add_argument("--overwrite", action="store_true", help="Allow replacing an existing output")
     return parser.parse_args(argv)
 
@@ -213,6 +220,27 @@ async def main(argv=None) -> int:
             return 2
     else:
         request = build_request(brief)
+    if bool(args.morphology_candidate) != bool(args.morphology_library):
+        print("Morphology gate requires both --morphology-candidate and --morphology-library.", file=sys.stderr)
+        return 2
+    if args.morphology_candidate:
+        from cinemaswarm_world.morphology import (
+            load_candidate, load_library, originality_report, morphology_context,
+        )
+        try:
+            candidate = load_candidate(args.morphology_candidate)
+            library = load_library(args.morphology_library)
+            report = originality_report(candidate, library, args.originality_threshold)
+        except (OSError, ValueError) as exc:
+            print(f"Invalid morphology inputs: {exc}", file=sys.stderr)
+            return 2
+        if report["blocked"]:
+            match = report["matches"][0]
+            print(f"Originality gate blocked: {match['story_id']} "
+                  f"(similarity={match['score']:.4f}, threshold={report['threshold']:.4f}).",
+                  file=sys.stderr)
+            return 3
+        request += morphology_context(candidate, report)
     if args.dry_run:
         print(request)
         return 0

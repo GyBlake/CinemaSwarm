@@ -9,6 +9,7 @@
 - Modular agent tools for nine creative-production disciplines
 - Configurable UTF-8 story briefs
 - Optional, read-only narrative world snapshot adapter with explicit approval for live context sharing
+- Annotated plot morphology comparison and offline originality gate (requires an author-supplied reference library)
 - Safe offline request preview, without API keys or installed SDK packages
 - Output path selection, no-clobber default, optional `--overwrite`
 - Neutral sample project: **Lantern City**
@@ -60,6 +61,22 @@ Generate a `world.json` file with `World.to_json()` (see
 [world engine docs](docs/world-engine.md)). No snapshots are included in the
 repository. Live use sends the selected story context to an AI provider and may
 incur charges. The current pipeline still produces text packets, not video.
+
+## Narrative morphology originality check
+
+Compare a candidate's annotated dramatic functions, character roles, outcomes,
+and causal links against a **local reference library** before generation:
+
+```bash
+python cinema_swarm.py --dry-run \
+  --morphology-candidate ./private/candidate.json \
+  --morphology-library ./private/library.json
+```
+
+The gate blocks high structural similarity (exit code 3, default score threshold
+0.85). It ignores mere changes in names, dialogue or visual style. It is an
+author-supplied heuristic and **not** copyright clearance or universal
+originality detection. See [morphology docs](docs/narrative-morphology.md).
 
 ## Architecture
 
