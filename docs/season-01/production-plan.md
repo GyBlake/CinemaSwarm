@@ -84,6 +84,27 @@ The [scene-role contract](e01-scene-roles.json) binds all ten existing scenes to
 - Sound layers distinguish diegetic recording, host-internal dialogue and objective sound.
 - Medical and radiation depictions avoid misinformation and real-world enhancement claims.
 
+### Nia/Vesper identity and contact proof previsualization
+
+[Identity and voice design contract](nia-vesper-identity.json) specifies Nia's
+character silhouette, wardrobe, acting and original voice direction, alongside
+Vesper's primarily audio-first presence, fallible knowledge, and subjective
+waking-dream graphical vocabulary. All assignments are provisional and
+**not approved likeness or voice assets**.
+
+The [40-second contact proof sequence](nia-vesper-contact.json) and
+[short dialogue script](nia-vesper-contact-script.md) align pilot shots
+S03, S04, S10, S11. The reel intentionally combines two different scenes
+for a **visual language test**, rather than pretending to be a contiguous
+episode excerpt. `cinemaswarm_world/contact_proof.py` validates identity,
+role, scene, duration, host/companion exclusivity and unrendered readiness
+with ten regression tests. No audio, performance, images or film is generated.
+
+**Production gate:** Approve Nia's design and performer voice, create
+original reference stills, record/authorize Vesper performance, then
+produce one camera-pair test of subjective Nexus imagery vs objective
+reverse shot. Paid generative providers are not authorized.
+
 ### Asset and rights requirements
 Minimum pre-pilot review packet: Nia/Mateo/Elias/Mara/Leena approved visual model sheets; 2017 Tortola environment reference; Nia studio; Illinois roadside/event grounds; Philadelphia maintenance room; Chicago observatory; archive set; corona and halo sourced scientific references; cassette and core prop model sheets; Vesper voice design; licensed/custom score; first pass soundscape; captions.
 All acquired third-party content requires usage rights records. Historical footage and public astronomical photography are **not** automatically rights-free.
