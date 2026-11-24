@@ -72,3 +72,49 @@ has been imported and hashed, the production job reconciled with actual
 provider results, automatic measurements and independent human approvals
 completed, at least one controlled defect repaired and revalidated, and
 multiple final episodes cleared both technical and story-continuity audits.
+
+## Operational state machine
+
+`studio_execution.py` supports these guarded, immutable transitions:
+`authorized → running → imported → verified`; `running/imported →
+rejected/failed`. All transitions return a **new** runtime snapshot.
+A failed output can create one bounded repair attempt that preserves prior
+approved assets. `verified` requires the output hash to match measured
+media-QC results plus separate semantic/performance approvals.
+
+```bash
+# Inventory work that can begin without unmet dependencies
+python cinema_swarm.py --list-ready-jobs private/runtime.json
+# Transition authorized job to running; creates a new durable snapshot
+python cinema_swarm.py --job-event private/runtime.json --job-id take1 \
+  --job-action start --job-output private/runtime-running.json
+# Import an actual provider return after download and attributed review
+python cinema_swarm.py --job-event private/runtime-running.json \
+  --job-id take1 --job-action import --job-result private/import-result.json \
+  --job-root private --job-output private/runtime-imported.json
+# Following independent real-media QC and semantic/performance review
+python cinema_swarm.py --job-event private/runtime-imported.json \
+  --job-id take1 --job-action verify --job-result private/verification.json \
+  --job-output private/runtime-verified.json
+```
+
+### Provider API execution (opt-in)
+
+The provider API adapter is **not triggered by CI or ordinary preflight**:
+
+```bash
+python cinema_swarm.py --provider-video-brief private/approved-shot.txt \
+  --provider-video-duration 12 --provider-video-plan private/plan.json
+# Set HEYGEN_API_KEY in the local environment; never commit it.
+python cinema_swarm.py --submit-provider-plan private/plan.json \
+  --provider-approved-by studio-reviewer \
+  --provider-max-cost-usd 5 --provider-estimated-cost-usd 1 \
+  --authorize-provider-spend --provider-receipt private/request-receipt.json
+```
+
+This returns a **provider submission receipt**, not a final video or
+verification. The signed-downloaded resulting file and the provider's actual
+charge must be reconciled through the job-import path. If the submission
+response fails ambiguously, inspect provider history rather than resubmit.
+Local snapshots use atomic replacement, but there is no distributed
+cross-machine writer lock or automatic remote polling.

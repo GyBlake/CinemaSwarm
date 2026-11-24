@@ -271,12 +271,81 @@ def parse_args(argv=None):
     parser.add_argument("--audit-series-ledger", type=Path, help="Cross-episode symbolic continuity ledger")
     parser.add_argument("--through-episode", type=int, help="Episode horizon for unresolved obligations")
     parser.add_argument("--series-report", type=Path, help="Series payoff audit output report")
+    parser.add_argument("--job-event", type=Path, help="Runtime manifest for one authorized job transition")
+    parser.add_argument("--job-id", help="Production job identifier")
+    parser.add_argument("--job-action", choices=["start", "import", "verify", "reject", "fail"], help="Job lifecycle transition")
+    parser.add_argument("--job-result", type=Path, help="Provider import or media-review receipt")
+    parser.add_argument("--job-root", type=Path, help="Approved local media root for imported take")
+    parser.add_argument("--job-output", type=Path, help="Updated runtime snapshot")
+    parser.add_argument("--list-ready-jobs", type=Path, help="Enumerate authorized, prerequisite-ready jobs")
+    parser.add_argument("--provider-video-brief", type=Path, help="Local UTF-8 prompt for HeyGen v3")
+    parser.add_argument("--provider-video-duration", type=int, default=10)
+    parser.add_argument("--provider-video-plan", type=Path, help="Provider dry-run JSON plan output")
+    parser.add_argument("--submit-provider-plan", type=Path, help="Approved provider plan for explicit paid submission")
+    parser.add_argument("--provider-receipt", type=Path, help="Provider submission receipt output")
+    parser.add_argument("--provider-approved-by", help="Authorized reviewer for provider spend")
+    parser.add_argument("--provider-max-cost-usd", type=float)
+    parser.add_argument("--provider-estimated-cost-usd", type=float)
+    parser.add_argument("--authorize-provider-spend", action="store_true", help="Explicitly authorize provider API spending")
     parser.add_argument("--overwrite", action="store_true", help="Allow replacing an existing output")
     return parser.parse_args(argv)
 
 
 async def main(argv=None) -> int:
     args = parse_args(argv)
+    if args.job_event or args.list_ready_jobs or args.provider_video_brief or args.submit_provider_plan:
+        import json
+        from cinemaswarm_world.collaboration import load_json
+        from cinemaswarm_world.studio_runtime import write_atomic
+        from cinemaswarm_world.studio_execution import transition, ready_jobs
+        from cinemaswarm_world.heygen_adapter import make_provider_plan, submit_video
+        try:
+            choices=[args.job_event,args.list_ready_jobs,
+                     args.provider_video_brief,args.submit_provider_plan]
+            if sum(bool(v) for v in choices)!=1:
+                raise ValueError("choose one production execution operation")
+            if args.job_event:
+                if not args.job_id or not args.job_action or not args.job_output:
+                    raise ValueError("job id/action/output required")
+                details=load_json(args.job_result) if args.job_result else None
+                result=transition(load_json(args.job_event),args.job_id,args.job_action,
+                                  root=args.job_root,result=details)
+                output=args.job_output
+            elif args.list_ready_jobs:
+                result={"ready_jobs":ready_jobs(load_json(args.list_ready_jobs))}
+                output=None
+            elif args.provider_video_brief:
+                if not args.provider_video_plan:
+                    raise ValueError("provider dry-run output required")
+                brief=args.provider_video_brief.read_text(encoding="utf-8")
+                result=make_provider_plan(brief,duration=args.provider_video_duration)
+                output=args.provider_video_plan
+            else:
+                if (not args.provider_receipt or not args.provider_approved_by or
+                    args.provider_max_cost_usd is None or
+                    args.provider_estimated_cost_usd is None):
+                    raise ValueError("authorized provider budget and receipt destination required")
+                plan=load_json(args.submit_provider_plan)
+                if not isinstance(plan,dict) or plan.get("version")!=1 or plan.get("provider")!="heygen-video-1":
+                    raise ValueError("unrecognized provider plan")
+                from cinemaswarm_world.collaboration import digest
+                if plan.get("request_sha256")!=digest(plan.get("request")):
+                    raise ValueError("provider plan altered after approval")
+                result=submit_video(plan["request"],approved_by=args.provider_approved_by,
+                       max_cost_usd=args.provider_max_cost_usd,
+                       estimated_cost_usd=args.provider_estimated_cost_usd,
+                       authorization=args.authorize_provider_spend)
+                output=args.provider_receipt
+            if output is not None:
+                write_atomic(output,result,overwrite=args.overwrite)
+            else:
+                print(json.dumps(result,indent=2))
+                return 0
+        except (OSError,ValueError,TypeError,KeyError,UnicodeError) as exc:
+            print(f"Studio execution failed: {exc}",file=sys.stderr)
+            return 2
+        print(f"Studio output saved to {output}")
+        return 0
     if args.audit_runtime or args.plan_repair or args.inspect_clips or args.audit_series_ledger:
         import json
         from cinemaswarm_world.collaboration import load_json
