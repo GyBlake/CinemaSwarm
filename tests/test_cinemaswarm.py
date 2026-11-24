@@ -10,7 +10,6 @@ class StubAgent:
         return kwargs
 
 sys.modules.setdefault("agents", types.SimpleNamespace(Agent=StubAgent, Runner=types.SimpleNamespace()))
-sys.modules.setdefault("dotenv", types.SimpleNamespace(load_dotenv=lambda: None))
 
 from cinema_swarm import DEFAULT_BRIEF, build_request, parse_args, write_packet
 

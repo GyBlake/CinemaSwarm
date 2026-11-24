@@ -57,7 +57,8 @@ def plan_shot(handoff, shot_id, workflow, config, frame):
     return {
         "shot_id": shot_id, "episode_id": handoff["episode_id"],
         "contract_sha256": handoff["shot_contract_sha256"],
-        "frame": frame, "dialogue": shot["dialogue"], "start_ms": shot["start_ms"],
+        "frame": frame, "direction": shot["blocking"], "dialogue": shot["dialogue"],
+        "start_ms": shot["start_ms"],
         "end_ms": shot["end_ms"], "workflow_sha256": digest(workflow),
         "request": {"prompt": graph}, "request_sha256": digest({"prompt": graph}),
     }
