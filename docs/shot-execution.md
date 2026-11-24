@@ -74,3 +74,60 @@ hash-identified. It does not automatically compare faces or mouths to the
 approved imagery, measure phonemes, or independently validate cinematic
 quality. The current local renderer still assembles still images and audio;
 this shot contract does not secretly provide a working AI-video backend.
+
+## Higgsfield rendering
+
+Use the provider handoff emitted by `--prepare-shots`. Seed and approve the
+sets, cast and recurring props first. For each source object, record its
+production-graph SHA-256 and the Higgsfield UUID of the corresponding
+uploaded image or saved Element. Keep this file private.
+
+```json
+{
+  "the-ring-cassette": {
+    "sha256": "<exact SHA-256 from the production graph>",
+    "role": "ref_element",
+    "value": "<Higgsfield Element UUID>"
+  }
+}
+```
+
+Reuse the same object ID in each shot that needs the same prop. The adapter
+resolves it to the same provider ID across scenes and blocks missing or
+stale bindings. Select a model that accepts your bound media roles. A model
+that supports a single start image cannot consume separate set and prop
+references. The render is rounded up to whole seconds with a three-second
+minimum. Retain the original timing for the edit.
+
+```bash
+python -m scripts.higgsfield_shots plan private/provider-shots.json \
+  private/higgsfield-bindings.json --model YOUR_MODEL > private/higgsfield-plan.json
+```
+
+Planning works offline. Live commands need the Python `mcp` package and an
+authenticated streamable HTTP MCP connection that exposes
+`estimate_video_cost`, `generate_video`, and `jobs_wait`. Set
+`HIGGSFIELD_MCP_URL` for a different endpoint,
+`HIGGSFIELD_MCP_TOKEN` if the connection provides a bearer token, and
+`HIGGSFIELD_MCP_TOOL_PREFIX` if the tool names are namespaced. The default
+URL is the [official Higgsfield MCP endpoint](https://mcp.higgsfield.ai/mcp).
+This client does not implement interactive OAuth. Live calls through the
+ChatGPT connector and authenticated calls from a standalone Python
+process are separate connections.
+
+```bash
+python -m scripts.higgsfield_shots quote private/higgsfield-plan.json SHOT_ID > private/shot-quote.json
+python -m scripts.higgsfield_shots submit private/higgsfield-plan.json SHOT_ID \
+  private/shot-quote.json --max-credits APPROVED_LIMIT --ledger private/render-ledger \
+  > private/shot-receipt.json
+python -m scripts.higgsfield_shots status private/shot-receipt.json
+```
+
+Pass the credit limit only after reviewing the shot and quote. The adapter
+refreshes the quote before submission and stops if the price increases.
+Keep a single shared ledger for the production. A claimed request with
+no job receipt needs reconciliation against Higgsfield history before any
+retry. Use the returned media for the existing continuity review before
+cutting it into the episode. Voice and dialogue assignments remain in the
+plan for editorial. The adapter requests picture with separate dialogue
+and does not assert that Higgsfield followed the prompt.
