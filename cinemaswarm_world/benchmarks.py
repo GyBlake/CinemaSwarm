@@ -193,7 +193,7 @@ def validate_season_manifest(doc: object) -> dict:
         numbers.add(number)
         for field in ("master", "master_sha256", "captions", "captions_sha256",
                       "continuity_report", "provenance_record", "collaboration_package",
-                      "collaboration_ack", "performance_report", "symbolic_program", "symbolic_report"):
+                      "collaboration_ack", "performance_report", "symbolic_program", "symbolic_report", "production_graph", "production_graph_report"):
             _bounded_text(ep.get(field), field)
         for field in ("master_sha256", "captions_sha256"):
             digest = ep[field]
@@ -319,6 +319,20 @@ def _episode(ep: dict, root: Path, profile: dict, season_id: str) -> dict:
         evidence["symbolic_program_sha256"] = digest(symbolic)
     except (OSError, ValueError, KeyError, TypeError, AttributeError):
         unknown("symbolic_narrative_evidence_missing_or_invalid")
+    try:
+        from .production_graph import validate_graph
+        from .collaboration import load_json, digest
+        graph = load_json(_file(root, ep["production_graph"]))
+        validate_graph(graph)
+        report = load_json(_file(root, ep["production_graph_report"]))
+        if (report.get("episode_id") != graph["episode_id"] or
+            report.get("graph_sha256") != digest(graph) or
+            report.get("status") != "checks_passed" or
+            report.get("error_count") != 0 or report.get("unknown_count") != 0):
+            fail("production_graph_gate_failed")
+        evidence["production_graph_sha256"] = digest(graph)
+    except (OSError, ValueError, KeyError, TypeError, AttributeError):
+        unknown("production_graph_evidence_unavailable")
     reviews = ep["reviews"]
     missing = [key for key in MANDATORY_REVIEWS if key not in reviews]
     if missing:

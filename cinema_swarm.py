@@ -249,12 +249,33 @@ def parse_args(argv=None):
     parser.add_argument("--symbolic-output", type=Path, help="Shot-level symbolic directions or audit report")
     parser.add_argument("--audit-symbolic", type=Path, help="Human-observed symbolic shot evidence JSON")
     parser.add_argument("--symbolic-root", type=Path, help="Approved local root for observed evidence")
+    parser.add_argument("--audit-production-graph", type=Path, help="Validate versioned production object graph")
+    parser.add_argument("--production-root", type=Path, help="Approved production root for evidence files")
+    parser.add_argument("--production-report", type=Path, help="Production graph audit output")
     parser.add_argument("--overwrite", action="store_true", help="Allow replacing an existing output")
     return parser.parse_args(argv)
 
 
 async def main(argv=None) -> int:
     args = parse_args(argv)
+    if args.audit_production_graph:
+        import json
+        from cinemaswarm_world.collaboration import load_json
+        from cinemaswarm_world.production_graph import audit_graph
+        try:
+            if not args.production_root or not args.production_report:
+                raise ValueError("--production-root and --production-report required")
+            result = audit_graph(load_json(args.audit_production_graph), args.production_root)
+            write_packet(args.production_report, json.dumps(result, indent=2) + "\n",
+                         overwrite=args.overwrite)
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            print(f"Production graph gate failed: {exc}", file=sys.stderr)
+            return 2
+        if result["status"] != "checks_passed":
+            print("Production graph files failed integrity verification.", file=sys.stderr)
+            return 3
+        print(f"Production graph audit saved to {args.production_report}")
+        return 0
     if args.prepare_symbolic or args.audit_symbolic:
         import json
         from cinemaswarm_world.collaboration import load_json

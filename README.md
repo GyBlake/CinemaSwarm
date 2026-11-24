@@ -234,6 +234,24 @@ prevents a release pass. This is a reviewer-verified semantic gate,
 
 See [multimodal symbolic storytelling](docs/symbolic-narrative.md).
 
+## Versioned production graph and take selection
+
+CinemaSwarm has a versioned, provider-neutral production-object graph:
+explicit ordered references to upstream character/scene/storyboard assets,
+per-output source SHA-256 integrity, optional provider call receipts with
+reported costs and approvals, mandatory production review stops, and
+an explicit selected take list for the final cut.
+
+This is an original production-control implementation informed by publicly
+documented filmmaking patterns, **not** an import of Pine Drama Studio
+or compatibility with the Pine proprietary service.
+
+`python cinema_swarm.py --audit-production-graph ./private/graph.json
+--production-root ./private --production-report ./private/report.json`
+
+Candidate rendering and season qualification require passing graph receipts.
+See [production object graph](docs/production-graph.md).
+
 ## Architecture
 
 ```text

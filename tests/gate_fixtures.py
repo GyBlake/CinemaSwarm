@@ -88,7 +88,40 @@ def write_gate(root, episode_id="lantern-01", audio_name="voice.wav"):
     for filename, payload in (("symbolic.json", program), ("symbolic-observations.json", obs),
                               ("symbolic-report.json", symbolic)):
         (root / filename).write_text(json.dumps(payload, indent=2))
-    return {"collaboration_package": "collaboration.json",
+    from cinemaswarm_world.production_graph import audit_graph, file_sha
+    # Synthetic test graph only; this is NOT a review of an actual film.
+    # Use distinct artifacts to exercise ordered references without generating media.
+    (root / "sample-keyframe.txt").write_text("synthetic storyboard still")
+    (root / "sample-take.txt").write_text("synthetic take")
+    (root / "sample-cut.txt").write_text("synthetic cut")
+    objects = [
+        {"id": "storyboard", "kind": "storyboard", "source": "sample-keyframe.txt",
+         "sha256": file_sha(root / "sample-keyframe.txt"),
+         "inputs_sent_in_order": [], "receipt": None},
+        {"id": "take1", "kind": "take", "source": "sample-take.txt",
+         "sha256": file_sha(root / "sample-take.txt"),
+         "inputs_sent_in_order": [{"id": "storyboard",
+                                   "sha256": file_sha(root / "sample-keyframe.txt")}],
+         "receipt": None},
+        {"id": "cut1", "kind": "cut", "source": "sample-cut.txt",
+         "sha256": file_sha(root / "sample-cut.txt"),
+         "inputs_sent_in_order": [{"id": "take1",
+                                   "sha256": file_sha(root / "sample-take.txt")}],
+         "receipt": None},
+    ]
+    graph = {"version": 1, "episode_id": episode_id, "visibility": "public",
+             "objects": objects, "stops": {
+                 phase: {"approved": True, "reviewer": "test-only",
+                         "evidence": "synthetic fixture not real production"}
+                 for phase in ("assets_planned", "assets_approved",
+                               "shots_planned", "storyboard_approved", "takes_reviewed")
+             }, "cut": {"object_id": "cut1", "take_ids": ["take1"]}}
+    graph_report = audit_graph(graph, root)
+    (root / "production-graph.json").write_text(json.dumps(graph, indent=2))
+    (root / "production-report.json").write_text(json.dumps(graph_report, indent=2))
+    return {"production_graph": "production-graph.json",
+            "production_graph_report": "production-report.json",
+            "collaboration_package": "collaboration.json",
             "collaboration_ack": "ack.json", "performance_report": "performance.json",
             "symbolic_program": "symbolic.json",
             "symbolic_report": "symbolic-report.json"}
