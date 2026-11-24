@@ -131,3 +131,39 @@ retry. Use the returned media for the existing continuity review before
 cutting it into the episode. Voice and dialogue assignments remain in the
 plan for editorial. The adapter requests picture with separate dialogue
 and does not assert that Higgsfield followed the prompt.
+
+## Wan rendering with ComfyUI
+
+Open the [Wan 2.2 image-to-video template](https://docs.comfy.org/tutorials/video/wan/wan2_2)
+in your ComfyUI workspace and export it in API format. Keep a reviewed
+copy of that workflow. Use a trusted ComfyUI server with the model and
+nodes installed. The adapter uses the native server API.
+
+Approve the first frame for each camera angle using the world-seed
+references, then upload it in ComfyUI. For each shot, provide a frame JSON
+with `filename` (the uploaded input path) and `references` (the shot's
+ordered object IDs and SHA-256 values). Reuse the same reference objects
+for the same cast, prop and location across angles. The frame record
+attests to reference provenance. Review the image itself before rendering.
+
+Provide a bindings JSON with `fps` matching the workflow video output
+and one `["node_id", "input_name"]` pair for each of `image`, `positive`,
+`negative` and `length`. Read those IDs from your API export. Bind direct
+inputs, for example a LoadImage node's `image` field. Frame counts round
+up to Wan's 4n+1 format. Keep CinemaSwarm's original timing for editing.
+
+```bash
+python -m scripts.wan_shots plan private/provider-shots.json SHOT_ID \
+  private/wan-api.json private/wan-bindings.json private/first-frame.json \
+  > private/wan-shot.json
+python -m scripts.wan_shots submit private/wan-shot.json \
+  --server http://127.0.0.1:8188 --ledger private/wan-ledger \
+  > private/wan-receipt.json
+python -m scripts.wan_shots status private/wan-receipt.json
+```
+
+Planning is offline. Submission queues a GPU job. Use a single ledger
+for the production and reconcile a claimed request against the ComfyUI
+queue or history before retrying an uncertain submission. ComfyUI's
+status output includes produced file records. Check the takes against the
+shot and continuity contracts and add approved dialogue in editing.
