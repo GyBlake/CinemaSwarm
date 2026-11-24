@@ -49,6 +49,30 @@ Full fulfillment means **eight completed, edited, performance-reviewed, continui
 | 14 | Leena opens decades-old file | Paper, recorder hum | Institutional knowledge, not omniscience |
 | 15 | Blank deck reverse / subjective glyph | Wind, low note, cut | Pilot evidence motif |
 
+## Pilot dramaturgy: shootable escalation
+
+The [scene-role contract](e01-scene-roles.json) binds all ten existing scenes to **15 shot IDs**, a dramatic function, an active choice, a reveal, and a continuity rule. This is not yet a locked shooting script. The highest-value next footage is one 30–45-second performance test using shots S03–S04–S10–S11, showing Nia's private Nexus perspective against an ordinary reverse angle. Review visual identity, intelligible Vesper dialogue, sound-source separation, shot continuity, acting and captions **before** approving a complete pilot render.
+
+### Performance direction
+
+**Nia:** Begins each apparent supernatural event by attempting a mundane explanation. Do not use a glowing HUD as a substitute for her inquiry. Her choice to demand evidence is the story turn.
+
+**Mateo:** Moves efficiently as a trained responder; his action-path doubling is brief, disorienting and private. Never interrupt medically necessary action to deliver exposition.
+
+**Elias:** A first encounter with strange geometry is alarming, not game-like mastery. A coworker remains anchored in the mundane environment.
+
+**Mara:** Notices timestamps and possible confounds. Her restraint is active intelligence, not cynicism.
+
+**Leena:** Withholds classified detail yet refuses mass detention. Small gestures reveal the tension between protective motives and damaging institutional history.
+
+**Vesper:** A nuanced second voice, fallible and not necessarily otherworldly in sound design. Its most revealing line is admitting the limits of its evidence.
+
+### Visual production gates
+- **Externally seen**: ordinary rooms, actors, objects and behaviors.
+- **Subjectively seen**: Nia's Nexus layout, Mateo's motion duplication, Elias's corridor; these effects vanish in a neutral reverse angle.
+- **Historical astronomy**: 2017 solar halo remains a separate optical event. Corona at 2024 totality only; avoid sun-watching shots without protective viewing.
+- **Continuity**: each shot ID is uniquely assigned to one scene; final film assets are pending.
+
 ### Visual continuity checklist
 - Nia: one documented hair silhouette, wardrobing and scar/jewelry positions across studio sequences.
 - Mateo: consistent paramedic uniform, bag damage before/after event, patient medical condition and scene geography.

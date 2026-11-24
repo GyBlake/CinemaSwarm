@@ -3,6 +3,9 @@
 **Format:** dramatic script development draft, intended 24–28 min after expansion, casting, timing and performance. **This is not a 26-minute finished screenplay or finished film.**
 **Setting:** Tortola, British Virgin Islands (2017 dramatized halo); New York / southern Illinois / Philadelphia / Chicago (2024). The corona occurs at totality, not before it.
 
+### Director's character-intent note
+Every scene must show a person making a choice, not only receiving a cosmic signal. The scene-role handoff identifies **whose decision** drives each beat. Nia's unique Nexus System is demonstrated through a question, a failed proof attempt and an invitation to investigate; other awakened characters do not receive equivalent Systems. See [E01 scene-role contract](e01-scene-roles.json). No final cast, image sequence, recorded performance or video is represented by this draft.
+
 FADE IN:
 
 ### 1. EXT. TORTOLA HILLSIDE — LATE AFTERNOON — 2017
