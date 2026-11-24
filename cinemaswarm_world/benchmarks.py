@@ -193,7 +193,7 @@ def validate_season_manifest(doc: object) -> dict:
         numbers.add(number)
         for field in ("master", "master_sha256", "captions", "captions_sha256",
                       "continuity_report", "provenance_record", "collaboration_package",
-                      "collaboration_ack", "performance_report", "symbolic_program", "symbolic_report", "production_graph", "production_graph_report", "semantic_contract", "semantic_report"):
+                      "collaboration_ack", "performance_report", "symbolic_program", "symbolic_report", "production_graph", "production_graph_report", "semantic_contract", "semantic_report", "shot_contract", "shot_report"):
             _bounded_text(ep.get(field), field)
         for field in ("master_sha256", "captions_sha256"):
             digest = ep[field]
@@ -350,6 +350,25 @@ def _episode(ep: dict, root: Path, profile: dict, season_id: str) -> dict:
         evidence["semantic_contract_sha256"] = digest(semantics)
     except (OSError, ValueError, KeyError, TypeError, AttributeError):
         unknown("semantic_interoperability_evidence_unavailable")
+    try:
+        from .collaboration import load_json, digest
+        from .shot_execution import validate_shots
+        package = load_json(_file(root, ep["collaboration_package"]))
+        semantic = load_json(_file(root, ep["semantic_contract"]))
+        symbolic = load_json(_file(root, ep["symbolic_program"]))
+        graph = load_json(_file(root, ep["production_graph"]))
+        shots = load_json(_file(root, ep["shot_contract"]))
+        validate_shots(shots, package, semantic, symbolic, graph)
+        review = load_json(_file(root, ep["shot_report"]))
+        if (review.get("contract_sha256") != digest(shots)
+            or review.get("package_sha256") != digest(package)
+            or review.get("episode_id") != package["episode_id"]
+            or review.get("status") != "checks_passed"
+            or review.get("error_count") != 0 or review.get("unknown_count") != 0):
+            fail("shot_execution_gate_failed")
+        evidence["shot_execution_sha256"] = digest(shots)
+    except (OSError, ValueError, KeyError, TypeError, AttributeError):
+        unknown("shot_execution_evidence_unavailable")
     reviews = ep["reviews"]
     missing = [key for key in MANDATORY_REVIEWS if key not in reviews]
     if missing:

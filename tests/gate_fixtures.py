@@ -157,7 +157,58 @@ def write_gate(root, episode_id="lantern-01", audio_name="voice.wav"):
     for name, value in (("semantic.json", semantic), ("semantic-eval.json", evaluation),
                         ("semantic-report.json", semantic_report)):
         (root / name).write_text(json.dumps(value, indent=2))
-    return {"semantic_contract": "semantic.json",
+    from cinemaswarm_world.shot_execution import audit_shot_evidence
+    shot_contract = {
+        "version": 1, "visibility": "public", "episode_id": episode_id,
+        "package_sha256": digest(package), "semantic_sha256": digest(semantic),
+        "symbolic_sha256": digest(program), "graph_sha256": digest(graph),
+        "approved_by": "synthetic test supervisor", "approved": True,
+        "shots": [{
+            "id": "opening-shot", "scene_id": "opening",
+            "start_ms": 0, "end_ms": 2000,
+            "cast": ["mara"],
+            "asset_refs": [{"object_id": "storyboard", "sha256":
+                            file_sha(root / "sample-keyframe.txt")}],
+            "dialogue_ids": ["line-1"],
+            "symbolic_beat_ids": ["plant-trust"],
+            "semantic_projection_ids": ["visual-handoff"],
+            "location": "A fictional threshold room",
+            "camera": "Hold on Mara and the talisman exchange",
+            "blocking": "Mara transfers an object to an ally",
+            "initial_state": {
+                "character_positions": "Mara holds the talisman",
+                "prop_state": "Talisman in Mara's hand",
+                "environment_state": "Interior lighting stable"},
+            "exit_state": {
+                "character_positions": "Mara's hand is empty",
+                "prop_state": "Talisman transferred to ally",
+                "environment_state": "Interior lighting unchanged"},
+            "soundscape": "Room tone plus Mara speaking",
+            "negative_constraints": ["Do not change speaker voice identity",
+                                     "Do not move the talisman back to Mara"]
+        }]
+    }
+    reviews = {
+        "version": 1, "contract_sha256": digest(shot_contract),
+        "reviews": [{
+            "shot_id": "opening-shot", "evidence_sha256":
+                file_sha(root / "sample-keyframe.txt"),
+            "reviewer": "synthetic test reviewer",
+            "evidence": "synthetic data, not real cinematic review",
+            "identity_preserved": True, "environment_preserved": True,
+            "dialogue_binding_preserved": True,
+            "state_transition_preserved": True, "symbolism_preserved": True,
+            "meaning_preserved": True, "approved": True
+        }]
+    }
+    shot_report = audit_shot_evidence(shot_contract, package, semantic,
+                                      program, graph, reviews)
+    for filename, payload in (("shot-contract.json", shot_contract),
+                              ("shot-reviews.json", reviews),
+                              ("shot-report.json", shot_report)):
+        (root / filename).write_text(json.dumps(payload, indent=2))
+    return {"shot_contract": "shot-contract.json", "shot_report": "shot-report.json",
+            "semantic_contract": "semantic.json",
             "semantic_report": "semantic-report.json",
             "production_graph": "production-graph.json",
             "production_graph_report": "production-report.json",

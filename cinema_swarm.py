@@ -290,12 +290,43 @@ def parse_args(argv=None):
     parser.add_argument("--audit-fulfillment", type=Path, help="Seven-stage production fulfillment proof manifest")
     parser.add_argument("--fulfillment-root", type=Path, help="Approved real media and evidence root")
     parser.add_argument("--fulfillment-report", type=Path, help="Machine-readable mission acceptance report")
+    parser.add_argument("--prepare-shots", type=Path, help="Approved shot execution contract")
+    parser.add_argument("--shot-package", type=Path, help="Approved collaboration package")
+    parser.add_argument("--shot-semantic", type=Path, help="Approved Rosetta semantic map")
+    parser.add_argument("--shot-symbolic", type=Path, help="Approved symbolic narrative program")
+    parser.add_argument("--shot-graph", type=Path, help="Approved production asset graph")
+    parser.add_argument("--shot-reviews", type=Path, help="Human shot evidence manifest for audit")
+    parser.add_argument("--shot-output", type=Path, help="Shot handoff or review result")
     parser.add_argument("--overwrite", action="store_true", help="Allow replacing an existing output")
     return parser.parse_args(argv)
 
 
 async def main(argv=None) -> int:
     args = parse_args(argv)
+    if args.prepare_shots:
+        import json
+        from cinemaswarm_world.collaboration import load_json
+        from cinemaswarm_world.shot_execution import stage_handoffs, audit_shot_evidence
+        try:
+            required=[args.shot_package,args.shot_semantic,args.shot_symbolic,
+                      args.shot_graph,args.shot_output]
+            if not all(required):
+                raise ValueError("all canonical shot dependencies and output required")
+            contract=load_json(args.prepare_shots)
+            dependencies=[load_json(p) for p in required[:4]]
+            report=(audit_shot_evidence(contract,*dependencies,
+                    load_json(args.shot_reviews)) if args.shot_reviews
+                    else stage_handoffs(contract,*dependencies))
+            write_packet(args.shot_output,json.dumps(report,indent=2)+"\n",
+                         overwrite=args.overwrite)
+        except (OSError,ValueError,KeyError,TypeError) as exc:
+            print(f"Shot execution contract failed: {exc}",file=sys.stderr)
+            return 2
+        if args.shot_reviews and report["status"]!="checks_passed":
+            print("Shot execution evidence incomplete or blocked.",file=sys.stderr)
+            return 3
+        print(f"Shot handoff saved to {args.shot_output}")
+        return 0
     if args.audit_fulfillment:
         from cinemaswarm_world.collaboration import load_json
         from cinemaswarm_world.studio_runtime import write_atomic

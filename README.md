@@ -293,6 +293,27 @@ Commands: `--audit-runtime`, `--plan-repair`, `--inspect-clips`,
 `--audit-series-ledger`. For contracts and limitations see
 [studio fulfillment](docs/studio-fulfillment.md).
 
+## Structured shot execution and provider handoff
+
+`cinemaswarm_world/shot_execution.py` implements a public, original
+**Shot Execution Contract** that aligns each production shot with:
+- Exact scene timing, character IDs and previously approved voice IDs.
+- Ordered SHA-256 asset references to the production object graph.
+- Active dialogue with authoritative speaker, channel and timing.
+- Blocking, camera, location, initial and final scene/prop/character states.
+- Acoustic instructions, negative constraints and approved symbolic cues.
+- Rosetta semantic projection IDs for image/voice/video/editing/continuity.
+- Reviewer-attested output evidence that can block candidate rendering and
+  season qualification when required approval dimensions fail.
+
+Use `--prepare-shots` with `--shot-package`, `--shot-semantic`,
+`--shot-symbolic`, `--shot-graph` and `--shot-output` to compile vendor-neutral
+provider instructions. Add `--shot-reviews` to audit a human-reviewed
+production. See [structured shot execution](docs/shot-execution.md).
+
+This adapts general production principles described in Pine Drama Studio's
+public tooling documentation, **not its proprietary runtime or model routing**.
+
 ## Architecture
 
 ```text

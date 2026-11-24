@@ -58,7 +58,7 @@ def validate_plan(doc: object) -> dict:
         raise ValueError("episode render plan version must be 1")
     if set(doc) - {"version", "episode_id", "profile", "mode", "scenes",
                    "audio_source", "captions_source", "collaboration_package",
-                   "collaboration_ack", "performance_report", "symbolic_program", "symbolic_report", "production_graph", "production_graph_report", "semantic_contract", "semantic_report"}:
+                   "collaboration_ack", "performance_report", "symbolic_program", "symbolic_report", "production_graph", "production_graph_report", "semantic_contract", "semantic_report", "shot_contract", "shot_report"}:
         raise ValueError("unsupported episode plan field")
     _label(doc.get("episode_id"), "episode_id")
     if doc.get("profile") not in PROFILES:
@@ -91,7 +91,7 @@ def validate_plan(doc: object) -> dict:
                 raise ValueError("candidate scenes need explicit approval")
             _label(scene.get("continuity_report"), "continuity_report")
     if doc["mode"] == "candidate":
-        for field in ("collaboration_package", "collaboration_ack", "performance_report", "symbolic_program", "symbolic_report", "production_graph", "production_graph_report", "semantic_contract", "semantic_report"):
+        for field in ("collaboration_package", "collaboration_ack", "performance_report", "symbolic_program", "symbolic_report", "production_graph", "production_graph_report", "semantic_contract", "semantic_report", "shot_contract", "shot_report"):
             _label(doc.get(field), field)
     for field in ("audio_source", "captions_source"):
         if field in doc:
@@ -190,6 +190,19 @@ def render_episode(plan: dict, root: Path, output: Path, receipt_path: Path,
             or semantic_report.get("error_count") != 0
             or semantic_report.get("unknown_count") != 0):
             raise ValueError("semantic interoperability gate not verified")
+        from .shot_execution import validate_shots
+        shots = load_json(_input(root, plan["shot_contract"], (".json",)))
+        validate_shots(shots, package, semantic, symbolic, graph)
+        reviewed_shots = load_json(_input(root, plan["shot_report"], (".json",)))
+        if (reviewed_shots.get("episode_id") != plan["episode_id"]
+            or reviewed_shots.get("package_sha256") != digest(package)
+            or reviewed_shots.get("contract_sha256") != digest(shots)
+            or reviewed_shots.get("status") != "checks_passed"
+            or reviewed_shots.get("error_count") != 0
+            or reviewed_shots.get("unknown_count") != 0):
+            raise ValueError("shot execution review gate not verified")
+        if not {s["scene_id"] for s in shots["shots"]} <= {s["scene_id"] for s in plan["scenes"]}:
+            raise ValueError("shot execution scene missing from candidate render plan")
         approvals.append({"collaboration_package_sha256": digest(package),
                           "collaboration_ack_sha256": _hash(_input(root, plan["collaboration_ack"], (".json",))),
                           "performance_report_sha256": _hash(_input(root, plan["performance_report"], (".json",))),
