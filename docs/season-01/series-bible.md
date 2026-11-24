@@ -21,6 +21,20 @@ An atmospheric **solar halo** is a ring from ice crystals, not the corona and no
 
 Use a **five-beat visual grammar**: halo (portent, not cause); ingress (ambient sound thins); totality (corona and silence); crossing (two perceptual states overlap); egress (ordinary world returns carrying an irreversible trace). Never show a literal permanent X etched onto the Earth as astronomical fact.
 
+## Dramatic role architecture
+
+See [Character Role Guide](character-role-guide.md) and the validated
+[Character Role Registry](character-roles.json). Nia is the sole season
+protagonist with Nexus. Mateo is deuteragonist, Mara tritagonist,
+Elias and Leena are co-leads. Vesper is a companion and confidant,
+not a separately empowered transmigrator. The Cartographer is the
+hidden primary personal antagonist, the Quiet Index is institutional
+opposition, the Keeper is a sympathetic opposing operative, and the
+Crossing itself is impersonal environmental antagonism. Flexible
+dramatic roles such as ally, foil, mentor, informant and redeemer can
+overlap without defining morality. Romance and hidden reveals remain
+unassigned until creative review.
+
 ## Ensemble and character arcs
 
 ### Nia Baptiste · 32 · New York · sound restoration specialist · emotional protagonist
