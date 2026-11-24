@@ -44,13 +44,13 @@
       "role": "companion",
       "design": {
         "form": "Recognizable adult humanoid AI companion with expressive face, direct gaze and natural gestures, visibly present to the audience in Nia's subjective view from her Episode 01 entrance; her body is a Nexus perceptual visualization, not a physical projection",
-        "appearance": "Consistent distinctly identifiable feminine celestial aesthetic: deep ebony complexion, long ornamented locs, starfield-like eyes and finely patterned blue-gold luminous garment, adapted as an original audience-visible Nexus persona. Human-scale proportions and detailed facial acting; restrained glyphwork supporting rather than hiding expressions.",
+        "appearance": "Distinct original Vesper design: warm copper-brown complexion, asymmetrical short silver curls, luminous amber irises with an abstract iris-ring motif, and a sculpted dark graphite mantle traced with delicate ivory and copper waveform lines. Human-scale proportions, nuanced facial acting, unmistakable recurring silhouette. No starfield eyes, ornamental locs, or private-source character likeness.",
         "visibility": "Audience sees and hears Vesper whenever story camera enters Nia's Nexus perception. Other characters and neutral objective camera do not see or hear her. Viewpoint must be legible through shot/reverse grammar.",
-        "palette": "Soft gold, blue-slate, near-white",
+        "palette": "Copper, warm ivory, graphite and restrained blue-gray",
         "lighting": "Vesper receives subjective motivated character lighting and image-space glow for visual readability; she casts no measurable illumination or physical shadows on objective room props.",
         "forbidden_changes": [
           "No invisible or audio-only companion during her pilot reveal",
-          "No arbitrary change to recognizable face, locs or wardrobe silhouette",
+          "No arbitrary change to recognizable face, short silver curls or sculpted mantle silhouette",
           "No visible companion in neutral objective shots",
           "No autonomous manipulation of real room objects",
           "No other character seeing or hearing Vesper without later explicit canon authorization"
