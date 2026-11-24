@@ -9,6 +9,7 @@ from pathlib import Path
 import pytest
 from PIL import Image
 from cinemaswarm_world.episode_renderer import validate_plan, render_episode
+from tests.gate_fixtures import write_gate
 
 
 def create(tmp_path, mode="preview"):
@@ -33,6 +34,7 @@ def create(tmp_path, mode="preview"):
             "1\n00:00:00,000 --> 00:00:01,000\nLantern City\n")
         doc["audio_source"] = "voice.wav"
         doc["captions_source"] = "captions.srt"
+        doc.update(write_gate(tmp_path, doc["episode_id"]))
     return doc
 
 
@@ -85,7 +87,7 @@ def test_real_candidate_render_provides_inputs_not_pretend_quality(tmp_path):
     assert not output["season_release_qualified"]
     assert not output["audio"]["silence_generated"]
     assert output["captions"]["author_provided"]
-    assert len(output["scene_approvals"]) == 2
+    assert len(output["scene_approvals"]) == 3
 
 
 def test_source_traversal_rejected(tmp_path):

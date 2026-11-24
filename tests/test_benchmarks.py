@@ -8,6 +8,7 @@ import pytest
 from cinemaswarm_world.benchmarks import (
     PROFILES, audit_season, load_season_manifest, validate_season_manifest,
 )
+from tests.gate_fixtures import write_gate
 
 def sample(tmp_path):
     (tmp_path / "master.mp4").write_bytes(b"fake-media-for-mocked-ffprobe")
@@ -23,6 +24,7 @@ def sample(tmp_path):
         "captions": "subtitle.srt",
         "captions_sha256": hashlib.sha256((tmp_path / "subtitle.srt").read_bytes()).hexdigest(),
         "continuity_report": "qc.json", "provenance_record": "provenance.json",
+        **write_gate(tmp_path, "lantern-01"),
         "reviews": {key: {"score": 98, "reviewer": "reviewer-1",
                            "evidence": "artistic-panel-report", "approved": True}
                     for key in ("narrative", "performance", "visual_identity", "voice_identity", "cinematography")},

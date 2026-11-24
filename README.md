@@ -205,6 +205,18 @@ The preview is deliberately **not** a film or character-rendering
 demonstration and receives no artistic score. It is a reproducible technical
 test proving that assets can be assembled, measured and audited.
 
+## External agent context and speaker protection
+
+Sanitized collaboration contracts, approved provider interpretations, and
+human-reviewed voice/lip-sync evidence now gate **candidate** renders and
+season qualification. Speakers have locked voice IDs and explicit channel
+routing for onscreen, offscreen, thought, crowds and disembodied narration.
+
+`--prepare-collaboration`, `--verify-collaboration` and
+`--audit-performance` produce receipts. External providers do not
+automatically inherit the repo, model internals or MCP tools.
+See [agent hydration and performance gates](docs/agent-hydration.md).
+
 ## Architecture
 
 ```text

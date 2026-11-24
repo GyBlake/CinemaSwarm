@@ -234,12 +234,59 @@ def parse_args(argv=None):
     parser.add_argument("--render-assets-root", type=Path, help="Approved asset folder for local rendering")
     parser.add_argument("--episode-master", type=Path, help="Output MP4 episode path")
     parser.add_argument("--episode-receipt", type=Path, help="Output render receipt JSON")
+    parser.add_argument("--prepare-collaboration", type=Path, help="Approved public collaboration package JSON")
+    parser.add_argument("--collaboration-output", type=Path, help="Hashed provider briefing output JSON")
+    parser.add_argument("--verify-collaboration", type=Path, help="Canonical public package for provider acknowledgment")
+    parser.add_argument("--collaboration-ack", type=Path, help="Author-reviewed provider interpretation JSON")
+    parser.add_argument("--collaboration-report", type=Path, help="Validation receipt JSON")
+    parser.add_argument("--audit-performance", type=Path, help="Voice and lip-sync evidence manifest")
+    parser.add_argument("--performance-package", type=Path, help="Public cast/voice contract")
+    parser.add_argument("--performance-root", type=Path, help="Approved local directory for dialogue audio")
+    parser.add_argument("--performance-output", type=Path, help="Audio performance report JSON")
     parser.add_argument("--overwrite", action="store_true", help="Allow replacing an existing output")
     return parser.parse_args(argv)
 
 
 async def main(argv=None) -> int:
     args = parse_args(argv)
+    if args.prepare_collaboration or args.verify_collaboration or args.audit_performance:
+        import json
+        from cinemaswarm_world.collaboration import load_json, make_handoff, validate_package, validate_acknowledgment, digest
+        from cinemaswarm_world.performance import audit_performance
+        try:
+            if sum(bool(x) for x in (args.prepare_collaboration, args.verify_collaboration, args.audit_performance)) != 1:
+                raise ValueError("choose only one collaboration/performance operation")
+            if args.prepare_collaboration:
+                if not args.collaboration_output:
+                    raise ValueError("--collaboration-output is required")
+                package = load_json(args.prepare_collaboration)
+                report = make_handoff(package)
+                destination = args.collaboration_output
+            elif args.verify_collaboration:
+                if not args.collaboration_ack or not args.collaboration_report:
+                    raise ValueError("--collaboration-ack and --collaboration-report are required")
+                package = load_json(args.verify_collaboration)
+                report = validate_acknowledgment(package, load_json(args.collaboration_ack))
+                destination = args.collaboration_report
+            else:
+                if not args.performance_package or not args.performance_root or not args.performance_output:
+                    raise ValueError("--performance-package, --performance-root and --performance-output required")
+                package = load_json(args.performance_package)
+                validate_package(package)
+                report = audit_performance(package, load_json(args.audit_performance),
+                                           args.performance_root)
+                report["package_sha256"] = digest(package)
+                destination = args.performance_output
+            write_packet(destination, json.dumps(report, ensure_ascii=False, indent=2) + "\n",
+                         overwrite=args.overwrite)
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            print(f"Collaboration/performance gate failed: {exc}", file=sys.stderr)
+            return 2
+        if args.audit_performance and report["status"] != "checks_passed":
+            print("Performance evidence incomplete or blocked.", file=sys.stderr)
+            return 3
+        print(f"Validation artifact saved to {destination}")
+        return 0
     if args.render_episode:
         if not all((args.render_assets_root, args.episode_master, args.episode_receipt)):
             print("Episode rendering requires --render-assets-root, --episode-master and --episode-receipt.", file=sys.stderr)

@@ -57,7 +57,8 @@ def validate_plan(doc: object) -> dict:
     if not isinstance(doc, dict) or doc.get("version") != 1:
         raise ValueError("episode render plan version must be 1")
     if set(doc) - {"version", "episode_id", "profile", "mode", "scenes",
-                   "audio_source", "captions_source"}:
+                   "audio_source", "captions_source", "collaboration_package",
+                   "collaboration_ack", "performance_report"}:
         raise ValueError("unsupported episode plan field")
     _label(doc.get("episode_id"), "episode_id")
     if doc.get("profile") not in PROFILES:
@@ -89,6 +90,9 @@ def validate_plan(doc: object) -> dict:
             if scene.get("approved") is not True:
                 raise ValueError("candidate scenes need explicit approval")
             _label(scene.get("continuity_report"), "continuity_report")
+    if doc["mode"] == "candidate":
+        for field in ("collaboration_package", "collaboration_ack", "performance_report"):
+            _label(doc.get(field), field)
     for field in ("audio_source", "captions_source"):
         if field in doc:
             _label(doc[field], field)
@@ -140,6 +144,23 @@ def render_episode(plan: dict, root: Path, output: Path, receipt_path: Path,
                               "continuity_sha256": _hash(qc)})
     audio = _input(root, plan["audio_source"], (".wav", ".flac")) if plan.get("audio_source") else None
     captions = _input(root, plan["captions_source"], (".srt", ".vtt")) if plan.get("captions_source") else None
+    if plan["mode"] == "candidate":
+        from .collaboration import load_json, validate_package, validate_acknowledgment, digest
+        package = load_json(_input(root, plan["collaboration_package"], (".json",)))
+        validate_package(package)
+        if package["episode_id"] != plan["episode_id"]:
+            raise ValueError("collaboration package does not match episode")
+        ack = load_json(_input(root, plan["collaboration_ack"], (".json",)))
+        validate_acknowledgment(package, ack)
+        performance = load_json(_input(root, plan["performance_report"], (".json",)))
+        if (not isinstance(performance, dict) or performance.get("episode_id") != plan["episode_id"]
+            or performance.get("package_sha256") != digest(package)
+            or performance.get("status") != "checks_passed"
+            or performance.get("error_count") != 0 or performance.get("unknown_count") != 0):
+            raise ValueError("performance quality gate not verified")
+        approvals.append({"collaboration_package_sha256": digest(package),
+                          "collaboration_ack_sha256": _hash(_input(root, plan["collaboration_ack"], (".json",))),
+                          "performance_report_sha256": _hash(_input(root, plan["performance_report"], (".json",)))})
     if plan["mode"] == "candidate" and (audio is None or captions is None):
         raise ValueError("candidate requires an actual soundtrack and captions")
     if captions and not captions.read_text(encoding="utf-8").strip():

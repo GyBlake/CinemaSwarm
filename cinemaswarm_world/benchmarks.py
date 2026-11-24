@@ -192,7 +192,8 @@ def validate_season_manifest(doc: object) -> dict:
             raise ValueError("duplicate or invalid episode number")
         numbers.add(number)
         for field in ("master", "master_sha256", "captions", "captions_sha256",
-                      "continuity_report", "provenance_record"):
+                      "continuity_report", "provenance_record", "collaboration_package",
+                      "collaboration_ack", "performance_report"):
             _bounded_text(ep.get(field), field)
         for field in ("master_sha256", "captions_sha256"):
             digest = ep[field]
@@ -284,6 +285,22 @@ def _episode(ep: dict, root: Path, profile: dict, season_id: str) -> dict:
                 unknown("c2pa_receipt_missing")
     except (OSError, ValueError, TypeError):
         unknown("provenance_record_unavailable")
+    try:
+        from .collaboration import load_json, validate_package, validate_acknowledgment, digest
+        package = load_json(_file(root, ep["collaboration_package"]))
+        validate_package(package)
+        ack = load_json(_file(root, ep["collaboration_ack"]))
+        validate_acknowledgment(package, ack)
+        receipt = load_json(_file(root, ep["performance_report"]))
+        if (receipt.get("package_sha256") != digest(package)
+            or receipt.get("episode_id") != package["episode_id"]
+            or receipt.get("status") != "checks_passed"
+            or receipt.get("error_count") != 0
+            or receipt.get("unknown_count") != 0):
+            fail("performance_or_hydration_gate_failed")
+        evidence["hydration_package_sha256"] = digest(package)
+    except (OSError, ValueError, KeyError, TypeError, AttributeError):
+        unknown("hydration_performance_evidence_missing_or_unverified")
     reviews = ep["reviews"]
     missing = [key for key in MANDATORY_REVIEWS if key not in reviews]
     if missing:
