@@ -6,6 +6,7 @@ from sound samples or model internals.
 """
 from __future__ import annotations
 import hashlib
+import math
 from pathlib import Path
 from .collaboration import validate_package, text
 
@@ -58,7 +59,7 @@ def audit_performance(package, takes, root):
             if take["lip_sync_approved"] is not True:
                 failed.append("lip_sync_not_approved")
             offset = take["sync_offset_ms"]
-            if type(offset) not in (float, int) or abs(offset) > MAX_OFFSET_MS:
+            if type(offset) not in (float, int) or not math.isfinite(offset) or abs(offset) > MAX_OFFSET_MS:
                 failed.append("lip_sync_offset_exceeds_limit_or_unmeasured")
         elif take["lip_sync_approved"] is True:
             failed.append("nonvisual_voice_must_not_claim_mouth_sync")

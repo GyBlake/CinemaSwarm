@@ -11,6 +11,9 @@ from pathlib import Path
 
 MAX_BYTES = 2_000_000
 CHANNELS = frozenset({"onscreen", "offscreen", "thought", "crowd", "disembodied"})
+# Explicit public/private boundary keywords; this is a guard, not a complete DLP system.
+PRIVATE_PROJECT_MARKERS = ("dreamcorp", "dreamguard", "phidelity", "shamayim",
+                           "imani vale", "siren avatar", "navel-gazer private")
 FIELDS = frozenset({"version", "project_id", "episode_id", "visibility", "creative_intent",
                     "canon", "characters", "relationships", "scenes", "dialogue", "provider"})
  
@@ -43,6 +46,9 @@ def validate_package(package):
         text(package[key], key)
     if package["visibility"] != "public":
         raise ValueError("external packages require explicit public visibility")
+    serialized = json.dumps(package, ensure_ascii=False).casefold()
+    if any(marker in serialized for marker in PRIVATE_PROJECT_MARKERS):
+        raise ValueError("external package includes private-project markers")
     canon = package["canon"]
     if not isinstance(canon, dict) or set(canon) != {"snapshot_id", "digest", "dramatic_beats"}:
         raise ValueError("invalid sanitized canon projection")
@@ -152,9 +158,15 @@ def validate_acknowledgment(package, ack):
         raise ValueError("invalid acknowledgment schema")
     if ack["package_sha256"] != digest(package) or ack["provider"] != package["provider"]["name"]:
         raise ValueError("acknowledgment does not match canonical handoff")
-    if set(ack["understood_scene_ids"]) != {s["id"] for s in package["scenes"]}:
+    scene_ids = {s["id"] for s in package["scenes"]}
+    character_ids = {c["id"] for c in package["characters"]}
+    if (not isinstance(ack["understood_scene_ids"], list)
+        or len(ack["understood_scene_ids"]) != len(scene_ids)
+        or set(ack["understood_scene_ids"]) != scene_ids):
         raise ValueError("provider did not acknowledge every scene")
-    if set(ack["understood_character_ids"]) != {c["id"] for c in package["characters"]}:
+    if (not isinstance(ack["understood_character_ids"], list)
+        or len(ack["understood_character_ids"]) != len(character_ids)
+        or set(ack["understood_character_ids"]) != character_ids):
         raise ValueError("provider did not acknowledge every character")
     if ack["unknowns"] != []:
         raise ValueError("unresolved provider interpretation issues")

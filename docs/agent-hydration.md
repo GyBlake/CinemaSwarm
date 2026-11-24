@@ -4,7 +4,10 @@
 
 External video/image/voice providers do not automatically receive repository,
 MCP access, hidden prompts, or Dreamcorp private data. **Only explicitly
-approved, sanitized public packages** may cross the boundary.
+approved, sanitized public packages** may cross the boundary. Public packages
+reject a small denylist of private project markers as defense in depth.
+This is **not** a general DLP scanner: human inspection and consent remain
+mandatory before sharing external payloads.
 
 A validated handoff proves local package integrity, not that a provider's
 private LLM understood the project. Provider claims require human inspection.

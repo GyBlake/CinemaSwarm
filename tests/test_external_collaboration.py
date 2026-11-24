@@ -117,3 +117,24 @@ def test_cli_contract_and_performance_pipeline(tmp_path):
     result=load_json(tmp_path/"performance-output.json")
     assert result["status"]=="checks_passed"
     assert result["package_sha256"]==digest(p)
+
+def test_nonfinite_sync_offset_is_not_a_pass(tmp_path):
+    p, _, takes = sample(tmp_path)
+    takes["takes"][0]["sync_offset_ms"] = float("nan")
+    result = audit_performance(p, takes, tmp_path)
+    assert result["status"] == "blocked"
+    assert any("lip_sync_offset" in f for f in result["failures"])
+
+
+def test_private_context_not_exportable(tmp_path):
+    p, _, _ = sample(tmp_path)
+    p["creative_intent"] = "Inject proprietary Dreamcorp operational protocols"
+    with pytest.raises(ValueError, match="private-project"):
+        validate_package(p)
+
+
+def test_acknowledgment_rejects_duplicate_scene_faking_coverage(tmp_path):
+    p, a, _ = sample(tmp_path)
+    a["understood_scene_ids"] = ["opening", "opening"]
+    with pytest.raises(ValueError, match="every scene"):
+        validate_acknowledgment(p, a)
