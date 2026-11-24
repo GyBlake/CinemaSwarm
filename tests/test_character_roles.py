@@ -70,5 +70,6 @@ def test_institution_cannot_be_companion():
 def test_relationship_timeline_validated():
     doc=load()
     doc["relationships"][0]["first_episode"]="e08-aecluptic"
+    doc["relationships"][0]["last_episode"]="e01-totality"
     with pytest.raises(ValueError,match="timeline"):
         validate_character_roles(doc,SEASON)
