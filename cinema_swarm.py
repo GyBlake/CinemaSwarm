@@ -243,12 +243,49 @@ def parse_args(argv=None):
     parser.add_argument("--performance-package", type=Path, help="Public cast/voice contract")
     parser.add_argument("--performance-root", type=Path, help="Approved local directory for dialogue audio")
     parser.add_argument("--performance-output", type=Path, help="Audio performance report JSON")
+    parser.add_argument("--prepare-symbolic", type=Path, help="Versioned symbolic narrative program JSON")
+    parser.add_argument("--symbolic-plan", type=Path, help="Symbolic program for evidence audit")
+    parser.add_argument("--symbolic-package", type=Path, help="Authorized public collaboration contract")
+    parser.add_argument("--symbolic-output", type=Path, help="Shot-level symbolic directions or audit report")
+    parser.add_argument("--audit-symbolic", type=Path, help="Human-observed symbolic shot evidence JSON")
+    parser.add_argument("--symbolic-root", type=Path, help="Approved local root for observed evidence")
     parser.add_argument("--overwrite", action="store_true", help="Allow replacing an existing output")
     return parser.parse_args(argv)
 
 
 async def main(argv=None) -> int:
     args = parse_args(argv)
+    if args.prepare_symbolic or args.audit_symbolic:
+        import json
+        from cinemaswarm_world.collaboration import load_json
+        from cinemaswarm_world.symbolic_narrative import (
+            validate_program, shot_directives, audit_symbolic)
+        try:
+            if bool(args.prepare_symbolic) == bool(args.audit_symbolic):
+                raise ValueError("choose exactly one symbolic operation")
+            if not args.symbolic_package or not args.symbolic_output:
+                raise ValueError("--symbolic-package and --symbolic-output are required")
+            package = load_json(args.symbolic_package)
+            if args.prepare_symbolic:
+                program = load_json(args.prepare_symbolic)
+                report = shot_directives(program, package)
+            else:
+                if not args.symbolic_root:
+                    raise ValueError("--symbolic-root required for observed shot audit")
+                if not args.symbolic_plan:
+                    raise ValueError("--symbolic-plan required for evidence audit")
+                program = load_json(args.symbolic_plan)
+                report = audit_symbolic(program, package, load_json(args.audit_symbolic), args.symbolic_root)
+            write_packet(args.symbolic_output, json.dumps(report, ensure_ascii=False, indent=2) + "\n",
+                         overwrite=args.overwrite)
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            print(f"Symbolic narrative gate failed: {exc}", file=sys.stderr)
+            return 2
+        if args.audit_symbolic and report["status"] != "checks_passed":
+            print("Symbolic narrative evidence incomplete or blocked.", file=sys.stderr)
+            return 3
+        print(f"Symbolic validation saved to {args.symbolic_output}")
+        return 0
     if args.prepare_collaboration or args.verify_collaboration or args.audit_performance:
         import json
         from cinemaswarm_world.collaboration import load_json, make_handoff, validate_package, validate_acknowledgment, digest

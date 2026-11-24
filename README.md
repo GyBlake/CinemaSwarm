@@ -217,6 +217,23 @@ routing for onscreen, offscreen, thought, crowds and disembodied narration.
 automatically inherit the repo, model internals or MCP tools.
 See [agent hydration and performance gates](docs/agent-hydration.md).
 
+## Multimodal symbolic narrative and foreshadowing
+
+`cinemaswarm_world/symbolic_narrative.py` tracks scene-bound symbolic
+beats across twelve channels (visual, acoustic, kinetic, relational,
+temporal, numerical, spatial, linguistic, material, psychological,
+cultural and cinematic) with plant/echo/mirror/invert/disguise/amplify/
+transmute/converge/diverge/reveal/resolve operators.
+
+Symbolic cues require explicit dramatic purpose, audience/character
+knowledge distinctions, culturally attributed interpretation and
+ordered dependencies. Reviewed shot evidence is required for candidate
+rendering and season qualification; a missing or contradicted symbol
+prevents a release pass. This is a reviewer-verified semantic gate,
+**not** automatic pixel-level symbolic recognition.
+
+See [multimodal symbolic storytelling](docs/symbolic-narrative.md).
+
 ## Architecture
 
 ```text

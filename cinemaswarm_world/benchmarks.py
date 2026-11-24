@@ -193,7 +193,7 @@ def validate_season_manifest(doc: object) -> dict:
         numbers.add(number)
         for field in ("master", "master_sha256", "captions", "captions_sha256",
                       "continuity_report", "provenance_record", "collaboration_package",
-                      "collaboration_ack", "performance_report"):
+                      "collaboration_ack", "performance_report", "symbolic_program", "symbolic_report"):
             _bounded_text(ep.get(field), field)
         for field in ("master_sha256", "captions_sha256"):
             digest = ep[field]
@@ -301,6 +301,24 @@ def _episode(ep: dict, root: Path, profile: dict, season_id: str) -> dict:
         evidence["hydration_package_sha256"] = digest(package)
     except (OSError, ValueError, KeyError, TypeError, AttributeError):
         unknown("hydration_performance_evidence_missing_or_unverified")
+    try:
+        from .symbolic_narrative import validate_program
+        from .collaboration import load_json, digest
+        package = load_json(_file(root, ep["collaboration_package"]))
+        symbolic = load_json(_file(root, ep["symbolic_program"]))
+        validate_program(symbolic, package)
+        verified_symbolism = load_json(_file(root, ep["symbolic_report"]))
+        if (not isinstance(verified_symbolism, dict)
+            or verified_symbolism.get("episode_id") != package["episode_id"]
+            or verified_symbolism.get("package_sha256") != digest(package)
+            or verified_symbolism.get("program_sha256") != digest(symbolic)
+            or verified_symbolism.get("status") != "checks_passed"
+            or verified_symbolism.get("error_count") != 0
+            or verified_symbolism.get("unknown_count") != 0):
+            fail("symbolic_narrative_gate_failed")
+        evidence["symbolic_program_sha256"] = digest(symbolic)
+    except (OSError, ValueError, KeyError, TypeError, AttributeError):
+        unknown("symbolic_narrative_evidence_missing_or_invalid")
     reviews = ep["reviews"]
     missing = [key for key in MANDATORY_REVIEWS if key not in reviews]
     if missing:

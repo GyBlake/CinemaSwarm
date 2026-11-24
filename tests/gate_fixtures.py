@@ -47,5 +47,48 @@ def write_gate(root, episode_id="lantern-01", audio_name="voice.wav"):
     for filename, payload in (("collaboration.json", package), ("ack.json", ack),
                               ("performance.json", perf), ("takes.json", takes)):
         (root / filename).write_text(json.dumps(payload, indent=2))
+    from cinemaswarm_world.symbolic_narrative import audit_symbolic
+    program = {
+        "version": 1, "episode_id": episode_id, "visibility": "public",
+        "package_sha256": digest(package),
+        "motifs": [{
+            "id": "talisman-gift", "sign": "handing over a talisman",
+            "authorial_meaning": "Trust demonstrated through custody",
+            "cultural_source": "original screenplay, no borrowed religious meaning",
+            "interpretation_scope": "story-specific",
+            "character_interpretations": {"mara": "Trust is a deliberate risk"},
+            "numerical_pattern": None,
+        }],
+        "beats": [{
+            "id": "plant-trust", "motif_id": "talisman-gift",
+            "scene_id": "opening", "start_ms": 100, "end_ms": 900,
+            "channel": "visual", "operator": "plant",
+            "surface_explanation": "A hand passes an ordinary object",
+            "dramatic_function": "Seed a later cost of trust",
+            "perceptual_directive": "Hold on the object as it changes hands",
+            "audience_knowledge": "The gesture may reveal allegiance",
+            "character_knowledge": "Mara believes it is a safe choice",
+            "depends_on": None, "reveal_policy": "conceal",
+            "planned_payoff_episode": 3,
+        }]
+    }
+    obs = {"version": 1, "episode_id": episode_id, "program_sha256": digest(program),
+           "observations": [{
+              "beat_id": "plant-trust", "evidence_path": audio_name,
+              "evidence_sha256": sha,
+              "observed_channel": "visual", "observed_operator": "plant",
+              "symbol_visible_or_audible": True,
+              "dramatic_intent_preserved": True,
+              "reveal_policy_preserved": True,
+              "reviewer": "synthetic-test-reviewer",
+              "review_reference": "fixture_only_no_real_media",
+              "approved": True
+           }]}
+    symbolic = audit_symbolic(program, package, obs, root)
+    for filename, payload in (("symbolic.json", program), ("symbolic-observations.json", obs),
+                              ("symbolic-report.json", symbolic)):
+        (root / filename).write_text(json.dumps(payload, indent=2))
     return {"collaboration_package": "collaboration.json",
-            "collaboration_ack": "ack.json", "performance_report": "performance.json"}
+            "collaboration_ack": "ack.json", "performance_report": "performance.json",
+            "symbolic_program": "symbolic.json",
+            "symbolic_report": "symbolic-report.json"}

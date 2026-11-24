@@ -58,7 +58,7 @@ def validate_plan(doc: object) -> dict:
         raise ValueError("episode render plan version must be 1")
     if set(doc) - {"version", "episode_id", "profile", "mode", "scenes",
                    "audio_source", "captions_source", "collaboration_package",
-                   "collaboration_ack", "performance_report"}:
+                   "collaboration_ack", "performance_report", "symbolic_program", "symbolic_report"}:
         raise ValueError("unsupported episode plan field")
     _label(doc.get("episode_id"), "episode_id")
     if doc.get("profile") not in PROFILES:
@@ -91,7 +91,7 @@ def validate_plan(doc: object) -> dict:
                 raise ValueError("candidate scenes need explicit approval")
             _label(scene.get("continuity_report"), "continuity_report")
     if doc["mode"] == "candidate":
-        for field in ("collaboration_package", "collaboration_ack", "performance_report"):
+        for field in ("collaboration_package", "collaboration_ack", "performance_report", "symbolic_program", "symbolic_report"):
             _label(doc.get(field), field)
     for field in ("audio_source", "captions_source"):
         if field in doc:
@@ -158,9 +158,22 @@ def render_episode(plan: dict, root: Path, output: Path, receipt_path: Path,
             or performance.get("status") != "checks_passed"
             or performance.get("error_count") != 0 or performance.get("unknown_count") != 0):
             raise ValueError("performance quality gate not verified")
+        from .symbolic_narrative import validate_program
+        symbolic = load_json(_input(root, plan["symbolic_program"], (".json",)))
+        validate_program(symbolic, package)
+        sym_report = load_json(_input(root, plan["symbolic_report"], (".json",)))
+        if (not isinstance(sym_report, dict)
+            or sym_report.get("episode_id") != plan["episode_id"]
+            or sym_report.get("package_sha256") != digest(package)
+            or sym_report.get("program_sha256") != digest(symbolic)
+            or sym_report.get("status") != "checks_passed"
+            or sym_report.get("error_count") != 0 or sym_report.get("unknown_count") != 0):
+            raise ValueError("symbolic narrative gate not verified")
         approvals.append({"collaboration_package_sha256": digest(package),
                           "collaboration_ack_sha256": _hash(_input(root, plan["collaboration_ack"], (".json",))),
-                          "performance_report_sha256": _hash(_input(root, plan["performance_report"], (".json",)))})
+                          "performance_report_sha256": _hash(_input(root, plan["performance_report"], (".json",))),
+                          "symbolic_program_sha256": digest(symbolic),
+                          "symbolic_report_sha256": _hash(_input(root, plan["symbolic_report"], (".json",)))})
     if plan["mode"] == "candidate" and (audio is None or captions is None):
         raise ValueError("candidate requires an actual soundtrack and captions")
     if captions and not captions.read_text(encoding="utf-8").strip():
