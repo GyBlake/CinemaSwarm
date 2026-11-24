@@ -118,3 +118,30 @@ charge must be reconciled through the job-import path. If the submission
 response fails ambiguously, inspect provider history rather than resubmit.
 Local snapshots use atomic replacement, but there is no distributed
 cross-machine writer lock or automatic remote polling.
+
+## Seven-stage independent mission acceptance
+
+`fulfillment_audit.py` implements a final **fail-closed** mission gate. Its
+input is a versioned JSON object with exactly: `version`, `runtime`,
+`media_qc`, `season_ledger` and `season_benchmark`.
+
+```bash
+python cinema_swarm.py --audit-fulfillment private/mission-proof.json \
+  --fulfillment-root private --fulfillment-report private/mission-audit.json
+```
+
+A single missing piece returns nonzero (exit 3) with a detailed JSON stage
+report. Full fulfillment requires:
+
+1. At least one verified provider-produced video job, with reconciled receipts.
+2. Checked approved asset registry and actual source files.
+3. At least one independently measured playable video clip.
+4. A separately verified replacement of a rejected/failed job.
+5. At least one completed, approved cross-episode symbolic payoff.
+6. Approved checkpoints, budget preflight and no in-flight jobs.
+7. A re-run of the existing season benchmark over **at least two** finished
+   episodes, with passing technical and human-reviewed evidence.
+
+The report is intentionally `unfulfilled` until all seven are evidenced.
+Real artistic integrity and synchronization still require specialist review,
+because automated motion measures do not understand narrative meaning.

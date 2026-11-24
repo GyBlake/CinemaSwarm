@@ -287,12 +287,32 @@ def parse_args(argv=None):
     parser.add_argument("--provider-max-cost-usd", type=float)
     parser.add_argument("--provider-estimated-cost-usd", type=float)
     parser.add_argument("--authorize-provider-spend", action="store_true", help="Explicitly authorize provider API spending")
+    parser.add_argument("--audit-fulfillment", type=Path, help="Seven-stage production fulfillment proof manifest")
+    parser.add_argument("--fulfillment-root", type=Path, help="Approved real media and evidence root")
+    parser.add_argument("--fulfillment-report", type=Path, help="Machine-readable mission acceptance report")
     parser.add_argument("--overwrite", action="store_true", help="Allow replacing an existing output")
     return parser.parse_args(argv)
 
 
 async def main(argv=None) -> int:
     args = parse_args(argv)
+    if args.audit_fulfillment:
+        from cinemaswarm_world.collaboration import load_json
+        from cinemaswarm_world.studio_runtime import write_atomic
+        from cinemaswarm_world.fulfillment_audit import audit_fulfillment
+        try:
+            if not args.fulfillment_root or not args.fulfillment_report:
+                raise ValueError("fulfillment root/report required")
+            result = audit_fulfillment(load_json(args.audit_fulfillment), args.fulfillment_root)
+            write_atomic(args.fulfillment_report, result, overwrite=args.overwrite)
+        except (OSError, ValueError, TypeError, KeyError) as exc:
+            print(f"Fulfillment audit failed: {exc}", file=sys.stderr)
+            return 2
+        print(f"Fulfillment report saved to {args.fulfillment_report}")
+        if result["status"]!="fulfilled":
+            print("Production has not satisfied all seven stages.", file=sys.stderr)
+            return 3
+        return 0
     if args.job_event or args.list_ready_jobs or args.provider_video_brief or args.submit_provider_plan:
         import json
         from cinemaswarm_world.collaboration import load_json
