@@ -1,0 +1,178 @@
+{
+  "version": 1,
+  "season_id": "aecluptic-s01",
+  "title": "THE ÆCLYPTIC: Seven Years Between Shadows",
+  "status": "development_draft",
+  "public_fiction": true,
+  "showrunner_approval": false,
+  "production_release_authorized": false,
+  "world_rules": [
+    "Astronomical history distinct from invented eclipse biology",
+    "Rare Nexus Systems; most awakened have no System",
+    "Transmigration is an identity transition, not power level",
+    "Synesthesia describes private system presentation, not separate system",
+    "No automatic trauma or hazardous radiation benefit",
+    "Artifacts preserve provenance, capability, cost, limit, consequence",
+    "Public canon excludes private Dreamcorp personnel and operational configurations"
+  ],
+  "protagonist": {
+    "id": "nia",
+    "name": "Nia Baptiste",
+    "status": "potential_transmigrator",
+    "nexus_class": true,
+    "system_voice": "vesper"
+  },
+  "cast": [
+    {
+      "id": "nia",
+      "name": "Nia Baptiste",
+      "awakened": true,
+      "nexus": true,
+      "system": "vesper",
+      "story_role": "primary protagonist"
+    },
+    {
+      "id": "mateo",
+      "name": "Mateo Reyes",
+      "awakened": true,
+      "nexus": false,
+      "system": null,
+      "story_role": "divergence sight, emergency response"
+    },
+    {
+      "id": "mara",
+      "name": "Dr. Mara Okonkwo",
+      "awakened": true,
+      "nexus": false,
+      "system": null,
+      "story_role": "astronomical inquiry and corroboration"
+    },
+    {
+      "id": "elias",
+      "name": "Elias Park",
+      "awakened": true,
+      "nexus": false,
+      "system": null,
+      "story_role": "lucid spatial overlays"
+    },
+    {
+      "id": "leena",
+      "name": "Leena Varma",
+      "awakened": null,
+      "nexus": false,
+      "system": null,
+      "story_role": "archive keeper and institutional legacy"
+    }
+  ],
+  "episodes": [
+    {
+      "number": 1,
+      "id": "e01-totality",
+      "title": "Totality",
+      "logline": "A voice appears in the only protagonist's waking interface during the second Great American Eclipse; witnesses report divergent experiences.",
+      "focus": "nia",
+      "final_hook": "Nia demands verifiable evidence.",
+      "screenplay_state": "development_draft",
+      "video_state": "not_generated",
+      "voice_state": "not_recorded",
+      "approved": false
+    },
+    {
+      "number": 2,
+      "id": "e02-sleepers",
+      "title": "The Sleepers",
+      "logline": "Nia investigates a rare anomalous core as an agency begins collecting witnesses.",
+      "focus": "mateo",
+      "final_hook": "Resonance core reacts to recorded voice.",
+      "screenplay_state": "treatment_only",
+      "video_state": "not_generated",
+      "voice_state": "not_recorded",
+      "approved": false
+    },
+    {
+      "number": 3,
+      "id": "e03-second-self",
+      "title": "The Second Self",
+      "logline": "A lithic array reveals an acoustic trace, while Nexus's false archival merge must be corrected.",
+      "focus": "nia",
+      "final_hook": "Authenticated trace leads to Illinois.",
+      "screenplay_state": "treatment_only",
+      "video_state": "not_generated",
+      "voice_state": "not_recorded",
+      "approved": false
+    },
+    {
+      "number": 4,
+      "id": "e04-crossroads",
+      "title": "The Crossroads",
+      "logline": "The ensemble converges at the X, encountering a partial continuity pearl record.",
+      "focus": "mara",
+      "final_hook": "A familiar corridor returns in an unknown imprint.",
+      "screenplay_state": "treatment_only",
+      "video_state": "not_generated",
+      "voice_state": "not_recorded",
+      "approved": false
+    },
+    {
+      "number": 5,
+      "id": "e05-keepers",
+      "title": "The Keepers",
+      "logline": "Leena's involvement emerges, and the team confronts consent and storage artifacts.",
+      "focus": "leena",
+      "final_hook": "A tracker imprints on a core.",
+      "screenplay_state": "treatment_only",
+      "video_state": "not_generated",
+      "voice_state": "not_recorded",
+      "approved": false
+    },
+    {
+      "number": 6,
+      "id": "e06-other-side",
+      "title": "The Other Side",
+      "logline": "A bounded pocket domain reveals ecology and the cost of harvesting living cores.",
+      "focus": "elias",
+      "final_hook": "An exit symbol returns inverted.",
+      "screenplay_state": "treatment_only",
+      "video_state": "not_generated",
+      "voice_state": "not_recorded",
+      "approved": false
+    },
+    {
+      "number": 7,
+      "id": "e07-false-awakening",
+      "title": "The False Awakening",
+      "logline": "A forged archive undermines Nexus predictions during a manufactured crisis.",
+      "focus": "nia",
+      "final_hook": "The monitoring consortium fractures.",
+      "screenplay_state": "treatment_only",
+      "video_state": "not_generated",
+      "voice_state": "not_recorded",
+      "approved": false
+    },
+    {
+      "number": 8,
+      "id": "e08-aecluptic",
+      "title": "The Æclyptic",
+      "logline": "A coordinated rescue prevents forced crossing, while an unresolved imprint suggests more keys.",
+      "focus": "nia",
+      "final_hook": "A first Meridian Key appears beyond Illinois.",
+      "screenplay_state": "treatment_only",
+      "video_state": "not_generated",
+      "voice_state": "not_recorded",
+      "approved": false
+    }
+  ],
+  "production": {
+    "pilot_shots": 15,
+    "locked_scripts": 0,
+    "voice_recordings": 0,
+    "finished_episodes": 0,
+    "cinematic_video_masters": 0,
+    "reviewed_performances": 0,
+    "rights_clearances": 0,
+    "shot_assets_ready": false,
+    "paid_generation_authorized": false,
+    "subtitle_assets_ready": false,
+    "production_gate": "blocked_missing_assets_and_approvals"
+  }
+}
