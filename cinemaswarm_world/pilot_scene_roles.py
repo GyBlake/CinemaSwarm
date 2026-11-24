@@ -37,7 +37,7 @@ def validate_scene_roles(doc,role_doc,season):
             raise ValueError("scene incorrectly approved or unclassified")
         if not isinstance(scene["participants"],list) or len(set(scene["participants"]))!=len(scene["participants"]):
             raise ValueError("duplicate scene participants")
-        if not set(scene["participants"]) <= entities:
+        if not set(scene["participants"]) <= set(entities):
             raise ValueError("scene participant not in cast registry")
         if scene["focus"]!="historical_record":
             if scene["focus"] not in scene["participants"]:
