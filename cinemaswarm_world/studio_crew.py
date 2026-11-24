@@ -159,8 +159,9 @@ def queued_departments(handoffs):
     """Explicit runnable automated jobs: none until humans approve assets/providers."""
     if handoffs["status"]!="planning_packets_not_performed":
         raise ValueError("unsupported handoff state")
-    return [d["department"] for d in handoffs["departments"]
-            if d["status"]=="authorized"]
+    if any(d["status"]=="authorized" for d in handoffs["departments"]):
+        raise ValueError("unverified crew authorization: validate canonical handoffs first")
+    return []
 
 def runtime_bridge(handoffs, runtime):
     """Fail closed: expose *only* already-valid authorized runtime jobs."""

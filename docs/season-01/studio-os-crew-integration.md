@@ -15,5 +15,9 @@ The 18 roles in [studio-crew.json](studio-crew.json) are department **capabiliti
 ## Missing before crew is capable of filmmaking
 Real asset/likeness approvals, embodied animated performers, stage models, performance recording, calibrated optics, practical or generated lighting, video providers and render receipts, actor animation, voice/lip-sync, verified edited masters, licensing, approval decisions and publishing authorization. The engine never implies these steps occurred.
 
-## Dreamcorp-style process mapping (architecture only)
-Source → Seal → Orient → Couple → Sync → Coordinate → Receipt → Release maps operationally to: collect canonical story; hash inputs; validate world and roles; bind crew; issue consistent scene-state handoffs; check dependencies and camera geometry; require provider and human review receipts; release only approved footage. This conceptual lineage is documented for maintainers, while the public implementation uses neutral names and never imports private Dreamcorp personnel or configurations.
+## General source-to-release process mapping
+Source → Seal → Orient → Couple → Sync → Coordinate → Receipt → Release maps operationally to: collect canonical story; hash inputs; validate world and roles; bind crew; issue consistent scene-state handoffs; check dependencies and camera geometry; require provider and human review receipts; release only approved footage. This sequence documents neutral studio operations without importing private crew personnel or configurations.
+
+## Offline CLI
+
+`python -m scripts.compile_studio_crew --output build/aecluptic-crew-handoffs.json` compiles all 18 packets from versioned source documents. The command is offline, validates upstream dependencies, refuses to overwrite existing output by default, and does **not** create or authorize paid runtime jobs.

@@ -83,7 +83,8 @@ def test_changed_camera_hash_invalidates_receipt():
 
 def test_unapproved_phase_cannot_run():
     a=prepared();a["departments"][11]["status"]="authorized"
-    assert queued_departments(a)==["gaffer"] # The bus is a read-only filter, not authority
+    with pytest.raises(ValueError,match="unverified crew authorization"):
+        queued_departments(a)
     with pytest.raises(ValueError,match="stale"):
         validate_handoffs(a,registry(),SEASON,IDENTITY,PROOF,SCENES,ROLES,CAMERA)
 

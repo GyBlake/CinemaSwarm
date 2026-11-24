@@ -421,3 +421,11 @@ cinematography simulation or real calibrated camera setup.
 ## Studio OS crew handoff bus
 
 The [CinemaSwarm crew architecture](docs/season-01/studio-os-crew-integration.md) routes the [18 functional departments](docs/season-01/studio-crew.json) through a **single validated shared scene state** instead of eighteen unrelated prompt contexts. `cinemaswarm_world.studio_crew.compile_department_handoffs` produces deterministic crew packets from the current Æclyptic contact proof, cast, stage, and camera engineering inputs. `runtime_bridge` only reports jobs already authorized by the separate production runtime. No actors, stagehands, video vendors or external providers are automatically invoked by compiling a handoff; all results remain in preproduction until human-reviewed receipts exist.
+
+Generate the reviewable pilot department handoff packet offline:
+
+```bash
+python -m scripts.compile_studio_crew --output build/aecluptic-crew-handoffs.json
+```
+
+The command fails if that file already exists; `--overwrite` must be supplied deliberately to replace it. The packet is not authorization for filming, animation, provider billing or release.
