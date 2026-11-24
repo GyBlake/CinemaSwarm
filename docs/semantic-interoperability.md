@@ -6,11 +6,14 @@ Its governance process can be supported by a private institutional consultant,
 but no proprietary agent identity, internal ontology, or private repository
 content is included in the public runtime.
 
-The historical Shabaka Stone describes Ptah's heart and tongue in the
-Memphite creation account. The architecture uses this as a *modern analogy*,
-not as an attribution of computer science to the historical text.
+The **Rosetta Stone** bears a decree in three scripts: hieroglyphic,
+Demotic and Ancient Greek. Correspondences between the versions assisted the
+decipherment of Egyptian scripts. CinemaSwarm uses this as a **translation
+analogy**, not as an ancient software specification: multiple agent-specific
+representations of a scene preserve shared semantic identities and relations.
+The historical scripts are not separate renderers or independent ontologies.
 
-### Source → meaning → relational operators → produced manifestation
+### Shared semantic pivot → equivalent production representations → reconciliation
 
 1. **Origin** records the authorized authorial intent and provenance.
 2. **Concepts** define a canonical semantic object, its polarity, scene, and
@@ -18,8 +21,10 @@ not as an attribution of computer science to the historical text.
    remain distinct.
 3. **Relations** define `equivalent`, `depends_on`, `contradicts`,
    `transforms`, or `manifests_as`, with explicit rationale.
-4. **Projections** compile the same meanings into stage-specific contracts
-   for image, voice, video, editing, and continuity departments.
+4. **Projections** compile the same concept IDs into image, voice, video,
+   editing and continuity dialects. Two agents may receive radically different
+   directions yet remain anchored to the same definition. Missing anchors,
+   cross-scene mismatches or conflicting constraints fail validation.
 5. **Evaluation** checks that reviewed outputs preserve the identified
    meaning, respect negative constraints, and carry no observed contradiction.
 
@@ -63,3 +68,16 @@ LLM's unreviewed output.
 
 See `tests/gate_fixtures.py` and `tests/test_semantic_interop.py` for a
 fully synthetic demonstration.
+
+## Rosetta mapping example
+
+A single semantic ID `hidden-wings` means *the audience sees the possibility
+of wings, but is shown two ordinary guards as the immediate explanation*.
+An image agent receives the silhouette geometry and lighting constraints;
+a video agent receives the entrance timing and bodyguard blocking; an editor
+receives a prohibition on revealing literal wings before the intended payoff;
+a sound agent may receive a thematic motif without invoking a visible speaker.
+Each projection references the same `hidden-wings` concept ID, so an approved
+meaning can survive translation between production disciplines. A future
+revelation is a separate causally linked concept, not a retroactive mutation
+of the opening's approved audience knowledge.

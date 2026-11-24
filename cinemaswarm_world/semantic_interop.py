@@ -1,8 +1,7 @@
 """Public semantic interoperability contract: intent -> distinctions -> relations -> outputs.
 
-An institutional, provenance-preserving translation boundary. Its historical
-inspiration is the Shabaka Stone's heart/tongue motif; it is NOT an ancient
-software protocol and does not expose private authors, agents or repository data.
+An institutional, provenance-preserving translation boundary. Its design analogy is the Rosetta Stone: aligned expressions across different
+systems anchor to shared meaning. It does not expose private agents or data.
 Semantic validity is structural; perceptual correctness needs independent review.
 """
 from __future__ import annotations

@@ -118,3 +118,21 @@ def test_cli_generate_and_audit(tmp_path):
                          cwd=tmp_path,capture_output=True,text=True)
         assert r.returncode==0,r.stderr
     assert load_json(tmp_path/"semantic-audit.json")["status"]=="checks_passed"
+
+def test_rosetta_pivot_shared_across_agent_dialects(tmp_path):
+    pkg, contract, evaluation = sample(tmp_path)
+    first = contract["projections"][0]
+    second = dict(first, id="edit-handoff", stage="editing",
+                  direction="Retain the handoff as an act of trust through the cut",
+                  output_contract="Editorial cut preserves motive")
+    contract["projections"].append(second)
+    assert validate_semantics(contract, pkg)
+    projection = make_projection(contract, pkg)
+    assert {tuple(p["concept_ids"]) for p in projection["authorized_projections"]} == {("trust-custody",)}
+    assert {p["stage"] for p in projection["authorized_projections"]} == {"image", "editing"}
+    evaluation["contract_sha256"] = digest(contract)
+    evaluation["evaluations"].append(dict(
+        evaluation["evaluations"][0], projection_id="edit-handoff"))
+    assert audit_semantics(contract, pkg, evaluation)["status"] == "checks_passed"
+    evaluation["evaluations"] = evaluation["evaluations"][:1]
+    assert audit_semantics(contract, pkg, evaluation)["status"] == "incomplete"

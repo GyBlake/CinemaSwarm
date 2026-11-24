@@ -255,8 +255,8 @@ See [production object graph](docs/production-graph.md).
 ## Semantic interoperability and meaning preservation
 
 CinemaSwarm supports an original public semantic-contract boundary inspired
-by the *Shabaka Stone* heart-and-tongue metaphor (historical analogy, not
-ancient software specification). A versioned contract separates authorial
+by the *Rosetta Stone* as an analogy for cross-language meaning alignment.
+It is not an ancient software specification. A versioned contract separates authorial
 intent, defined concepts, polarities, relations, and provider-specific
 execution projections. It keeps semantic, transport, execution and
 presentation layers distinct.
