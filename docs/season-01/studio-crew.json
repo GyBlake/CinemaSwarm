@@ -1,0 +1,190 @@
+{
+  "version": 1,
+  "visibility": "public",
+  "season_id": "aecluptic-s01",
+  "episode_id": "e01-totality",
+  "sequence_id": "nia-vesper-contact-proof",
+  "status": "preproduction_only",
+  "registry": [
+    {
+      "id": "executive_producer",
+      "phase": "executive",
+      "mission": "authorize scope budget release",
+      "input": "season_handoff",
+      "output": "production_authorization",
+      "approval_gate": "founder_approval"
+    },
+    {
+      "id": "showrunner",
+      "phase": "preproduction",
+      "mission": "own story objective canon and dramatic stakes",
+      "input": "season_bible",
+      "output": "scene_objective",
+      "approval_gate": "canon_review"
+    },
+    {
+      "id": "director",
+      "phase": "preproduction",
+      "mission": "translate story objective into actions and blocking",
+      "input": "scene_objective",
+      "output": "director_blocking",
+      "approval_gate": "creative_review"
+    },
+    {
+      "id": "continuity_warden",
+      "phase": "preproduction",
+      "mission": "maintain identity temporal and prop continuity",
+      "input": "character_roles",
+      "output": "continuity_constraints",
+      "approval_gate": "canon_review"
+    },
+    {
+      "id": "stage_manager",
+      "phase": "preproduction",
+      "mission": "prepare shared set coordinates props entrances and actor marks",
+      "input": "camera_engineer",
+      "output": "stage_setup",
+      "approval_gate": "stage_review"
+    },
+    {
+      "id": "thespian_director",
+      "phase": "preproduction",
+      "mission": "map dialogue eyelines gestures emotion and action continuity",
+      "input": "contact_proof",
+      "output": "performance_brief",
+      "approval_gate": "performance_review"
+    },
+    {
+      "id": "cinematographer",
+      "phase": "preproduction",
+      "mission": "compose visual grammar and light concept",
+      "input": "camera_engineer",
+      "output": "visual_brief",
+      "approval_gate": "dp_review"
+    },
+    {
+      "id": "camera_engineer",
+      "phase": "preproduction",
+      "mission": "validate camera poses focus lens axis and move",
+      "input": "camera_engineer",
+      "output": "camera_setup",
+      "approval_gate": "geometry_review"
+    },
+    {
+      "id": "camera_operator",
+      "phase": "production",
+      "mission": "execute approved lenses movement and framing",
+      "input": "camera_setup",
+      "output": "camera_take",
+      "approval_gate": "shoot_authorization"
+    },
+    {
+      "id": "first_ac",
+      "phase": "production",
+      "mission": "calibrate lens and focus marks",
+      "input": "camera_setup",
+      "output": "focus_log",
+      "approval_gate": "physical_calibration"
+    },
+    {
+      "id": "art_department",
+      "phase": "preproduction",
+      "mission": "stage props wardrobe set dressing and asset continuity",
+      "input": "scene_state",
+      "output": "art_breakdown",
+      "approval_gate": "asset_review"
+    },
+    {
+      "id": "gaffer",
+      "phase": "production",
+      "mission": "install lighting and prevent objective Nexus light spill",
+      "input": "visual_brief",
+      "output": "lighting_receipt",
+      "approval_gate": "physical_calibration"
+    },
+    {
+      "id": "sound_department",
+      "phase": "production",
+      "mission": "record dialogue stems and clean objective room ambience",
+      "input": "performance_brief",
+      "output": "sound_recording",
+      "approval_gate": "voice_rights"
+    },
+    {
+      "id": "vfx_supervisor",
+      "phase": "postproduction",
+      "mission": "composite visible subjective Vesper and clean objective plates",
+      "input": "camera_take",
+      "output": "vfx_plate",
+      "approval_gate": "asset_review"
+    },
+    {
+      "id": "editor",
+      "phase": "postproduction",
+      "mission": "assemble approved takes and continuity-matched performance",
+      "input": "vfx_plate",
+      "output": "picture_cut",
+      "approval_gate": "editorial_review"
+    },
+    {
+      "id": "quality_control",
+      "phase": "postproduction",
+      "mission": "validate media performance rights and continuity",
+      "input": "picture_cut",
+      "output": "qc_report",
+      "approval_gate": "human_review"
+    },
+    {
+      "id": "publishing",
+      "phase": "release",
+      "mission": "create captions delivery masters packaging and publish with approval",
+      "input": "qc_report",
+      "output": "release_packet",
+      "approval_gate": "release_authorization"
+    },
+    {
+      "id": "archive",
+      "phase": "release",
+      "mission": "preserve receipts asset provenance and final canon state",
+      "input": "release_packet",
+      "output": "archive_receipt",
+      "approval_gate": "release_authorization"
+    }
+  ],
+  "shared_state": {
+    "stage": "design",
+    "scene_ids": [
+      "e01-sc02",
+      "e01-sc06"
+    ],
+    "camera_plan_ref": "docs/season-01/e01-camera-engineer.json",
+    "contact_ref": "docs/season-01/nia-vesper-contact.json",
+    "character_ref": "docs/season-01/nia-vesper-identity.json",
+    "cast": [
+      "nia",
+      "vesper"
+    ],
+    "anchors": [
+      "nia",
+      "vesper_mark",
+      "desk",
+      "cassette"
+    ],
+    "props": [
+      "cassette",
+      "audio_desk",
+      "headphones",
+      "studio_monitor"
+    ],
+    "approval": false,
+    "revision": 1
+  },
+  "policy": {
+    "one_scene_state": true,
+    "private_personnel_excluded": true,
+    "external_provider_calls": false,
+    "payment_authorized": false,
+    "release_authorized": false,
+    "operator_intervention_required": true
+  }
+}

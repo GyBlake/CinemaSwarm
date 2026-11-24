@@ -20,6 +20,18 @@ Full fulfillment means **eight completed, edited, performance-reviewed, continui
 | Compiled eight episode masters | None | Blocked |
 | Human performance/artistic, legal and distribution signoff | None | Blocked |
 
+### Shared Studio OS crew orchestration
+
+The [unified crew capability registry](studio-crew.json) and
+[studio operating handoff contract](studio-os-crew-integration.md) define
+18 production department lenses across story, acting, camera, stagehands,
+props, lighting, sound, VFX, editorial, QC, release and archive. The
+`cinemaswarm_world/studio_crew.py` compiler produces **deterministic
+preproduction packets sharing one 40-second scene state** and checks
+that upstream identity, scene and camera contracts match. Real rendering,
+assets, payments and release remain blocked without authorized jobs and
+reviewer receipts. This is not an autonomous film shoot.
+
 ### Near-term production sequence
 1. **Canon review:** approve and lock character biographies, locations, and scope of transmigration reveal; check 2017/2024 astronomical visual details. Avoid inserting private Dreamcorp lore into public files.
 2. **Script room:** expand 8 treatments into dialogue scripts; establish episode runtimes through rehearsal/timing; run cross-episode symbolic and causal review.
