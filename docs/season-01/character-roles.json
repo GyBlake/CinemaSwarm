@@ -425,8 +425,8 @@
       "to": "vesper",
       "type": "host_companion",
       "initial": "cooperative",
-      "first_episode": "e01",
-      "last_episode": "e08",
+      "first_episode": "e01-totality",
+      "last_episode": "e08-aecluptic",
       "dynamic": "Consent and mutual error correction"
     },
     {
@@ -434,8 +434,8 @@
       "to": "mateo",
       "type": "allies",
       "initial": "unfamiliar",
-      "first_episode": "e03",
-      "last_episode": "e08",
+      "first_episode": "e03-second-self",
+      "last_episode": "e08-aecluptic",
       "dynamic": "Evidence versus rescue ethics, then reciprocal trust"
     },
     {
@@ -443,8 +443,8 @@
       "to": "mara",
       "type": "allies",
       "initial": "unfamiliar",
-      "first_episode": "e03",
-      "last_episode": "e08",
+      "first_episode": "e03-second-self",
+      "last_episode": "e08-aecluptic",
       "dynamic": "Cross-check hypotheses against recorded events"
     },
     {
@@ -452,8 +452,8 @@
       "to": "elias",
       "type": "allies",
       "initial": "unfamiliar",
-      "first_episode": "e03",
-      "last_episode": "e08",
+      "first_episode": "e03-second-self",
+      "last_episode": "e08-aecluptic",
       "dynamic": "Risk-taking offset by structured interpretation"
     },
     {
@@ -461,8 +461,8 @@
       "to": "leena",
       "type": "conflicted_allies",
       "initial": "suspicious",
-      "first_episode": "e04",
-      "last_episode": "e08",
+      "first_episode": "e04-crossroads",
+      "last_episode": "e08-aecluptic",
       "dynamic": "Concealed provenance confronted and publicly repaired"
     },
     {
@@ -470,8 +470,8 @@
       "to": "keeper",
       "type": "opposition",
       "initial": "unknown",
-      "first_episode": "e05",
-      "last_episode": "e08",
+      "first_episode": "e05-keepers",
+      "last_episode": "e08-aecluptic",
       "dynamic": "Privacy and safety conflict"
     },
     {
@@ -479,8 +479,8 @@
       "to": "cartographer",
       "type": "opposition",
       "initial": "unknown",
-      "first_episode": "e07",
-      "last_episode": "e08",
+      "first_episode": "e07-false-awakening",
+      "last_episode": "e08-aecluptic",
       "dynamic": "Coercive archive gathering blocks autonomy"
     },
     {
@@ -488,8 +488,8 @@
       "to": "quiet_index",
       "type": "former_affiliation",
       "initial": "concealed",
-      "first_episode": "e05",
-      "last_episode": "e07",
+      "first_episode": "e05-keepers",
+      "last_episode": "e07-false-awakening",
       "dynamic": "Complicity and accountability"
     },
     {
@@ -497,8 +497,8 @@
       "to": "quiet_index",
       "type": "operative",
       "initial": "active",
-      "first_episode": "e05",
-      "last_episode": "e08",
+      "first_episode": "e05-keepers",
+      "last_episode": "e08-aecluptic",
       "dynamic": "Duty increasingly conflicts with harmful commands"
     },
     {
@@ -506,8 +506,8 @@
       "to": "mateo",
       "type": "allies",
       "initial": "unfamiliar",
-      "first_episode": "e04",
-      "last_episode": "e08",
+      "first_episode": "e04-crossroads",
+      "last_episode": "e08-aecluptic",
       "dynamic": "Protection without denying Elias agency"
     }
   ],
