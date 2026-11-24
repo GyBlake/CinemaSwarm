@@ -297,12 +297,31 @@ def parse_args(argv=None):
     parser.add_argument("--shot-graph", type=Path, help="Approved production asset graph")
     parser.add_argument("--shot-reviews", type=Path, help="Human shot evidence manifest for audit")
     parser.add_argument("--shot-output", type=Path, help="Shot handoff or review result")
+    parser.add_argument("--cosmology-context", type=Path, help="Approved versioned world cosmology JSON")
+    parser.add_argument("--cosmology-output", type=Path, help="Validated cosmology observation JSON")
+    parser.add_argument("--observe-cosmology", type=Path, help="Read-only cosmology observer manifest")
+    parser.add_argument("--approve-cosmology-brief", action="store_true", help="Authorize sanitized cosmological context in live provider request")
     parser.add_argument("--overwrite", action="store_true", help="Allow replacing an existing output")
     return parser.parse_args(argv)
 
 
 async def main(argv=None) -> int:
     args = parse_args(argv)
+    if args.observe_cosmology:
+        import json
+        from cinemaswarm_world.cosmological_context import observer
+        from cinemaswarm_world.collaboration import load_json
+        try:
+            if not args.cosmology_output:
+                raise ValueError("--cosmology-output required")
+            report = observer(load_json(args.observe_cosmology))
+            write_packet(args.cosmology_output,json.dumps(report,ensure_ascii=False,indent=2)+"\n",
+                         overwrite=args.overwrite)
+        except (OSError,ValueError,TypeError,KeyError) as exc:
+            print(f"Cosmological context validation failed: {exc}",file=sys.stderr)
+            return 2
+        print(f"Cosmology observer saved to {args.cosmology_output}")
+        return 0
     if args.prepare_shots:
         import json
         from cinemaswarm_world.collaboration import load_json
@@ -689,6 +708,39 @@ async def main(argv=None) -> int:
             return 2
     else:
         request = build_request(brief)
+    if args.cosmology_context:
+        from cinemaswarm_world.cosmological_context import (
+            validate_cosmology, prompt_context)
+        from cinemaswarm_world.collaboration import load_json
+        try:
+            cosmology = load_json(args.cosmology_context)
+            validate_cosmology(cosmology)
+            if args.world_snapshot:
+                if snapshot["world_id"] != cosmology["world_id"]:
+                    raise ValueError("cosmology and world snapshot ID mismatch")
+                characters = set(snapshot["characters"])
+                world_events = {e["id"]: e for e in snapshot["events"]}
+                for event in cosmology["events"]:
+                    if event["actor_id"] not in characters:
+                        raise ValueError("cosmological event actor missing from world")
+                    recorded = world_events.get(event["id"])
+                    if recorded is None or recorded["actor_id"] != event["actor_id"]:
+                        raise ValueError("cosmological event not committed to canonical world")
+            context = prompt_context(cosmology)
+            if args.cosmology_output:
+                import json
+                from cinemaswarm_world.cosmological_context import observer
+                write_packet(args.cosmology_output,
+                             json.dumps(observer(cosmology),ensure_ascii=False,indent=2)+"\n",
+                             overwrite=args.overwrite)
+        except (OSError,ValueError,TypeError,KeyError) as exc:
+            print(f"Invalid cosmological context: {exc}",file=sys.stderr)
+            return 2
+        if not args.dry_run and not args.approve_cosmology_brief:
+            print("Cosmology requires --approve-cosmology-brief for live generation.",
+                  file=sys.stderr)
+            return 2
+        request += context
     if args.identity_snapshot:
         from cinemaswarm_world.identity_adapter import (
             load_identity_snapshot, project_identities, identity_context,

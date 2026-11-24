@@ -314,6 +314,32 @@ production. See [structured shot execution](docs/shot-execution.md).
 This adapts general production principles described in Pine Drama Studio's
 public tooling documentation, **not its proprietary runtime or model routing**.
 
+## Cosmological Context Engine: world before story
+
+`cinemaswarm_world/cosmological_context.py` introduces a deterministic,
+**author-controlled, provenance-preserving** world context upstream of story
+creation. It models fictional laws, documented traditions and interpretations,
+ambient functional archetypes, comparative relationships, institutions and
+approved causal events. Narrative observers select *existing events* instead
+of fabricating new canon. Historical or sacred traditions are **never silently
+equated** with original fiction; comparative mappings preserve differences and
+require human approval.
+
+```bash
+python cinema_swarm.py --observe-cosmology ./private/cosmology.json \
+  --cosmology-output ./private/cosmology-seeds.json
+
+python cinema_swarm.py --cosmology-context ./private/cosmology.json --dry-run
+
+# Optional: attach to a committed, same-world event history
+python cinema_swarm.py --cosmology-context ./private/cosmology.json \
+  --world-snapshot ./private/world.json --dry-run
+```
+
+Live AI-provider use requires explicit `--approve-cosmology-brief`. This is
+a read-only narrative-context adapter, not an autonomous mythological simulator.
+See [cosmological context specification](docs/cosmological-context.md).
+
 ## Architecture
 
 ```text
