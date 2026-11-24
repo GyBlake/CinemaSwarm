@@ -192,6 +192,22 @@ def observer(doc, *, limit=8):
     return {"version":1,"world_id":doc["world_id"],
         "cosmology_sha256":digest(doc),"premise":doc["premise"],
         "ambient_archetype_catalog":ambient,
+        "comparative_mappings":[{
+            "id":m["id"],"left":m["left_archetype_id"],
+            "right":m["right_archetype_id"],"relation":m["relation"],
+            "shared_function":m["shared_function"],
+            "differences":m["differences"],"sources":m["source_refs"]
+        } for m in doc["mappings"]],
+        "world_laws":[{
+            "id":law["id"],"domain":law["domain"],
+            "statement":law["statement"],"status":law["status"],
+            "provenance":law["provenance"]
+        } for law in doc["laws"]],
+        "institutions":[{
+            "id":ins["id"],"name":ins["name"],
+            "framework":ins["framework"],"beliefs":ins["beliefs"],
+            "law_ids":ins["law_ids"]
+        } for ins in doc["institutions"]],
         "sources":[{"id":t["id"],"context":t["cultural_context"],
                     "reference":t["source_reference"],
                     "interpretation":t["interpretation"]} for t in doc["traditions"]],

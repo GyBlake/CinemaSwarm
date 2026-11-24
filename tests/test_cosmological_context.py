@@ -94,6 +94,9 @@ def test_valid_world_and_observer_do_not_assign_archetypes():
     assert [x["event_id"] for x in obs["narrative_seeds"]]==["record1","record2"]
     assert [x["id"] for x in obs["ambient_archetype_catalog"]]==["interpreter","archivist"]
     assert "archetype_id" not in obs["narrative_seeds"][0]
+    assert obs["comparative_mappings"][0]["differences"].startswith("One navigates")
+    assert {law["status"] for law in obs["world_laws"]} == {"fictional_law", "in_world_belief"}
+    assert {inst["id"] for inst in obs["institutions"]} == {"academy", "archive"}
     assert "functional_overlap" not in obs["constraints"][1]
 
 def test_in_world_belief_is_not_rewritten_as_physics():

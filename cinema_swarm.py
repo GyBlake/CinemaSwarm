@@ -44,6 +44,12 @@ def create_orchestrator():
     Create serialized short-form cinematic arcs.
     Protect plot structure, character motivation, emotional stakes, and episode order.
     When world observer data is supplied, treat its established events as immutable canon.
+    When an approved cosmological context is supplied, begin from its laws,
+    distinct institutional interpretations and sourced ambient archetypes.
+    Preserve causal event order and provenance. Do not force an archetype onto
+    a character, equate sacred traditions, or make belief into universal physics.
+    Derive conflict from plausible institutional interpretations and decisions
+    before introducing generic villains or alignment binaries.
     Preserve event references and distinguish suggested dramatization from world facts.
     When author-reviewed dramaturgy is supplied, preserve knowledge asymmetries,
     explicit stakes, evidence-linked archetypal transitions, and unresolved questions.
@@ -59,6 +65,8 @@ def create_orchestrator():
     Return precise fixes.
     Distinguish structural plot repetition from surface changes in dialogue and visuals.
     Preserve approved causal events, character agency, and world provenance.
+    Check cosmological laws separately from in-world cultural beliefs, and flag
+    unsupported cross-cultural identity assertions or fabricated causes.
     Respect separately approved body-bound clothing, current body anatomy,
     body-worn props and ownership; never infer physical custody from personal ownership.
     When identity projections are supplied, verify stable IDs, body occupancy,
