@@ -257,12 +257,69 @@ def parse_args(argv=None):
     parser.add_argument("--semantic-output", type=Path, help="Semantic projection or audit output")
     parser.add_argument("--audit-semantics", type=Path, help="Reviewer-attested semantic evaluation JSON")
     parser.add_argument("--semantic-contract", type=Path, help="Semantic contract for evaluation")
+    parser.add_argument("--audit-runtime", type=Path, help="Versioned provider execution and asset graph")
+    parser.add_argument("--runtime-root", type=Path, help="Approved local runtime media directory")
+    parser.add_argument("--runtime-report", type=Path, help="Offline runtime integrity report")
+    parser.add_argument("--plan-repair", type=Path, help="Runtime graph containing a failed job")
+    parser.add_argument("--repair-job", help="Failed job ID to retry")
+    parser.add_argument("--repair-id", help="Unique new repair job ID")
+    parser.add_argument("--repair-approved-by", help="Authorized supervisor")
+    parser.add_argument("--repair-output", type=Path, help="Output new amended runtime graph")
+    parser.add_argument("--inspect-clips", type=Path, help="Local real-media QC manifest")
+    parser.add_argument("--clips-root", type=Path, help="Approved source for real media clips")
+    parser.add_argument("--clips-report", type=Path, help="Video measurement output report")
+    parser.add_argument("--audit-series-ledger", type=Path, help="Cross-episode symbolic continuity ledger")
+    parser.add_argument("--through-episode", type=int, help="Episode horizon for unresolved obligations")
+    parser.add_argument("--series-report", type=Path, help="Series payoff audit output report")
     parser.add_argument("--overwrite", action="store_true", help="Allow replacing an existing output")
     return parser.parse_args(argv)
 
 
 async def main(argv=None) -> int:
     args = parse_args(argv)
+    if args.audit_runtime or args.plan_repair or args.inspect_clips or args.audit_series_ledger:
+        import json
+        from cinemaswarm_world.collaboration import load_json
+        from cinemaswarm_world.studio_runtime import audit_runtime, plan_repair, write_atomic
+        from cinemaswarm_world.media_qc import inspect_suite
+        from cinemaswarm_world.series_ledger import audit_season_ledger
+        try:
+            modes = [args.audit_runtime, args.plan_repair, args.inspect_clips,
+                     args.audit_series_ledger]
+            if sum(bool(mode) for mode in modes) != 1:
+                raise ValueError("choose one studio operation")
+            if args.audit_runtime:
+                if not args.runtime_root or not args.runtime_report:
+                    raise ValueError("runtime root and report required")
+                result = audit_runtime(load_json(args.audit_runtime), args.runtime_root)
+                output = args.runtime_report
+            elif args.plan_repair:
+                if not all([args.repair_job, args.repair_id, args.repair_approved_by,
+                            args.repair_output]):
+                    raise ValueError("repair parent, ID, reviewer and output required")
+                result = plan_repair(load_json(args.plan_repair), args.repair_job,
+                                     args.repair_id, args.repair_approved_by)
+                output = args.repair_output
+            elif args.inspect_clips:
+                if not args.clips_root or not args.clips_report:
+                    raise ValueError("clip root and report required")
+                result = inspect_suite(load_json(args.inspect_clips), args.clips_root)
+                output = args.clips_report
+            else:
+                if not args.series_report:
+                    raise ValueError("--series-report required")
+                result = audit_season_ledger(load_json(args.audit_series_ledger),
+                                             args.through_episode)
+                output = args.series_report
+            write_atomic(output, result, overwrite=args.overwrite)
+        except (OSError, ValueError, KeyError, TypeError, RuntimeError) as exc:
+            print(f"Studio operation failed: {exc}", file=sys.stderr)
+            return 2
+        if result.get("status") in ("blocked", "incomplete"):
+            print(f"Studio gate returned {result['status']}", file=sys.stderr)
+            return 3
+        print(f"Studio output saved to {output}")
+        return 0
     if args.prepare_semantics or args.audit_semantics:
         import json
         from cinemaswarm_world.collaboration import load_json

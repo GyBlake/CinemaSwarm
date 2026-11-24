@@ -268,6 +268,31 @@ and season qualification now require passing semantic evidence.
 
 See [semantic interoperability](docs/semantic-interoperability.md).
 
+## Seven-stage studio execution and continuity controls
+
+Beyond existing canonical world, body, voice, symbolism, Rosetta translation
+and release-gate contracts, CinemaSwarm now implements a **provider-neutral**
+execution and review runtime in `cinemaswarm_world/studio_runtime.py`:
+
+- Authorized jobs with frozen SHA-256 input references, stable idempotency
+  keys, explicit dependency preflight, cost ceilings and attributed review.
+- Immutable reference assets and per-provider returned media asset receipts;
+  digest and provider input matching required for a `verified` state.
+- On-disk atomic snapshots and checkpoints; no automatic network calls.
+- Targeted failed/rejected job repair plans with bounded retries and budget
+  rechecking, preserving other approved assets.
+- `media_qc.py` inspects **actual local video** for codec/container readability,
+  stream existence, measured duration/resolution, and inter-frame pixel motion.
+  This does not perform facial recognition, speaker authentication or
+  audiovisual phoneme alignment.
+- `series_ledger.py` reconciles approved delayed symbolic payoff obligations
+  across a contiguous set of episodes; unresolved obligations become blocking
+  when their deadline is reached.
+
+Commands: `--audit-runtime`, `--plan-repair`, `--inspect-clips`,
+`--audit-series-ledger`. For contracts and limitations see
+[studio fulfillment](docs/studio-fulfillment.md).
+
 ## Architecture
 
 ```text
