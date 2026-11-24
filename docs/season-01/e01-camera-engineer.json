@@ -1,0 +1,299 @@
+{
+  "version": 1,
+  "season_id": "aecluptic-s01",
+  "episode_id": "e01-totality",
+  "proof_sequence_id": "nia-vesper-contact-proof",
+  "status": "engineering_draft",
+  "coordinate_system": {
+    "units": "meters",
+    "origin": "southwest_studio_corner",
+    "x": "east",
+    "y": "north",
+    "z": "up",
+    "room": [
+      6,
+      5,
+      3
+    ],
+    "surveyed": false
+  },
+  "action_axis": {
+    "from": "nia",
+    "to": "vesper_mark",
+    "allowed_side": "negative",
+    "tolerance_m2": 0.02,
+    "eyeline_rule": "Nia eyeline toward Vesper fixed anchor, shared by objective and subjective cameras"
+  },
+  "anchors": [
+    {
+      "id": "nia",
+      "xyz": [
+        2.5,
+        2.1,
+        1.55
+      ],
+      "physical": true
+    },
+    {
+      "id": "vesper_mark",
+      "xyz": [
+        3.7,
+        3.2,
+        1.58
+      ],
+      "physical": false
+    },
+    {
+      "id": "desk",
+      "xyz": [
+        3,
+        2.5,
+        0.75
+      ],
+      "physical": true
+    },
+    {
+      "id": "cassette",
+      "xyz": [
+        2.8,
+        2.48,
+        0.96
+      ],
+      "physical": true
+    }
+  ],
+  "departments": [
+    {
+      "id": "director",
+      "responsibility": "Emotional and narrative intent, actor choices, subjective/objective story grammar",
+      "handoff": "character role and scene objective"
+    },
+    {
+      "id": "camera_engineer",
+      "responsibility": "Camera poses, axis, lens/framing, blocking, focal positions and matching geometry",
+      "handoff": "validated camera plan"
+    },
+    {
+      "id": "director_of_photography",
+      "responsibility": "Cinematographic lighting, exposure, contrast, visual tone, shot coverage",
+      "handoff": "lighting and exposure look notes"
+    },
+    {
+      "id": "camera_operator",
+      "responsibility": "Framing, operating, dolly track, head moves and takes",
+      "handoff": "shot-level camera staging"
+    },
+    {
+      "id": "first_ac",
+      "responsibility": "Lens and focus marks, tracking focus, camera prep",
+      "handoff": "focus distances and focus transitions"
+    },
+    {
+      "id": "gaffer",
+      "responsibility": "Lighting implementation without unintentional Nexus spill on objective plates",
+      "handoff": "lighting cue sheet"
+    },
+    {
+      "id": "vfx_supervisor",
+      "responsibility": "Nia/Vesper eyeline, tracking markers, subjective character compositing, clean objective plates",
+      "handoff": "match-cut and matte/reference requirements"
+    },
+    {
+      "id": "script_supervisor",
+      "responsibility": "Action continuity, Nia hand movement and wardrobe across subjective/objective cuts",
+      "handoff": "action match sheet"
+    },
+    {
+      "id": "sound_recordist",
+      "responsibility": "Isolated Nia and Vesper dialogue stems; isolate private AI voice from objective room microphones",
+      "handoff": "scene sound source chart"
+    },
+    {
+      "id": "editor",
+      "responsibility": "Shot/reverse continuity, cut point, pacing and dialogue intelligibility",
+      "handoff": "assembled approved proof"
+    }
+  ],
+  "cameras": [
+    {
+      "id": "S03",
+      "parent_shot": "S03",
+      "at": [
+        2.3,
+        0.9,
+        1.53
+      ],
+      "aim": "nia",
+      "lens_mm": 50,
+      "shot_size": "medium_close_up",
+      "move": "locked",
+      "travel_m": 0,
+      "seconds": 9,
+      "view": "objective",
+      "sees": [
+        "nia"
+      ],
+      "focus": [
+        "nia",
+        "cassette"
+      ],
+      "lighting": "warm_practical",
+      "audio": "objective_ambience",
+      "notes": "Nia face then rack to cassette wheel; established no Vesper image"
+    },
+    {
+      "id": "S04",
+      "parent_shot": "S04",
+      "at": [
+        4.8,
+        1,
+        1.6
+      ],
+      "aim": "vesper_mark",
+      "lens_mm": 28,
+      "shot_size": "wide",
+      "move": "locked",
+      "travel_m": 0,
+      "seconds": 7,
+      "view": "objective",
+      "sees": [
+        "nia"
+      ],
+      "focus": [
+        "vesper_mark"
+      ],
+      "lighting": "warm_practical",
+      "audio": "objective_ambience",
+      "notes": "Empty zone at Vesper anchor; off-screen subject must remain absent"
+    },
+    {
+      "id": "S10-A",
+      "parent_shot": "S10",
+      "at": [
+        3.8,
+        1.2,
+        1.55
+      ],
+      "aim": "vesper_mark",
+      "lens_mm": 35,
+      "shot_size": "two_shot",
+      "move": "dolly_in",
+      "travel_m": 0.45,
+      "seconds": 7,
+      "view": "subjective",
+      "sees": [
+        "nia",
+        "vesper"
+      ],
+      "focus": [
+        "vesper_mark",
+        "nia"
+      ],
+      "lighting": "nexus_subjective",
+      "audio": "private_dialogue",
+      "notes": "Nia and Vesper share frame; audience sees face and emotional expression"
+    },
+    {
+      "id": "S10-B",
+      "parent_shot": "S10",
+      "at": [
+        2.95,
+        1.15,
+        1.55
+      ],
+      "aim": "vesper_mark",
+      "lens_mm": 65,
+      "shot_size": "reaction_close_up",
+      "move": "locked",
+      "travel_m": 0,
+      "seconds": 5,
+      "view": "subjective",
+      "sees": [
+        "vesper"
+      ],
+      "focus": [
+        "vesper_mark"
+      ],
+      "lighting": "nexus_subjective",
+      "audio": "private_dialogue",
+      "notes": "Vesper emotional beat must be readable and distinctly framed"
+    },
+    {
+      "id": "S10-C",
+      "parent_shot": "S10",
+      "at": [
+        4.2,
+        1.5,
+        1.55
+      ],
+      "aim": "nia",
+      "lens_mm": 65,
+      "shot_size": "close_up",
+      "move": "locked",
+      "travel_m": 0,
+      "seconds": 5,
+      "view": "subjective",
+      "sees": [
+        "nia"
+      ],
+      "focus": [
+        "nia"
+      ],
+      "lighting": "nexus_subjective",
+      "audio": "private_dialogue",
+      "notes": "Nia's eyeline continues to fixed Vesper anchor"
+    },
+    {
+      "id": "S11",
+      "parent_shot": "S11",
+      "at": [
+        0.7,
+        0.2,
+        1.64
+      ],
+      "aim": "vesper_mark",
+      "lens_mm": 28,
+      "shot_size": "wide",
+      "move": "locked",
+      "travel_m": 0,
+      "seconds": 7,
+      "view": "objective",
+      "sees": [
+        "nia"
+      ],
+      "focus": [
+        "nia"
+      ],
+      "lighting": "warm_practical",
+      "audio": "objective_ambience",
+      "notes": "Match Nia gaze and hand reach; absence of Vesper confirms private perception"
+    }
+  ],
+  "continuity": {
+    "eye_match": {
+      "host": "nia",
+      "target": "vesper_mark",
+      "subjective_shot": "S10-C",
+      "objective_shot": "S11"
+    },
+    "visibility_rule": "Vesper visible to audience in subjective coverage; never in objective neutral shots",
+    "same_room_geometry": true,
+    "no_physical_nexus_spill": true,
+    "cutting_order": [
+      "S03",
+      "S04",
+      "S10-A",
+      "S10-B",
+      "S10-C",
+      "S11"
+    ]
+  },
+  "approval": {
+    "engineer_reviewed": false,
+    "dp_reviewed": false,
+    "visual_assets_verified": false,
+    "blocking_rehearsed": false,
+    "physical_measurements_verified": false,
+    "evidence": "Previsualization-only coordinate proposal"
+  }
+}

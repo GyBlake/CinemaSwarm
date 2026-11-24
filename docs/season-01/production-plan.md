@@ -87,6 +87,20 @@ In subjective camera perspective Vesper is visibly portrayed as a recurring expr
 - Sound layers distinguish diegetic recording, host-internal dialogue and objective sound.
 - Medical and radiation depictions avoid misinformation and real-world enhancement claims.
 
+### Camera Engineer department
+
+The [Camera Engineering Stack](camera-engineering-stack.md) and
+[typed camera setup manifest](e01-camera-engineer.json) bind six exact
+camera stations to the four parent proof shots. The author-specified
+6×5 m space is a proposed previsualization coordinate frame; optical
+and mechanical values, action-axis side, focus marks, dolly travel,
+screen grammar, visibility and total shot durations are checked by
+`cinemaswarm_world/camera_engineer.py`. The downstream Camera
+Operator, First AC, gaffer, VFX supervisor, sound recordist, script
+supervisor and editor have explicit production handoffs. Nothing in
+this planning stack establishes physical stage measurements or
+authorizes filming or provider spending.
+
 ### Nia/Vesper identity and contact proof previsualization
 
 [Identity and voice design contract](nia-vesper-identity.json) specifies Nia's

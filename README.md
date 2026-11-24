@@ -403,3 +403,17 @@ This project is distributed under the **Eclipse Public License 2.0**. See [LICEN
 ## Season 01 dramatic character roles
 
 The Æclyptic development package includes a [48-role dramatic taxonomy](docs/season-01/character-role-guide.md), [15 assigned characters/institutions/forces](docs/season-01/character-roles.json), and 10 relationship edges. The independent `cinemaswarm_world.character_roles` validator cross-checks the [eight-episode season handoff](docs/season-01/season-handoff.json), maintains Nia's sole Nexus protagonist status and preserves antagonist identity secrecy. Assignments remain **draft**, not final casting or completed scenes.
+
+## Camera Engineer virtual cinematography stack
+
+The [Æclyptic Camera Engineering Stack](docs/season-01/camera-engineering-stack.md)
+provides read-only numeric checks on the
+[Episode 01 camera manifest](docs/season-01/e01-camera-engineer.json):
+virtual crew department responsibilities, room anchors, lens and
+focus target configuration, camera positions and heights, shot size,
+180° action-axis and dolly path, subjective versus objective character
+visibility, and 40-second parent shot coverage. It validates the
+[contact proof](docs/season-01/nia-vesper-contact.json) and preserves
+**audience-visible Vesper** without making her visible to bystanders.
+This is previsualization metadata, not a 3D film renderer, virtual
+cinematography simulation or real calibrated camera setup.
