@@ -142,7 +142,7 @@ Who are you?
 VESPER (V.O.)
 I don't know how to answer without lying.
 
-A small interface forms in Nia's perception, text building from misheard syllables:
+For the audience alone, the source of the voice becomes visible across the studio: VESPER, an expressive humanoid woman bearing intricate blue-gold Nexus patterns. She meets Nia's eyes, calm but uncertain. The room remains physically unchanged. A small interface forms within Nia's perception, text building from misheard syllables:
 **SOURCE / TIMESTAMP / CONFIDENCE / UNKNOWN**
 
 Nia reaches toward it. Her hand touches air.
@@ -248,7 +248,7 @@ CUT TO BLACK.
 
 ### Pilot directing notes
 - **No tech lecture.** Nexus is conveyed by source labels, uncertainty, a failed query and an honest second voice. The protagonist does the work.
-- **Two independent camera vocabularies:** ordinary external photography and subjective waking-dream overlays. Use an unbroken reverse angle to show others cannot see them.
+- **Two independent camera vocabularies:** ordinary external photography and subjective waking-dream overlays. Show Vesper with a full recognizable expressive humanoid appearance for the audience in subjective shots. Use an unbroken reverse angle to show that other characters cannot see her.
 - **No real person should look directly at an uneclipsed Sun;** eclipse viewing scenes must include proper protective glasses except during the actual total phase.
 - The speculative halo recording is a fictional family artifact, not a claim that a halo caused the 2017 eclipse.
 - The celiac plexus and DNA are **not explained onscreen**.

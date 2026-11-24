@@ -67,3 +67,21 @@ def test_no_unreferenced_scene():
     a,b=docs();b["shots"][2]["scene_id"]="e01-sc07"
     with pytest.raises(ValueError,match="cross-scene"):
         validate_contact(a,b,SCENES,ROLES,SEASON)
+
+
+def test_audience_sees_companion_in_subjective_view():
+    a,b=docs()
+    assert a["relationship"]["audience_visible"] is True
+    assert a["relationship"]["audience_audible"] is True
+    assert "humanoid" in b["shots"][2]["effects"].lower()
+    validate_contact(a,b,SCENES,ROLES,SEASON)
+
+def test_reject_invisible_to_viewer():
+    a,b=docs();a["relationship"]["audience_visible"]=False
+    with pytest.raises(ValueError,match="private Nexus"):
+        validate_contact(a,b,SCENES,ROLES,SEASON)
+
+def test_reject_invisible_subjective_ai():
+    a,b=docs();b["shots"][2]["effects"]="Only a vague empty waveform and glyphs; no character."
+    with pytest.raises(ValueError,match="visible companion"):
+        validate_contact(a,b,SCENES,ROLES,SEASON)

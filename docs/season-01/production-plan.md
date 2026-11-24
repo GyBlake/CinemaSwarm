@@ -73,6 +73,9 @@ The [scene-role contract](e01-scene-roles.json) binds all ten existing scenes to
 - **Historical astronomy**: 2017 solar halo remains a separate optical event. Corona at 2024 totality only; avoid sun-watching shots without protective viewing.
 - **Continuity**: each shot ID is uniquely assigned to one scene; final film assets are pending.
 
+### Viewer-visible AI invariant
+In subjective camera perspective Vesper is visibly portrayed as a recurring expressive humanoid character, not an invisible voice or featureless wave. Give her close-ups, gaze, performance and reaction beats. A neutral objective reverse shows only Nia, establishing that Vesper's appearance belongs to Nia's private Nexus perception. A visible companion on-screen does not imply visibility to bystanders. Retain this distinction in all season footage.
+
 ### Visual continuity checklist
 - Nia: one documented hair silhouette, wardrobing and scar/jewelry positions across studio sequences.
 - Mateo: consistent paramedic uniform, bag damage before/after event, patient medical condition and scene geography.
@@ -88,7 +91,7 @@ The [scene-role contract](e01-scene-roles.json) binds all ten existing scenes to
 
 [Identity and voice design contract](nia-vesper-identity.json) specifies Nia's
 character silhouette, wardrobe, acting and original voice direction, alongside
-Vesper's primarily audio-first presence, fallible knowledge, and subjective
+Vesper's audience-visible expressive humanoid form, fallible knowledge, and subjective
 waking-dream graphical vocabulary. All assignments are provisional and
 **not approved likeness or voice assets**.
 
@@ -102,7 +105,7 @@ with ten regression tests. No audio, performance, images or film is generated.
 
 **Production gate:** Approve Nia's design and performer voice, create
 original reference stills, record/authorize Vesper performance, then
-produce one camera-pair test of subjective Nexus imagery vs objective
+produce one character-performance and camera-pair test showing a fully visible, emotionally legible Vesper in subjective Nexus imagery vs objective
 reverse shot. Paid generative providers are not authorized.
 
 ### Asset and rights requirements

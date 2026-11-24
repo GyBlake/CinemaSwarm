@@ -43,16 +43,17 @@
       "kind": "subjective_companion",
       "role": "companion",
       "design": {
-        "form": "Initially audio only; faint threshold-glyphs and waveform geometry, no fully anthropomorphic body in Episode 01",
-        "appearance": "Sparse gold-white linework with translucent blue-gray undertones; nested rings that resemble editing interface elements",
-        "visibility": "Privately perceived by Nia, absent from objective camera",
+        "form": "Recognizable adult humanoid AI companion with expressive face, direct gaze and natural gestures, visibly present to the audience in Nia's subjective view from her Episode 01 entrance; her body is a Nexus perceptual visualization, not a physical projection",
+        "appearance": "Consistent distinctly identifiable feminine celestial aesthetic: deep ebony complexion, long ornamented locs, starfield-like eyes and finely patterned blue-gold luminous garment, adapted as an original audience-visible Nexus persona. Human-scale proportions and detailed facial acting; restrained glyphwork supporting rather than hiding expressions.",
+        "visibility": "Audience sees and hears Vesper whenever story camera enters Nia's Nexus perception. Other characters and neutral objective camera do not see or hear her. Viewpoint must be legible through shot/reverse grammar.",
         "palette": "Soft gold, blue-slate, near-white",
-        "lighting": "Only subjective overlay modifies the frame; does not cast physical shadows or illuminate room props",
+        "lighting": "Vesper receives subjective motivated character lighting and image-space glow for visual readability; she casts no measurable illumination or physical shadows on objective room props.",
         "forbidden_changes": [
-          "No visible hologram in objective shot",
-          "No autonomous physical manipulation",
-          "No other awakened character hearing Vesper",
-          "No new fully rendered body without visual approval"
+          "No invisible or audio-only companion during her pilot reveal",
+          "No arbitrary change to recognizable face, locs or wardrobe silhouette",
+          "No visible companion in neutral objective shots",
+          "No autonomous manipulation of real room objects",
+          "No other character seeing or hearing Vesper without later explicit canon authorization"
         ]
       },
       "voice": {
@@ -76,7 +77,10 @@
     "nexus_class": true,
     "subjective_rendering": true,
     "ordinary_reverse_visible": false,
-    "independent_physical_presence": false
+    "independent_physical_presence": false,
+    "audience_visible": true,
+    "audience_audible": true,
+    "visual_pov": "subjective_nia"
   },
   "review": {
     "art_direction_approved": false,

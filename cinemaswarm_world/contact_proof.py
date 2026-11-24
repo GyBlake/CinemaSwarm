@@ -45,11 +45,13 @@ def validate_contact(identity,sequence,scene_roles,roles,season):
         raise ValueError("subject types mismatch")
     rel=identity["relationship"]
     _exact(rel,("host_id","companion_id","mode","nexus_class","subjective_rendering",
-                "ordinary_reverse_visible","independent_physical_presence"),"host relation")
+                "ordinary_reverse_visible","independent_physical_presence","audience_visible","audience_audible","visual_pov"),"host relation")
     if (rel["host_id"]!="nia" or rel["companion_id"]!="vesper" or rel["mode"]!="waking_dream"
         or rel["nexus_class"] is not True or rel["subjective_rendering"] is not True
         or rel["ordinary_reverse_visible"] is not False
-        or rel["independent_physical_presence"] is not False):
+        or rel["independent_physical_presence"] is not False
+        or rel["audience_visible"] is not True or rel["audience_audible"] is not True
+        or rel["visual_pov"]!="subjective_nia"):
         raise ValueError("private Nexus visibility invariant")
     ids=sequence["shot_ids"]
     if ids!=["S03","S04","S10","S11"] or len(sequence["shots"])!=4:
@@ -79,6 +81,12 @@ def validate_contact(identity,sequence,scene_roles,roles,season):
             _string(line["line"],"spoken line")
             if line["speaker"]=="vesper" and item["view"]!="subjective":
                 raise ValueError("Vesper voice audible in neutral camera")
+    # The subject-view AI is visually and emotionally present, never just a voice.
+    revealed=sequence["shots"][2]
+    if not all(token in revealed["action"].casefold() for token in ("vesper","audience","eye contact")):
+        raise ValueError("audience-visible companion reveal missing")
+    if not all(token in revealed["effects"].casefold() for token in ("humanoid","face","subjective")):
+        raise ValueError("visible companion character design missing")
     if total!=40 or sequence["target_seconds"]!=40:
         raise ValueError("proof duration mismatch")
     production=sequence["production"]

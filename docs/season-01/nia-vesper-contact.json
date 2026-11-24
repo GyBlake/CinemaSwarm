@@ -51,8 +51,8 @@
       "scene_id": "e01-sc06",
       "seconds": 17,
       "view": "subjective",
-      "camera": "Slow push in on Nia; subtle frame-edge chromatic separation. No third-person floating UI.",
-      "action": "At subjective eclipse threshold a minimalist concentric audio-ring blooms around the tape spindle. Nia asks what is happening. Nexus labels emerge, then resolve to UNKNOWN.",
+      "camera": "Subjective two-shot and expressive close-ups of Nia and Vesper inside the audio-room environment. Lens geometry supports full-size character interaction; a composed, legible Nexus interface occupies depth behind them.",
+      "action": "During the threshold, the audience FIRST SEES VESPER appear opposite Nia: a distinctive luminous woman, full face and expressive eyes, clearly a character, not an abstract HUD. Nia turns, makes eye contact and converses. Nexus labels emerge in the surrounding subjective environment; Vesper's expression shows uncertainty.",
       "audio": "Layered internal tone, Vesper close and distinguishable from tape playback; no score drowning dialogue.",
       "dialogue": [
         {
@@ -72,8 +72,8 @@
           "line": "That I am here with you. And I could be wrong."
         }
       ],
-      "effects": "Four brief HUD labels: SOURCE, TIMESTAMP, CONFIDENCE, UNKNOWN; linework not world-space objects.",
-      "continuity": "Only Nia perceives Nexus. Vesper's personality and voice remain consistent."
+      "effects": "Audience-visible articulated humanoid companion with consistent face, gaze, expression, loc silhouette and blue-gold design; SOURCE/TIMESTAMP/CONFIDENCE/UNKNOWN interface behind her. Subjective only, not a physical hologram.",
+      "continuity": "Vesper clearly appears on screen in S10. The same eyeline and hand reach continue into S11 where she is absent in the objective reverse; no lighting or physical reflections persist."
     },
     {
       "id": "S11",
@@ -110,6 +110,6 @@
     "shot_plan_approved": false,
     "asset_approval": false,
     "dialogue_approval": false,
-    "evidence": "Candidate 40-second concept, pending artistic direction and media evidence"
+    "evidence": "Audience-visible Vesper revision prepared; full character art and actual footage remain unproduced and unapproved."
   }
 }
