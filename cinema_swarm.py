@@ -252,12 +252,44 @@ def parse_args(argv=None):
     parser.add_argument("--audit-production-graph", type=Path, help="Validate versioned production object graph")
     parser.add_argument("--production-root", type=Path, help="Approved production root for evidence files")
     parser.add_argument("--production-report", type=Path, help="Production graph audit output")
+    parser.add_argument("--prepare-semantics", type=Path, help="Approved public semantic contract JSON")
+    parser.add_argument("--semantic-package", type=Path, help="Public canonical collaboration package")
+    parser.add_argument("--semantic-output", type=Path, help="Semantic projection or audit output")
+    parser.add_argument("--audit-semantics", type=Path, help="Reviewer-attested semantic evaluation JSON")
+    parser.add_argument("--semantic-contract", type=Path, help="Semantic contract for evaluation")
     parser.add_argument("--overwrite", action="store_true", help="Allow replacing an existing output")
     return parser.parse_args(argv)
 
 
 async def main(argv=None) -> int:
     args = parse_args(argv)
+    if args.prepare_semantics or args.audit_semantics:
+        import json
+        from cinemaswarm_world.collaboration import load_json
+        from cinemaswarm_world.semantic_interop import make_projection, audit_semantics
+        try:
+            if bool(args.prepare_semantics) == bool(args.audit_semantics):
+                raise ValueError("choose one semantic operation")
+            if not args.semantic_package or not args.semantic_output:
+                raise ValueError("--semantic-package and --semantic-output required")
+            package = load_json(args.semantic_package)
+            if args.prepare_semantics:
+                report = make_projection(load_json(args.prepare_semantics), package)
+            else:
+                if not args.semantic_contract:
+                    raise ValueError("--semantic-contract required")
+                report = audit_semantics(load_json(args.semantic_contract), package,
+                                         load_json(args.audit_semantics))
+            write_packet(args.semantic_output, json.dumps(report, indent=2) + "\n",
+                         overwrite=args.overwrite)
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            print(f"Semantic interoperability gate failed: {exc}", file=sys.stderr)
+            return 2
+        if args.audit_semantics and report["status"] != "checks_passed":
+            print("Semantic evaluation incomplete or contradicted.", file=sys.stderr)
+            return 3
+        print(f"Semantic output saved to {args.semantic_output}")
+        return 0
     if args.audit_production_graph:
         import json
         from cinemaswarm_world.collaboration import load_json

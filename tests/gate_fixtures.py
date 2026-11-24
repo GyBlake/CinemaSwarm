@@ -119,7 +119,47 @@ def write_gate(root, episode_id="lantern-01", audio_name="voice.wav"):
     graph_report = audit_graph(graph, root)
     (root / "production-graph.json").write_text(json.dumps(graph, indent=2))
     (root / "production-report.json").write_text(json.dumps(graph_report, indent=2))
-    return {"production_graph": "production-graph.json",
+    from cinemaswarm_world.semantic_interop import audit_semantics
+    semantic = {
+        "version": 1, "visibility": "public", "episode_id": episode_id,
+        "package_sha256": digest(package),
+        "origin": {"intent": "Character trust conveyed through prop custody",
+                   "source": "authorized original screenplay",
+                   "scope": "fictional narrative"},
+        "concepts": [{
+            "id": "trust-custody", "definition": "A deliberate handoff conveys trust",
+            "polarity": "trust versus betrayal", "scene_id": "opening",
+            "visibility": "public", "evidence": "scene actions",
+            "source_tradition": "original fictional story"
+        }],
+        "relations": [],
+        "projections": [{
+            "id": "visual-handoff", "stage": "image", "scene_id": "opening",
+            "concept_ids": ["trust-custody"],
+            "direction": "Make the talisman transfer visible through hand position",
+            "must_preserve": ["Mara initiates handoff"],
+            "must_not_assert": ["The object stays with Mara after transfer"],
+            "output_contract": "Single approved still composition"
+        }],
+        "review": {"approved": True, "reviewer": "synthetic test only",
+                   "evidence": "fixture, not actual semantic review"}
+    }
+    evaluation = {
+        "version": 1, "contract_sha256": digest(semantic),
+        "evaluations": [{
+            "projection_id": "visual-handoff", "meaning_preserved": True,
+            "contradiction_found": False, "prohibitions_respected": True,
+            "observed_evidence": "synthetic test only",
+            "reviewer": "synthetic test only", "approved": True
+        }]
+    }
+    semantic_report = audit_semantics(semantic, package, evaluation)
+    for name, value in (("semantic.json", semantic), ("semantic-eval.json", evaluation),
+                        ("semantic-report.json", semantic_report)):
+        (root / name).write_text(json.dumps(value, indent=2))
+    return {"semantic_contract": "semantic.json",
+            "semantic_report": "semantic-report.json",
+            "production_graph": "production-graph.json",
             "production_graph_report": "production-report.json",
             "collaboration_package": "collaboration.json",
             "collaboration_ack": "ack.json", "performance_report": "performance.json",

@@ -193,7 +193,7 @@ def validate_season_manifest(doc: object) -> dict:
         numbers.add(number)
         for field in ("master", "master_sha256", "captions", "captions_sha256",
                       "continuity_report", "provenance_record", "collaboration_package",
-                      "collaboration_ack", "performance_report", "symbolic_program", "symbolic_report", "production_graph", "production_graph_report"):
+                      "collaboration_ack", "performance_report", "symbolic_program", "symbolic_report", "production_graph", "production_graph_report", "semantic_contract", "semantic_report"):
             _bounded_text(ep.get(field), field)
         for field in ("master_sha256", "captions_sha256"):
             digest = ep[field]
@@ -333,6 +333,23 @@ def _episode(ep: dict, root: Path, profile: dict, season_id: str) -> dict:
         evidence["production_graph_sha256"] = digest(graph)
     except (OSError, ValueError, KeyError, TypeError, AttributeError):
         unknown("production_graph_evidence_unavailable")
+    try:
+        from .semantic_interop import validate_semantics
+        from .collaboration import load_json, digest
+        package = load_json(_file(root, ep["collaboration_package"]))
+        semantics = load_json(_file(root, ep["semantic_contract"]))
+        validate_semantics(semantics, package)
+        semantic_receipt = load_json(_file(root, ep["semantic_report"]))
+        if (semantic_receipt.get("episode_id") != package["episode_id"]
+            or semantic_receipt.get("contract_sha256") != digest(semantics)
+            or semantic_receipt.get("package_sha256") != digest(package)
+            or semantic_receipt.get("status") != "checks_passed"
+            or semantic_receipt.get("error_count") != 0
+            or semantic_receipt.get("unknown_count") != 0):
+            fail("semantic_interoperability_gate_failed")
+        evidence["semantic_contract_sha256"] = digest(semantics)
+    except (OSError, ValueError, KeyError, TypeError, AttributeError):
+        unknown("semantic_interoperability_evidence_unavailable")
     reviews = ep["reviews"]
     missing = [key for key in MANDATORY_REVIEWS if key not in reviews]
     if missing:

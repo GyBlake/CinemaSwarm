@@ -58,7 +58,7 @@ def validate_plan(doc: object) -> dict:
         raise ValueError("episode render plan version must be 1")
     if set(doc) - {"version", "episode_id", "profile", "mode", "scenes",
                    "audio_source", "captions_source", "collaboration_package",
-                   "collaboration_ack", "performance_report", "symbolic_program", "symbolic_report", "production_graph", "production_graph_report"}:
+                   "collaboration_ack", "performance_report", "symbolic_program", "symbolic_report", "production_graph", "production_graph_report", "semantic_contract", "semantic_report"}:
         raise ValueError("unsupported episode plan field")
     _label(doc.get("episode_id"), "episode_id")
     if doc.get("profile") not in PROFILES:
@@ -91,7 +91,7 @@ def validate_plan(doc: object) -> dict:
                 raise ValueError("candidate scenes need explicit approval")
             _label(scene.get("continuity_report"), "continuity_report")
     if doc["mode"] == "candidate":
-        for field in ("collaboration_package", "collaboration_ack", "performance_report", "symbolic_program", "symbolic_report", "production_graph", "production_graph_report"):
+        for field in ("collaboration_package", "collaboration_ack", "performance_report", "symbolic_program", "symbolic_report", "production_graph", "production_graph_report", "semantic_contract", "semantic_report"):
             _label(doc.get(field), field)
     for field in ("audio_source", "captions_source"):
         if field in doc:
@@ -179,6 +179,17 @@ def render_episode(plan: dict, root: Path, output: Path, receipt_path: Path,
             or result.get("status") != "checks_passed"
             or result.get("error_count") != 0 or result.get("unknown_count") != 0):
             raise ValueError("production graph gate not verified")
+        from .semantic_interop import validate_semantics
+        semantic = load_json(_input(root, plan["semantic_contract"], (".json",)))
+        validate_semantics(semantic, package)
+        semantic_report = load_json(_input(root, plan["semantic_report"], (".json",)))
+        if (semantic_report.get("episode_id") != plan["episode_id"]
+            or semantic_report.get("contract_sha256") != digest(semantic)
+            or semantic_report.get("package_sha256") != digest(package)
+            or semantic_report.get("status") != "checks_passed"
+            or semantic_report.get("error_count") != 0
+            or semantic_report.get("unknown_count") != 0):
+            raise ValueError("semantic interoperability gate not verified")
         approvals.append({"collaboration_package_sha256": digest(package),
                           "collaboration_ack_sha256": _hash(_input(root, plan["collaboration_ack"], (".json",))),
                           "performance_report_sha256": _hash(_input(root, plan["performance_report"], (".json",))),

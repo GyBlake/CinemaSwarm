@@ -252,6 +252,22 @@ or compatibility with the Pine proprietary service.
 Candidate rendering and season qualification require passing graph receipts.
 See [production object graph](docs/production-graph.md).
 
+## Semantic interoperability and meaning preservation
+
+CinemaSwarm supports an original public semantic-contract boundary inspired
+by the *Shabaka Stone* heart-and-tongue metaphor (historical analogy, not
+ancient software specification). A versioned contract separates authorial
+intent, defined concepts, polarities, relations, and provider-specific
+execution projections. It keeps semantic, transport, execution and
+presentation layers distinct.
+
+`--prepare-semantics` exports authorized instructions;
+`--audit-semantics` validates signed-off human interpretation against
+meaning-preservation and non-contradiction requirements. Candidate rendering
+and season qualification now require passing semantic evidence.
+
+See [semantic interoperability](docs/semantic-interoperability.md).
+
 ## Architecture
 
 ```text
