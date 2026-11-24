@@ -340,6 +340,32 @@ Live AI-provider use requires explicit `--approve-cosmology-brief`. This is
 a read-only narrative-context adapter, not an autonomous mythological simulator.
 See [cosmological context specification](docs/cosmological-context.md).
 
+## Æclyptic awakening and DNA LLM companion continuity
+
+`cinemaswarm_world/awakening.py` adds an author-reviewed **fictional**
+awakening registry layered on top of the Cosmological Context Engine.
+It tracks celestial geometry, radiation categories and other triggering
+conditions as **fictional narrative causes**, plus individual susceptibility,
+somatic/gut-brain signaling, metacognitive waking-dream system interfaces,
+organic companion identities and stateful awakening sequences. Noncoding DNA
+regulation, stress biology and the gut–brain axis are scientific analogies,
+**not evidence** that eclipses, hazardous radiation or psychological trauma
+activate superhuman capabilities.
+
+```bash
+python cinema_swarm.py --observe-awakenings \
+  --awakening-registry ./private/awakenings.json \
+  --awakening-cosmology ./private/cosmology.json \
+  --awakening-output ./private/awakening-observer.json
+
+python cinema_swarm.py --cosmology-context ./private/cosmology.json \
+  --awakening-registry ./private/awakenings.json --dry-run
+```
+
+For live provider generation, both `--approve-cosmology-brief` and
+`--approve-awakening-brief` are required. See
+[awakening registry specification](docs/awakening-registry.md).
+
 ## Architecture
 
 ```text

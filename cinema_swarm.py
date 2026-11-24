@@ -44,6 +44,10 @@ def create_orchestrator():
     Create serialized short-form cinematic arcs.
     Protect plot structure, character motivation, emotional stakes, and episode order.
     When world observer data is supplied, treat its established events as immutable canon.
+    When an awakening registry is supplied, preserve each host's current
+    activation phase, trigger lineage, waking-dream system and organic companion
+    identity. Do not invent successful biological mutations, force trauma, or
+    depict harmful radiation as a practical enhancement method.
     When an approved cosmological context is supplied, begin from its laws,
     distinct institutional interpretations and sourced ambient archetypes.
     Preserve causal event order and provenance. Do not force an archetype onto
@@ -309,12 +313,33 @@ def parse_args(argv=None):
     parser.add_argument("--cosmology-output", type=Path, help="Validated cosmology observation JSON")
     parser.add_argument("--observe-cosmology", type=Path, help="Read-only cosmology observer manifest")
     parser.add_argument("--approve-cosmology-brief", action="store_true", help="Authorize sanitized cosmological context in live provider request")
+    parser.add_argument("--awakening-registry", type=Path, help="Author-reviewed fictional awakening registry")
+    parser.add_argument("--awakening-cosmology", type=Path, help="Canonical cosmology dependency")
+    parser.add_argument("--observe-awakenings", action="store_true", help="Generate read-only awakening observer JSON")
+    parser.add_argument("--awakening-output", type=Path, help="Offline observer report path")
+    parser.add_argument("--approve-awakening-brief", action="store_true", help="Authorize fictional awakening context sent to AI provider")
     parser.add_argument("--overwrite", action="store_true", help="Allow replacing an existing output")
     return parser.parse_args(argv)
 
 
 async def main(argv=None) -> int:
     args = parse_args(argv)
+    if args.observe_awakenings:
+        import json
+        from cinemaswarm_world.collaboration import load_json
+        from cinemaswarm_world.awakening import observe_awakenings
+        try:
+            if not all((args.awakening_registry,args.awakening_cosmology,args.awakening_output)):
+                raise ValueError("Awakening observer requires --awakening-registry, --awakening-cosmology and --awakening-output")
+            report=observe_awakenings(load_json(args.awakening_registry),
+                                      load_json(args.awakening_cosmology))
+            write_packet(args.awakening_output,json.dumps(report,ensure_ascii=False,indent=2)+"\n",
+                         overwrite=args.overwrite)
+        except (OSError,ValueError,TypeError,KeyError) as exc:
+            print(f"Awakening registry failed: {exc}",file=sys.stderr)
+            return 2
+        print(f"Awakening observer saved to {args.awakening_output}")
+        return 0
     if args.observe_cosmology:
         import json
         from cinemaswarm_world.cosmological_context import observer
@@ -749,6 +774,37 @@ async def main(argv=None) -> int:
                   file=sys.stderr)
             return 2
         request += context
+    if args.awakening_registry:
+        from cinemaswarm_world.awakening import awakening_prompt, observe_awakenings
+        from cinemaswarm_world.collaboration import load_json
+        try:
+            if not args.cosmology_context:
+                raise ValueError("Awakening context requires --cosmology-context")
+            if args.awakening_cosmology:
+                raise ValueError("Use --cosmology-context for live awakening dependency")
+            awakening = load_json(args.awakening_registry)
+            if args.world_snapshot:
+                missing = set(h["id"] for h in awakening["hosts"]) - set(snapshot["characters"])
+                if missing:
+                    raise ValueError("Awakening hosts missing from canonical world snapshot")
+            context = awakening_prompt(awakening,cosmology)
+            if args.awakening_output:
+                import json
+                report=observe_awakenings(awakening,cosmology)
+                write_packet(args.awakening_output,
+                             json.dumps(report,ensure_ascii=False,indent=2)+"\n",
+                             overwrite=args.overwrite)
+        except (OSError,ValueError,TypeError,KeyError) as exc:
+            print(f"Invalid awakening context: {exc}",file=sys.stderr)
+            return 2
+        if not args.dry_run and not args.approve_awakening_brief:
+            print("Awakening context requires --approve-awakening-brief for live generation.",
+                  file=sys.stderr)
+            return 2
+        request += context
+    elif args.awakening_cosmology:
+        print("--awakening-cosmology only applies with --observe-awakenings.",file=sys.stderr)
+        return 2
     if args.identity_snapshot:
         from cinemaswarm_world.identity_adapter import (
             load_identity_snapshot, project_identities, identity_context,
