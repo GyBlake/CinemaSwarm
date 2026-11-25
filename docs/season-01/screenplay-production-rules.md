@@ -2,6 +2,18 @@
 
 These rules recover the cross-chat writing decisions for The Æclyptic. Use them with the [series bible](series-bible.md), [semantic dramaturgy](../semantic-dramaturgy.md), [narrative morphology](../narrative-morphology.md), [symbolic narrative](../symbolic-narrative.md), and [audiovisual continuity](../av-continuity.md). Apply them before locking a script, during coverage and performance breakdown, and again on the edited cut.
 
+## Project intake
+
+Capture these before developing the world seed, scene order, or production packet.
+
+| Input | What to preserve |
+|---|---|
+| Genre | The authored blend and the conventions that viewers should be able to recognize. |
+| World type | The setting and cultural lens, everyday activity, institutions and power, and which mechanics operate in-world. |
+| Plot synopsis | The protagonist's starting position, goal, opposition, decisive turns, consequences, and intended larger arc where supplied. |
+
+Keep intake tied to the project. Mark missing inputs as unspecified and separate proposals from established canon. Use the three inputs to choose opening locations, narrative voice, the first rules viewers see in action, and the sound palette.
+
 ## Narrative and plot tension
 
 - Open inside a conflict already in motion. Establish the immediate want, obstacle, and stakes through action and dialogue. Compress setup so the episode can deliver reversals, decisions, outcomes, and a consequence that carries forward.
