@@ -57,7 +57,7 @@ def create_orchestrator():
     Preserve event references and distinguish suggested dramatization from world facts.
     When author-reviewed dramaturgy is supplied, preserve knowledge asymmetries,
     explicit stakes, evidence-linked archetypal transitions, and unresolved questions.
-    Every clip must advance the story.
+    Every clip must advance the story. In Episode 1, orient the audience across inhabited places,\n    everyday activity and institutions before a world rule determines an outcome. Establish the\n    lead's trade, stakes and ambition. Use authored opening narration, decision-point interior\n    thought and motivated bystander dialogue as distinct sources of audience knowledge.
     """,
     )
     
@@ -95,7 +95,7 @@ def create_orchestrator():
         name="Thespian Performance Director",
         instructions="""
     You direct actors like a serious cinema director.
-    Focus on facial expression, breath, silence, posture, eye movement, blocking, subtext, and emotional truth.
+    Focus on facial expression, breath, silence, posture, eye movement, blocking, subtext, and emotional truth.\n    Match facial and physical tension to the vocal delivery. Separate spoken dialogue, private\n    thought, narration and System voice; give listeners only audible cues available to them.\n    Lock each voice take before lip sync and use the same audio across camera angles.
     """,
     )
     
@@ -112,7 +112,7 @@ def create_orchestrator():
         instructions="""
     Optimize for Shorts, TikTok, Reels, and Facebook retention.
     Make the first 1-2 seconds magnetic.
-    Add escalation, pattern interrupts, tight pacing, and loopable endings.
+    Add escalation, pattern interrupts, tight pacing, and loopable endings.\n    Cut to musical and vocal turns. Use rests, reduced instrumentation and lower volume\n    while an ambient musical element continues across cuts and during dialogue.
     """,
     )
     
@@ -128,7 +128,7 @@ def create_orchestrator():
         name="Prompt Engineer Agent",
         instructions="""
     Convert approved scenes into AI-video prompts.
-    Include character consistency, setting, lighting, camera motion, mood, negative prompt, and production constraints.
+    Include character consistency, setting, lighting, camera motion, mood, negative prompt, and production constraints.\n    Carry the scene's audio cues and point-of-view boundaries into the prompt. Specify\n    which sounds carry across cuts and which character mouths each audible line.
     """,
     )
     
@@ -137,7 +137,7 @@ def create_orchestrator():
         instructions="""
     Final pass.
     Reject weak hooks, plot holes, vague visuals, continuity drift, boring pacing, or unclear emotional payoff.
-    Return a polished final production packet.
+    Check that a new viewer can orient and anticipate a world consequence in the opening.\n    Check score continuity across transitions and rests, dialogue intelligibility, POV boundaries,\n    and alignment between vocal tension, facial acting and lip sync. Flag absent media evidence.\n    Return a polished final production packet.
     """,
     )
     
@@ -161,7 +161,7 @@ def create_orchestrator():
     8. Continuity check
     9. AI-video production prompt
     10. Negative prompt
-    11. Platform pack
+    11. Platform pack\n    12. Sound and score cues: continuous ambient musical bed, scene mood and point of view,\n        local population and activity, carryover, rests or level changes, and re-entry cue.\n        Identify score, sourced music, crowds, environment, effects, thoughts, System voice\n        and spoken dialogue. Bind voice cues to facial expression, physical action and sync.
     
     No random clips.
     No plot holes.
