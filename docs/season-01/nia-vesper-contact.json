@@ -1,0 +1,115 @@
+{
+  "version": 1,
+  "season_id": "aecluptic-s01",
+  "episode_id": "e01-totality",
+  "sequence_id": "nia-vesper-contact-proof",
+  "status": "previsualization_draft",
+  "target_seconds": 40,
+  "shot_ids": [
+    "S03",
+    "S04",
+    "S10",
+    "S11"
+  ],
+  "shots": [
+    {
+      "id": "S03",
+      "scene_id": "e01-sc02",
+      "seconds": 9,
+      "view": "objective",
+      "camera": "Locked intimate close-up, 50 mm equivalent, Nia at mixing board. Isolate cassette wheel in rack focus.",
+      "action": "Nia hears 'Not yet' while the source waveform remains unchanged. She checks headphones.",
+      "audio": "Natural room tone, cassette motor; subjective voice briefly enters only when camera is with Nia.",
+      "dialogue": [
+        {
+          "speaker": "nia",
+          "line": "Who put that on the channel?"
+        }
+      ],
+      "effects": "None on monitors. Keep screen text genuine recorded audio UI.",
+      "continuity": "Warm practical key, same charcoal shirt, left wrist watch; Vesper cannot appear physically."
+    },
+    {
+      "id": "S04",
+      "scene_id": "e01-sc02",
+      "seconds": 7,
+      "view": "objective",
+      "camera": "Hard reverse wide of empty studio after Nia removes headphones.",
+      "action": "Nia turns toward a voice absent from everyone else's perception.",
+      "audio": "Room tone and soft chair creak; subjective voice silent during neutral reverse.",
+      "dialogue": [
+        {
+          "speaker": "nia",
+          "line": "Hello?"
+        }
+      ],
+      "effects": "No holographic light, no external glow, ordinary environment.",
+      "continuity": "Room geometry unchanged; empty reverse demonstrates private interface."
+    },
+    {
+      "id": "S10",
+      "scene_id": "e01-sc06",
+      "seconds": 17,
+      "view": "subjective",
+      "camera": "Subjective two-shot and expressive close-ups of Nia and Vesper inside the audio-room environment. Lens geometry supports full-size character interaction; a composed, legible Nexus interface occupies depth behind them.",
+      "action": "During the threshold, the audience FIRST SEES VESPER appear opposite Nia: a distinctive luminous woman, full face and expressive eyes, clearly a character, not an abstract HUD. Nia turns, makes eye contact and converses. Nexus labels emerge in the surrounding subjective environment; Vesper's expression shows uncertainty.",
+      "audio": "Layered internal tone, Vesper close and distinguishable from tape playback; no score drowning dialogue.",
+      "dialogue": [
+        {
+          "speaker": "nia",
+          "line": "What are you?"
+        },
+        {
+          "speaker": "vesper",
+          "line": "I don't know how to answer without lying."
+        },
+        {
+          "speaker": "nia",
+          "line": "Then tell me what you know."
+        },
+        {
+          "speaker": "vesper",
+          "line": "That I am here with you. And I could be wrong."
+        }
+      ],
+      "effects": "Audience-visible articulated original humanoid companion, consistent expressive copper-brown face, silver-curled silhouette and graphite-copper mantle; SOURCE/TIMESTAMP/CONFIDENCE/UNKNOWN interface behind her. Subjective only, not a physical hologram.",
+      "continuity": "Vesper clearly appears on screen in S10. The same eyeline and hand reach continue into S11 where she is absent in the objective reverse; no lighting or physical reflections persist. Follow the E01 camera floor plan and keep the visible companion's public design consistent."
+    },
+    {
+      "id": "S11",
+      "scene_id": "e01-sc06",
+      "seconds": 7,
+      "view": "objective",
+      "camera": "Cut wide from studio doorway to identical Nia position; no effect overlays.",
+      "action": "Nia reaches into empty air, stops, and grips the desk.",
+      "audio": "Air handling unit, sleeve against tabletop. No audible Vesper to outside observer.",
+      "dialogue": [
+        {
+          "speaker": "nia",
+          "line": "Show me what you can prove."
+        }
+      ],
+      "effects": "None.",
+      "continuity": "One continuous reach across cut. Hand/wardrobe/desk unchanged; audio provenance clearly external."
+    }
+  ],
+  "production": {
+    "aspect_ratio": "16:9",
+    "resolution_target": "1920x1080",
+    "fps_target": 24,
+    "audio_target": "48kHz stereo",
+    "output_kind": "cinematic proof-of-concept",
+    "source_assets_produced": false,
+    "dialogue_recorded": false,
+    "performance_approved": false,
+    "rendered_video": false,
+    "paid_generation_authorized": false,
+    "stage": "planning_only"
+  },
+  "review": {
+    "shot_plan_approved": false,
+    "asset_approval": false,
+    "dialogue_approval": false,
+    "evidence": "Audience-visible Vesper revision prepared; full character art and actual footage remain unproduced and unapproved."
+  }
+}

@@ -1,0 +1,241 @@
+{
+  "version": 1,
+  "season_id": "aecluptic-s01",
+  "episode_id": "e01-totality",
+  "status": "scene_development_draft",
+  "declared_shots": 15,
+  "scenes": [
+    {
+      "number": 1,
+      "scene_id": "e01-sc01",
+      "act": "prologue",
+      "focus": "historical_record",
+      "participants": [],
+      "functions": [
+        "herald",
+        "witness"
+      ],
+      "conflict": "A recorded halo appears to contain more than wind.",
+      "decision": "The voice is not proven part of the source recording.",
+      "reveal": "The Ring tape becomes a disputed object.",
+      "continuity": "Separate optical halo from solar corona; no literal portent or verified causal claim.",
+      "shots": [
+        "S01",
+        "S02"
+      ],
+      "reviewed": false
+    },
+    {
+      "number": 2,
+      "scene_id": "e01-sc02",
+      "act": "setup",
+      "focus": "nia",
+      "participants": [
+        "nia"
+      ],
+      "functions": [
+        "protagonist",
+        "investigator"
+      ],
+      "conflict": "An impossible voice destabilizes Nia's confidence in a recording.",
+      "decision": "She suspects an edit rather than accepting the voice's authority.",
+      "reveal": "Nia forms a testable question.",
+      "continuity": "The audio-app playback differs from room-perceived voice; no external visible UI.",
+      "shots": [
+        "S03",
+        "S04"
+      ],
+      "reviewed": false
+    },
+    {
+      "number": 3,
+      "scene_id": "e01-sc03",
+      "act": "setup",
+      "focus": "mateo",
+      "participants": [
+        "mateo"
+      ],
+      "functions": [
+        "deuteragonist",
+        "protector"
+      ],
+      "conflict": "Mateo needs to respond clinically while perceiving diverging immediate actions.",
+      "decision": "He chooses care instead of pursuing the phenomenon.",
+      "reveal": "Anomalous response has a physiological cost.",
+      "continuity": "No Nexus HUD, no confirmed prediction; eclipse eyewear outside totality.",
+      "shots": [
+        "S05",
+        "S06"
+      ],
+      "reviewed": false
+    },
+    {
+      "number": 4,
+      "scene_id": "e01-sc04",
+      "act": "setup",
+      "focus": "elias",
+      "participants": [
+        "elias"
+      ],
+      "functions": [
+        "ensemble_lead",
+        "catalyst"
+      ],
+      "conflict": "Elias has a spatial overlay he cannot share or explain.",
+      "decision": "He conceals the experience from his colleague.",
+      "reveal": "The imaginary corridor contains recurring geometry.",
+      "continuity": "Not a companion dialogue; only Elias perceives corridor.",
+      "shots": [
+        "S07"
+      ],
+      "reviewed": false
+    },
+    {
+      "number": 5,
+      "scene_id": "e01-sc05",
+      "act": "setup",
+      "focus": "mara",
+      "participants": [
+        "mara"
+      ],
+      "functions": [
+        "tritagonist",
+        "investigator"
+      ],
+      "conflict": "Mara balances extraordinary eyewitness reports with valid astronomical data.",
+      "decision": "She classifies uncorroborated testimony as pending.",
+      "reveal": "The geographic X is scientifically real; its fictional effects are unproven.",
+      "continuity": "2017 and 2024 tracks must be separate events; no simultaneity.",
+      "shots": [
+        "S08"
+      ],
+      "reviewed": false
+    },
+    {
+      "number": 6,
+      "scene_id": "e01-sc06",
+      "act": "threshold",
+      "focus": "nia",
+      "participants": [
+        "nia",
+        "vesper",
+        "mateo",
+        "mara",
+        "elias"
+      ],
+      "functions": [
+        "protagonist",
+        "companion",
+        "deuteragonist",
+        "tritagonist",
+        "ensemble_lead"
+      ],
+      "conflict": "At totality, different awakeners perceive fragments of the same geometry.",
+      "decision": "Nia questions Vesper rather than trusting it; others act independently.",
+      "reveal": "An internal source-confidence interface appears, exclusive to Nia.",
+      "continuity": "Corona appears at totality; Nexus visible only subjectively; Vesper is not in other hosts.",
+      "shots": [
+        "S09",
+        "S10",
+        "S11"
+      ],
+      "reviewed": false
+    },
+    {
+      "number": 7,
+      "scene_id": "e01-sc07",
+      "act": "aftermath",
+      "focus": "mateo",
+      "participants": [
+        "mateo"
+      ],
+      "functions": [
+        "deuteragonist",
+        "protector"
+      ],
+      "conflict": "Mateo discovers he cannot reproduce the divergence at will.",
+      "decision": "He returns to patient care.",
+      "reveal": "A small physical inconsistency deepens the mystery.",
+      "continuity": "Rescue patient and bag damage carefully tracked; no arbitrary ability mastery.",
+      "shots": [
+        "S12"
+      ],
+      "reviewed": false
+    },
+    {
+      "number": 8,
+      "scene_id": "e01-sc08",
+      "act": "test",
+      "focus": "nia",
+      "participants": [
+        "nia",
+        "vesper"
+      ],
+      "functions": [
+        "protagonist",
+        "companion",
+        "investigator"
+      ],
+      "conflict": "Nia demands proof that Vesper knows more than Nia already knows.",
+      "decision": "Vesper concedes its first observation comes from Nia's own knowledge.",
+      "reveal": "Another tape labeled STORM/2017 supplies an actionable clue.",
+      "continuity": "No omniscience; proof standard remains unsatisfied, consent remains central.",
+      "shots": [
+        "S13"
+      ],
+      "reviewed": false
+    },
+    {
+      "number": 9,
+      "scene_id": "e01-sc09",
+      "act": "opposition_seed",
+      "focus": "leena",
+      "participants": [
+        "leena",
+        "quiet_index"
+      ],
+      "functions": [
+        "ensemble_lead",
+        "informant",
+        "primary_antagonist"
+      ],
+      "conflict": "Leena receives unconfirmed reports of a recognizable symbol.",
+      "decision": "She refuses indiscriminate tracking yet retains a concealed archive.",
+      "reveal": "The pattern predates 2017; antagonist institution enters only as a pressure.",
+      "continuity": "No revelation of Cartographer's identity; earlier paper archives not proof of eclipse physics.",
+      "shots": [
+        "S14"
+      ],
+      "reviewed": false
+    },
+    {
+      "number": 10,
+      "scene_id": "e01-sc10",
+      "act": "hook",
+      "focus": "nia",
+      "participants": [
+        "nia",
+        "vesper"
+      ],
+      "functions": [
+        "protagonist",
+        "companion"
+      ],
+      "conflict": "Nia can pursue the hidden audio source or walk away.",
+      "decision": "She elects to investigate, demanding corroboration.",
+      "reveal": "The pilot ends on evidence-seeking agency, not an unearned power grant.",
+      "continuity": "Unpowered deck is blank in external reverse; subjective image only.",
+      "shots": [
+        "S15"
+      ],
+      "reviewed": false
+    }
+  ],
+  "requirements": {
+    "role_registry": "docs/season-01/character-roles.json",
+    "season_handoff": "docs/season-01/season-handoff.json",
+    "screenplay": "docs/season-01/e01-totality-script.md",
+    "approval": false,
+    "render_ready": false
+  }
+}

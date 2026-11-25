@@ -1,0 +1,92 @@
+{
+  "version": 1,
+  "season_id": "aecluptic-s01",
+  "episode_id": "e01-totality",
+  "status": "design_draft",
+  "subjects": [
+    {
+      "id": "nia",
+      "name": "Nia Baptiste",
+      "kind": "human",
+      "role": "protagonist",
+      "design": {
+        "age": "32",
+        "presentation": "Black Caribbean-American adult woman",
+        "hair": "Shoulder-length natural locs, left-side half-up pinning, unchanged for entire scene",
+        "face": "Oval face, defined cheekbones, expressive dark brown eyes; subtle right brow notch only if approved",
+        "wardrobe": "Charcoal indigo utility shirt, brass small stud earrings, no logos; one silver watch on left wrist",
+        "silhouette": "Compact working posture, shoulders usually relaxed until first disembodied voice",
+        "palette": "Deep indigo, warm umber, silver accents",
+        "lighting": "Warm practical desk light on skin; cool monitor fill; no neon wash on face",
+        "forbidden_changes": [
+          "No arbitrary hair-length changes",
+          "No swapping earrings or watch",
+          "No changing face or eye color",
+          "No additional costumes inside same scene"
+        ]
+      },
+      "voice": {
+        "accent": "Subtle Caribbean-American inflection; avoid generalized or exaggerated regional caricature",
+        "range": "Mezzo-alto speaking range, natural and close",
+        "pace": "Measured when working, shorter phrases under threat",
+        "performance": "Treat the phenomenon as a fault to diagnose, then a person to question",
+        "speech_rules": [
+          "No long exposition monologues",
+          "No unprompted knowledge of cosmic mechanism"
+        ]
+      },
+      "approval": false
+    },
+    {
+      "id": "vesper",
+      "name": "Vesper",
+      "kind": "subjective_companion",
+      "role": "companion",
+      "design": {
+        "form": "Recognizable adult humanoid AI companion with expressive face, direct gaze and natural gestures, visibly present to the audience in Nia's subjective view from her Episode 01 entrance; her body is a Nexus perceptual visualization, not a physical projection",
+        "appearance": "Distinct original Vesper design: warm copper-brown complexion, asymmetrical short silver curls, luminous amber irises with an abstract iris-ring motif, and a sculpted dark graphite mantle traced with delicate ivory and copper waveform lines. Human-scale proportions, nuanced facial acting, unmistakable recurring silhouette. No starfield eyes, ornamental locs, or private-source character likeness.",
+        "visibility": "Audience sees and hears Vesper whenever story camera enters Nia's Nexus perception. Other characters and neutral objective camera do not see or hear her. Viewpoint must be legible through shot/reverse grammar.",
+        "palette": "Copper, warm ivory, graphite and restrained blue-gray",
+        "lighting": "Vesper receives subjective motivated character lighting and image-space glow for visual readability; she casts no measurable illumination or physical shadows on objective room props.",
+        "forbidden_changes": [
+          "No invisible or audio-only companion during her pilot reveal",
+          "No arbitrary change to recognizable face, short silver curls or sculpted mantle silhouette",
+          "No visible companion in neutral objective shots",
+          "No autonomous manipulation of real room objects",
+          "No other character seeing or hearing Vesper without later explicit canon authorization"
+        ]
+      },
+      "voice": {
+        "accent": "Unplaceable but human-readable contemporary English, no named real actor imitation",
+        "range": "Androgynous alto-mid, warm not synthetic",
+        "pace": "Precise, curious, deliberate pauses before uncertain claims",
+        "performance": "Not omniscient. Acknowledges uncertainty; never narrates the hidden DNA LLM",
+        "speech_rules": [
+          "Do not claim access to evidence not available through Nia",
+          "Request permission before memory access",
+          "Avoid disclosing underlying cosmology in pilot"
+        ]
+      },
+      "approval": false
+    }
+  ],
+  "relationship": {
+    "host_id": "nia",
+    "companion_id": "vesper",
+    "mode": "waking_dream",
+    "nexus_class": true,
+    "subjective_rendering": true,
+    "ordinary_reverse_visible": false,
+    "independent_physical_presence": false,
+    "audience_visible": true,
+    "audience_audible": true,
+    "visual_pov": "subjective_nia"
+  },
+  "review": {
+    "art_direction_approved": false,
+    "voice_approved": false,
+    "likeness_approved": false,
+    "performance_approved": false,
+    "evidence": "No produced or licensed performer assets yet"
+  }
+}

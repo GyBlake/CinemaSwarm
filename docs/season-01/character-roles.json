@@ -1,0 +1,524 @@
+{
+  "version": 1,
+  "season_id": "aecluptic-s01",
+  "status": "development_draft",
+  "taxonomy": [
+    {
+      "id": "protagonist",
+      "function": "Principal viewpoint carrying the season's central decisions"
+    },
+    {
+      "id": "deuteragonist",
+      "function": "Second major dramatic perspective with autonomous stakes"
+    },
+    {
+      "id": "tritagonist",
+      "function": "Third central perspective or thematic counterweight"
+    },
+    {
+      "id": "ensemble_lead",
+      "function": "Recurring co-lead with substantial independent agency"
+    },
+    {
+      "id": "antagonist",
+      "function": "Person or organization actively obstructing protagonist goals"
+    },
+    {
+      "id": "primary_antagonist",
+      "function": "Main organized opposition driving the central conflict"
+    },
+    {
+      "id": "secondary_antagonist",
+      "function": "Localized or episodic opposing force"
+    },
+    {
+      "id": "antihero",
+      "function": "Major character using morally compromised methods for sympathetic ends"
+    },
+    {
+      "id": "antivillain",
+      "function": "Opposition with sympathetic motives and harmful methods"
+    },
+    {
+      "id": "mentor",
+      "function": "Guides training or interpretation while retaining limits"
+    },
+    {
+      "id": "guide",
+      "function": "Directs travel, discovery, or navigation"
+    },
+    {
+      "id": "ally",
+      "function": "Advances a protagonist goal through aligned action"
+    },
+    {
+      "id": "confidant",
+      "function": "Receives intimate information and challenges a character's self-account"
+    },
+    {
+      "id": "foil",
+      "function": "Contrasts the protagonist's values or methods"
+    },
+    {
+      "id": "rival",
+      "function": "Competes over an objective without necessarily being villainous"
+    },
+    {
+      "id": "love_interest",
+      "function": "Potential romantic partner; never assumed by character gender"
+    },
+    {
+      "id": "sidekick",
+      "function": "Close recurring helper whose agency and motivation remain independent"
+    },
+    {
+      "id": "companion",
+      "function": "Persistent partner or interface with a relational arc"
+    },
+    {
+      "id": "catalyst",
+      "function": "Triggers irreversible story action"
+    },
+    {
+      "id": "herald",
+      "function": "Brings news or evidence of a change in the world"
+    },
+    {
+      "id": "guardian",
+      "function": "Protects a place, threshold, person, or rule"
+    },
+    {
+      "id": "threshold_keeper",
+      "function": "Controls access to a realm, artifact, or institution"
+    },
+    {
+      "id": "trickster",
+      "function": "Disrupts expectations through deception, humor, or reversal"
+    },
+    {
+      "id": "shapeshifter",
+      "function": "Has shifting perceived allegiance or identity; not necessarily literal transformation"
+    },
+    {
+      "id": "traitor",
+      "function": "Violates an established trust with consequential action"
+    },
+    {
+      "id": "redeemer",
+      "function": "Makes material restitution for prior harm"
+    },
+    {
+      "id": "witness",
+      "function": "Establishes limited first-hand testimony"
+    },
+    {
+      "id": "investigator",
+      "function": "Tests uncertain claims against evidence"
+    },
+    {
+      "id": "scholar",
+      "function": "Provides domain expertise with bounded knowledge"
+    },
+    {
+      "id": "healer",
+      "function": "Delivers care while facing ethical and capability limits"
+    },
+    {
+      "id": "protector",
+      "function": "Accepts risk to keep others safe"
+    },
+    {
+      "id": "informant",
+      "function": "Supplies crucial restricted information"
+    },
+    {
+      "id": "gatekeeper",
+      "function": "Controls access to an institution or resource"
+    },
+    {
+      "id": "merchant",
+      "function": "Enables resource exchange within the world economy"
+    },
+    {
+      "id": "quest_giver",
+      "function": "Offers an actionable objective and consequences"
+    },
+    {
+      "id": "quest_target",
+      "function": "Person central to a rescue, pursuit, or investigation"
+    },
+    {
+      "id": "victim",
+      "function": "Suffers harm with the potential for continued agency"
+    },
+    {
+      "id": "rescued",
+      "function": "Receives rescue without being reduced to a permanent passive role"
+    },
+    {
+      "id": "tempter",
+      "function": "Offers an attractive but morally costly shortcut"
+    },
+    {
+      "id": "false_mentor",
+      "function": "Presents harmful guidance as protective mentorship"
+    },
+    {
+      "id": "mystery_figure",
+      "function": "Identity, goal or status is deliberately unknown"
+    },
+    {
+      "id": "recurring_support",
+      "function": "Supports story continuity across episodes"
+    },
+    {
+      "id": "guest",
+      "function": "Limited-duration story function"
+    },
+    {
+      "id": "cameo",
+      "function": "Brief appearance, not required for a full arc"
+    },
+    {
+      "id": "narrator",
+      "function": "Presents story information, possibly with limited reliability"
+    },
+    {
+      "id": "chorus",
+      "function": "Collective voices or social response, never omniscient by default"
+    },
+    {
+      "id": "world_antagonism",
+      "function": "Non-personal opposing force such as ecology, chronology or a boundary"
+    },
+    {
+      "id": "protagonist_alternative",
+      "function": "Embodies a plausible choice the protagonist refuses"
+    }
+  ],
+  "characters": [
+    {
+      "id": "nia",
+      "name": "Nia Baptiste",
+      "tier": "principal",
+      "roles": [
+        "protagonist",
+        "investigator",
+        "protagonist_alternative"
+      ],
+      "canon": "Full Nexus host; rare system bearer, potential transmigrator",
+      "appearance": "ongoing",
+      "arc": "Nia anchors the moral choice about memory access and public evidence.",
+      "approved": false
+    },
+    {
+      "id": "vesper",
+      "name": "Vesper",
+      "tier": "principal",
+      "roles": [
+        "companion",
+        "confidant",
+        "guide",
+        "foil"
+      ],
+      "canon": "Nexus's private waking-dream voice; not an independently verified external AI",
+      "appearance": "ongoing",
+      "arc": "Must learn evidence hygiene and respect host consent.",
+      "approved": false
+    },
+    {
+      "id": "mateo",
+      "name": "Mateo Reyes",
+      "tier": "principal",
+      "roles": [
+        "deuteragonist",
+        "protector",
+        "healer",
+        "foil",
+        "ally"
+      ],
+      "canon": "Awakened, no System",
+      "appearance": "ongoing",
+      "arc": "Rescue ethics oppose treating people as data.",
+      "approved": false
+    },
+    {
+      "id": "mara",
+      "name": "Dr. Mara Okonkwo",
+      "tier": "principal",
+      "roles": [
+        "tritagonist",
+        "scholar",
+        "investigator",
+        "foil",
+        "ally"
+      ],
+      "canon": "Awakened visual pattern perception, no System",
+      "appearance": "ongoing",
+      "arc": "Scientific verification questions narrative certainty.",
+      "approved": false
+    },
+    {
+      "id": "elias",
+      "name": "Elias Park",
+      "tier": "principal",
+      "roles": [
+        "ensemble_lead",
+        "ally",
+        "guide",
+        "catalyst"
+      ],
+      "canon": "Awakened lucid spatial overlays; no System",
+      "appearance": "ongoing",
+      "arc": "Discovery and risk shape the realm-exploration arc.",
+      "approved": false
+    },
+    {
+      "id": "leena",
+      "name": "Leena Varma",
+      "tier": "principal",
+      "roles": [
+        "ensemble_lead",
+        "informant",
+        "mentor",
+        "shapeshifter",
+        "redeemer"
+      ],
+      "canon": "Archive keeper; awakening unconfirmed",
+      "appearance": "ongoing",
+      "arc": "Complicity in historical surveillance demands accountable disclosure.",
+      "approved": false
+    },
+    {
+      "id": "keeper",
+      "name": "The Keeper",
+      "tier": "recurring",
+      "roles": [
+        "antagonist",
+        "antivillain",
+        "guardian",
+        "threshold_keeper",
+        "protector"
+      ],
+      "canon": "Quiet Index field operative; identity provisional",
+      "appearance": "ongoing",
+      "arc": "Protects civilians while enforcing coercive containment methods.",
+      "approved": false
+    },
+    {
+      "id": "cartographer",
+      "name": "The Cartographer",
+      "tier": "recurring",
+      "roles": [
+        "primary_antagonist",
+        "mystery_figure",
+        "tempter"
+      ],
+      "canon": "Covert coordinator; identity unrevealed",
+      "appearance": "ongoing",
+      "arc": "Seeks a forced crossing via control of the collective archive.",
+      "approved": false
+    },
+    {
+      "id": "iris",
+      "name": "Iris Bell",
+      "tier": "support",
+      "roles": [
+        "recurring_support",
+        "witness",
+        "informant",
+        "ally"
+      ],
+      "canon": "Independent amateur radio archivist",
+      "appearance": "e03-e04",
+      "arc": "Maintains chain of custody for 2017 recordings.",
+      "approved": false
+    },
+    {
+      "id": "adewale",
+      "name": "Dr. Adewale Sanni",
+      "tier": "support",
+      "roles": [
+        "recurring_support",
+        "scholar",
+        "healer"
+      ],
+      "canon": "Physiologist; no confirmed awakening or Nexus",
+      "appearance": "e02-e07",
+      "arc": "Medical caution and care constrain dangerous experimentation.",
+      "approved": false
+    },
+    {
+      "id": "mrs_baptiste",
+      "name": "Mrs. Baptiste",
+      "tier": "support",
+      "roles": [
+        "recurring_support",
+        "confidant",
+        "witness"
+      ],
+      "canon": "Nia's aunt and caretaker of family recordings",
+      "appearance": "e01-e08",
+      "arc": "Her imperfect family history tests memory versus recording.",
+      "approved": false
+    },
+    {
+      "id": "quiet_index",
+      "name": "The Quiet Index",
+      "tier": "institution",
+      "roles": [
+        "primary_antagonist",
+        "gatekeeper",
+        "world_antagonism"
+      ],
+      "canon": "Plural institution; not a single individual",
+      "appearance": "ongoing",
+      "arc": "Contested internal motives: safety, control, exploitation.",
+      "approved": false
+    },
+    {
+      "id": "meridian_archive",
+      "name": "The Meridian Archive",
+      "tier": "institution",
+      "roles": [
+        "informant",
+        "guardian",
+        "scholar"
+      ],
+      "canon": "Dispersed record network; member cells differ",
+      "appearance": "ongoing",
+      "arc": "Historical record can preserve and distort truth.",
+      "approved": false
+    },
+    {
+      "id": "crossing_market",
+      "name": "The Crossing Market",
+      "tier": "institution",
+      "roles": [
+        "merchant",
+        "tempter",
+        "gatekeeper"
+      ],
+      "canon": "Artifact exchange network",
+      "appearance": "e05-e08",
+      "arc": "Resource utility competes with provenance and ethics.",
+      "approved": false
+    },
+    {
+      "id": "crossroads",
+      "name": "The Crossing",
+      "tier": "force",
+      "roles": [
+        "world_antagonism",
+        "catalyst",
+        "threshold_keeper"
+      ],
+      "canon": "Fictional environmental condition, not a character",
+      "appearance": "ongoing",
+      "arc": "A boundary condition no faction fully controls.",
+      "approved": false
+    }
+  ],
+  "relationships": [
+    {
+      "from": "nia",
+      "to": "vesper",
+      "type": "host_companion",
+      "initial": "cooperative",
+      "first_episode": "e01-totality",
+      "last_episode": "e08-aecluptic",
+      "dynamic": "Consent and mutual error correction"
+    },
+    {
+      "from": "nia",
+      "to": "mateo",
+      "type": "allies",
+      "initial": "unfamiliar",
+      "first_episode": "e03-second-self",
+      "last_episode": "e08-aecluptic",
+      "dynamic": "Evidence versus rescue ethics, then reciprocal trust"
+    },
+    {
+      "from": "nia",
+      "to": "mara",
+      "type": "allies",
+      "initial": "unfamiliar",
+      "first_episode": "e03-second-self",
+      "last_episode": "e08-aecluptic",
+      "dynamic": "Cross-check hypotheses against recorded events"
+    },
+    {
+      "from": "nia",
+      "to": "elias",
+      "type": "allies",
+      "initial": "unfamiliar",
+      "first_episode": "e03-second-self",
+      "last_episode": "e08-aecluptic",
+      "dynamic": "Risk-taking offset by structured interpretation"
+    },
+    {
+      "from": "nia",
+      "to": "leena",
+      "type": "conflicted_allies",
+      "initial": "suspicious",
+      "first_episode": "e04-crossroads",
+      "last_episode": "e08-aecluptic",
+      "dynamic": "Concealed provenance confronted and publicly repaired"
+    },
+    {
+      "from": "nia",
+      "to": "keeper",
+      "type": "opposition",
+      "initial": "unknown",
+      "first_episode": "e05-keepers",
+      "last_episode": "e08-aecluptic",
+      "dynamic": "Privacy and safety conflict"
+    },
+    {
+      "from": "nia",
+      "to": "cartographer",
+      "type": "opposition",
+      "initial": "unknown",
+      "first_episode": "e07-false-awakening",
+      "last_episode": "e08-aecluptic",
+      "dynamic": "Coercive archive gathering blocks autonomy"
+    },
+    {
+      "from": "leena",
+      "to": "quiet_index",
+      "type": "former_affiliation",
+      "initial": "concealed",
+      "first_episode": "e05-keepers",
+      "last_episode": "e07-false-awakening",
+      "dynamic": "Complicity and accountability"
+    },
+    {
+      "from": "keeper",
+      "to": "quiet_index",
+      "type": "operative",
+      "initial": "active",
+      "first_episode": "e05-keepers",
+      "last_episode": "e08-aecluptic",
+      "dynamic": "Duty increasingly conflicts with harmful commands"
+    },
+    {
+      "from": "elias",
+      "to": "mateo",
+      "type": "allies",
+      "initial": "unfamiliar",
+      "first_episode": "e04-crossroads",
+      "last_episode": "e08-aecluptic",
+      "dynamic": "Protection without denying Elias agency"
+    }
+  ],
+  "policies": {
+    "nexus_host_id": "nia",
+    "nexus_voice_id": "vesper",
+    "sole_pov_anchor": "nia",
+    "allow_multiple_roles": true,
+    "allow_antagonist_reversals": true,
+    "romance": "not_assigned",
+    "hidden_identity": "cartographer",
+    "review_required": true
+  }
+}
