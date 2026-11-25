@@ -11,6 +11,19 @@ These rules recover the cross-chat writing decisions for The Æclyptic. Use them
 - Increase information density through dialogue that does several jobs. A reply can reveal a fact, expose an allegiance, and force a decision. Use interruption, evasion, bargaining, and silence where they express character. Cut exchanges that repeat information or delay the turn.
 - Track what each character and the audience know at each beat. Use dramatic irony when the audience has the advantage and audience mystery when a character has it. A recognition can reverse a plan or relationship in the same beat.
 
+## World orientation and point of view
+
+- For a series opener, seed the world on screen. Use distinct locations, social groups, institutions, and everyday activity to establish where the protagonist belongs, what they want, who holds power, and what a world rule costs before it decides the outcome. A viewer should be able to anticipate a consequence in Episode 1.
+- When authored, use a disembodied opening voice-over to carry the orientation montage. Switch to the protagonist's critical thoughts once live scene action begins. Use thoughts at decisions, when a cue changes what the protagonist believes or will do. Keep spoken dialogue, private thought, and any System voice distinct and respect who can hear each.
+- Let bystanders talk to one another out of their own needs. Crowd dialogue can establish a local rule, carry news or consequences, or give the audience information the protagonist lacks.
+- When the arc calls for it, show the protagonist's initial dream in concrete images and build a later reality that exceeds it. Preserve the distance between current means, imagined success, and what the character eventually discovers.
+
+## Continuous score and sound direction
+
+- Treat music as the primary carrier of emotional perspective. Keep an ambient musical bed across the episode, including rest periods and cuts. Use changes in level, instrumentation, rhythm, or texture to create space, tension and release while a quiet musical element continues.
+- For each scene, specify the musical character, point of view, cultural and spatial setting, population and activity, the carryover from the previous cue, what rests or recedes, and the action or line that brings the score forward. Distinguish score from sourced music, ambience, crowd, thought, spoken dialogue, System voice, and effects. Make room for words and plot-critical sounds.
+- Bind vocal tension, breath, and timing to facial expression and body action. Lock the voice take before mouth animation. Check lip sync and speaker attribution, then review the score, mix, performance, and cut together. Plan musical transitions before the edit is locked.
+
 ## Literary and symbolic devices
 
 - Weave devices into the causal flow. Prologue, epilogue, flashback, and frame narrative should orient or recontextualize present action. A recurrence should change what the audience understands or what a character can do.
